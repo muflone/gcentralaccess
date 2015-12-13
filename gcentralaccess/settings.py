@@ -113,3 +113,25 @@ class Settings(object):
         """Print a text with current date and time based on verbose level"""
         if verbose_level <= self.options.verbose_level:
             print '[%s] %s' % (time.strftime('%Y/%m/%d %H:%M:%S'), text)
+
+    def restore_window_position(self, window, section):
+        """Restore the saved window size and position"""
+        if self.get_int(section, SIZE_WIDTH) and \
+                self.get_int(section, SIZE_HEIGHT):
+            window.set_default_size(
+                self.get_int(section, SIZE_WIDTH, -1),
+                self.get_int(section, SIZE_HEIGHT, -1))
+        if self.get_int(section, POSITION_LEFT) and \
+                self.get_int(section, POSITION_TOP):
+            window.move(
+                self.get_int(section, POSITION_LEFT),
+                self.get_int(section, POSITION_TOP))
+
+    def save_window_position(self, window, section):
+        """Save the window size and position"""
+        position = window.get_position()
+        self.set_int(section, POSITION_LEFT, position[0])
+        self.set_int(section, POSITION_TOP, position[1])
+        size = window.get_size()
+        self.set_int(section, SIZE_WIDTH, size[0])
+        self.set_int(section, SIZE_HEIGHT, size[1])

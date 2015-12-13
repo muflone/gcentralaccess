@@ -18,32 +18,28 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .constants import FILE_UI_MAIN, FILE_SETTINGS
+from .constants import (FILE_UI_MAIN, FILE_SETTINGS,
+    FILE_WINDOWS_POSITION)
 from .functions import show_dialog_fileopen, _
-from .settings import *
+from .settings import Settings
 from .gtkbuilder_loader import GtkBuilderLoader
 from .ui_about import UIAbout
 from gi.repository import Gtk
 from gi.repository import Gdk
+
+SECTION_WINDOW_NAME = 'main'
 
 
 class UIMain(object):
     def __init__(self, application):
         self.application = application
         self.settings = Settings(FILE_SETTINGS)
+        self.settings_positions = Settings(FILE_WINDOWS_POSITION)
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
-        if self.settings.get_setting(SETTING_MAIN_WINDOW_WIDTH) and \
-                self.settings.get_setting(SETTING_MAIN_WINDOW_HEIGHT):
-            self.ui.win_main.set_default_size(
-                self.settings.get_setting(SETTING_MAIN_WINDOW_WIDTH, -1),
-                self.settings.get_setting(SETTING_MAIN_WINDOW_HEIGHT, -1))
-        if self.settings.get_setting(SETTING_MAIN_WINDOW_LEFT) and \
-                self.settings.get_setting(SETTING_MAIN_WINDOW_TOP):
-            self.ui.win_main.move(
-                self.settings.get_setting(SETTING_MAIN_WINDOW_LEFT),
-                self.settings.get_setting(SETTING_MAIN_WINDOW_TOP))
+        self.settings_positions.restore_window_position(
+            self.ui.win_main, SECTION_WINDOW_NAME)
 
     def loadUI(self):
         """Load the interface UI"""
@@ -62,15 +58,9 @@ class UIMain(object):
 
     def on_win_main_delete_event(self, widget, event):
         """Save the settings and close the application"""
-        # Window position
-        position = self.ui.win_main.get_position()
-        self.settings.set_setting(SETTING_MAIN_WINDOW_LEFT, position[0])
-        self.settings.set_setting(SETTING_MAIN_WINDOW_TOP, position[1])
-        # Window size
-        size = self.ui.win_main.get_size()
-        self.settings.set_setting(SETTING_MAIN_WINDOW_WIDTH, size[0])
-        self.settings.set_setting(SETTING_MAIN_WINDOW_HEIGHT, size[1])
-        # Save settings and quit
+        self.settings_positions.save_window_position(
+            self.ui.win_main, SECTION_WINDOW_NAME)
+        self.settings_positions.save()
         self.settings.save()
         self.about.destroy()
         self.application.quit()

@@ -65,3 +65,4 @@ FILE_LICENSE = os.path.join(DIR_DOCS, 'license')
 FILE_RESOURCES = os.path.join(DIR_DOCS, 'resources')
 # Set the paths for configuration files
 FILE_SETTINGS = os.path.join(DIR_SETTINGS, 'settings.conf')
+FILE_WINDOWS_POSITION = os.path.join(DIR_SETTINGS, 'windows.conf')

@@ -29,17 +29,15 @@ from .gtkbuilder_loader import GtkBuilderLoader
 
 
 class Application(Gtk.Application):
-    def __init__(self, settings):
+    def __init__(self):
         """Create the application object"""
         super(self.__class__, self).__init__(application_id=APP_ID)
-        self.settings = settings
         self.connect("activate", self.activate)
         self.connect('startup', self.startup)
 
     def startup(self, application):
         """Configure the application during the startup"""
-        self.ui = UIMain(self,
-                         self.settings)
+        self.ui = UIMain(self)
         # Add the about action to the app menu
         action = Gio.SimpleAction(name="about")
         action.connect("activate", self.on_app_about_activate)

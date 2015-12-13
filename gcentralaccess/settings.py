@@ -18,27 +18,21 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import os
-import os.path
 import optparse
 import time
 import ConfigParser
 
-from .functions import *
-from .constants import *
+from .constants import (
+    VERBOSE_LEVEL_QUIET, VERBOSE_LEVEL_NORMAL, VERBOSE_LEVEL_MAX)
 
-SECTION_MAINWIN = 'main window'
-SECTION_APPLICATION = 'application'
+POSITION_LEFT = 'left'
+POSITION_TOP = 'top'
+SIZE_WIDTH = 'width'
+SIZE_HEIGHT = 'height'
 
-SETTING_MAIN_WINDOW_LEFT = (SECTION_MAINWIN, 'left', int)
-SETTING_MAIN_WINDOW_TOP = (SECTION_MAINWIN, 'top', int)
-SETTING_MAIN_WINDOW_WIDTH = (SECTION_MAINWIN, 'width', int)
-SETTING_MAIN_WINDOW_HEIGHT = (SECTION_MAINWIN, 'height', int)
-SETTING_MAIN_WINDOW_SPLITTER = (SECTION_MAINWIN, 'splitter position', int)
-SETTING_SHOW_LINE_NUMBERS = (SECTION_APPLICATION, 'show line numbers', bool)
 
 class Settings(object):
-    def __init__(self):
+    def __init__(self, filename):
         # Command line options and arguments
         parser = optparse.OptionParser(usage='usage: %prog [options]')
         parser.set_defaults(verbose_level=VERBOSE_LEVEL_NORMAL)
@@ -52,11 +46,10 @@ class Settings(object):
         # Parse settings from the configuration file
         self.config = ConfigParser.RawConfigParser()
         # Determine which filename to use for settings
-        self.filename = FILE_SETTINGS
-        if self.filename:
-            self.logText('Loading settings from %s' % self.filename,
-                         VERBOSE_LEVEL_MAX)
-            self.config.read(self.filename)
+        self.filename = filename
+        self.logText('Loading settings from %s' % self.filename,
+                     VERBOSE_LEVEL_MAX)
+        self.config.read(self.filename)
 
     def get(self, section, option, default=None):
         """Get an option from a specific section"""

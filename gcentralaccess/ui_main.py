@@ -18,7 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .constants import FILE_UI_MAIN
+from .constants import FILE_UI_MAIN, FILE_SETTINGS
 from .functions import show_dialog_fileopen, _
 from .settings import *
 from .gtkbuilder_loader import GtkBuilderLoader
@@ -28,9 +28,9 @@ from gi.repository import Gdk
 
 
 class UIMain(object):
-    def __init__(self, application, settings):
+    def __init__(self, application):
         self.application = application
-        self.settings = settings
+        self.settings = Settings(FILE_SETTINGS)
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, settings, False)
         # Restore the saved size and position

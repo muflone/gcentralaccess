@@ -23,12 +23,8 @@
 import gettext
 import locale
 from gcentralaccess.app import Application
-from gcentralaccess.settings import Settings
 
 if __name__ == '__main__':
-    # Load the settings from the configuration file
-    settings = Settings()
     # Start the application
-    app = Application(
-        settings=settings)
+    app = Application()
     app.run(None)

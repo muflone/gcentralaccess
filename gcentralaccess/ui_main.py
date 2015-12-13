@@ -32,7 +32,7 @@ class UIMain(object):
         self.application = application
         self.settings = Settings(FILE_SETTINGS)
         self.loadUI()
-        self.about = UIAbout(self.ui.win_main, settings, False)
+        self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
         if self.settings.get_setting(SETTING_MAIN_WINDOW_WIDTH) and \
                 self.settings.get_setting(SETTING_MAIN_WINDOW_HEIGHT):

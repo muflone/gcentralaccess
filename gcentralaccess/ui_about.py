@@ -28,9 +28,8 @@ from .functions import *
 
 
 class UIAbout(object):
-    def __init__(self, winParent, settings, show=False):
+    def __init__(self, win_parent, show=False):
         """Prepare the about dialog and optionally show it immediately"""
-        self.settings = settings
         # Retrieve the translators list
         translators = []
         for line in readlines(FILE_TRANSLATORS, False):
@@ -42,11 +41,11 @@ class UIAbout(object):
         # Load the user interface
         self.ui = GtkBuilderLoader(FILE_UI_ABOUT)
         # Set various properties
-        self.ui.dialogAbout.set_program_name(APP_NAME)
-        self.ui.dialogAbout.set_version('Version %s' % APP_VERSION)
-        self.ui.dialogAbout.set_comments(APP_DESCRIPTION)
-        self.ui.dialogAbout.set_website(APP_URL)
-        self.ui.dialogAbout.set_copyright(APP_COPYRIGHT)
+        self.ui.dialog_about.set_program_name(APP_NAME)
+        self.ui.dialog_about.set_version('Version %s' % APP_VERSION)
+        self.ui.dialog_about.set_comments(APP_DESCRIPTION)
+        self.ui.dialog_about.set_website(APP_URL)
+        self.ui.dialog_about.set_copyright(APP_COPYRIGHT)
         # Prepare lists for authors and contributors
         authors = ['%s <%s>' % (APP_AUTHOR, APP_AUTHOR_EMAIL)]
         contributors = []
@@ -55,30 +54,30 @@ class UIAbout(object):
         if len(contributors) > 0:
             contributors.insert(0, _('Contributors:'))
             authors.extend(contributors)
-        self.ui.dialogAbout.set_authors(authors)
-        self.ui.dialogAbout.set_license(
+        self.ui.dialog_about.set_authors(authors)
+        self.ui.dialog_about.set_license(
             '\n'.join(readlines(FILE_LICENSE, True)))
-        self.ui.dialogAbout.set_translator_credits('\n'.join(translators))
+        self.ui.dialog_about.set_translator_credits('\n'.join(translators))
         # Retrieve the external resources links
         # only for GTK+ 3.6.0 and higher
         if not Gtk.check_version(3, 6, 0):
             for line in readlines(FILE_RESOURCES, False):
                 resource_type, resource_url = line.split(':', 1)
-                self.ui.dialogAbout.add_credit_section(
+                self.ui.dialog_about.add_credit_section(
                     resource_type, (resource_url,))
         icon_logo = Pixbuf.new_from_file(FILE_ICON)
-        self.ui.dialogAbout.set_logo(icon_logo)
-        self.ui.dialogAbout.set_transient_for(winParent)
+        self.ui.dialog_about.set_logo(icon_logo)
+        self.ui.dialog_about.set_transient_for(win_parent)
         # Optionally show the dialog
         if show:
             self.show()
 
     def show(self):
         """Show the About dialog"""
-        self.ui.dialogAbout.run()
-        self.ui.dialogAbout.hide()
+        self.ui.dialog_about.run()
+        self.ui.dialog_about.hide()
 
     def destroy(self):
         """Destroy the About dialog"""
-        self.ui.dialogAbout.destroy()
-        self.ui.dialogAbout = None
+        self.ui.dialog_about.destroy()
+        self.ui.dialog_about = None

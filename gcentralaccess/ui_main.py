@@ -18,8 +18,9 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .constants import (FILE_UI_MAIN, FILE_SETTINGS,
-    FILE_WINDOWS_POSITION)
+from .constants import (
+    FILE_UI_MAIN, APP_NAME,
+    FILE_SETTINGS, FILE_WINDOWS_POSITION)
 from .functions import show_dialog_fileopen, _
 from .settings import Settings
 from .gtkbuilder_loader import GtkBuilderLoader
@@ -45,6 +46,7 @@ class UIMain(object):
         """Load the interface UI"""
         self.ui = GtkBuilderLoader(FILE_UI_MAIN)
         self.ui.win_main.set_application(self.application)
+        self.ui.win_main.set_title(APP_NAME)
         # Set the actions accelerator group
         for group_name in ('actions_application', ):
             for action in self.ui.get_object(group_name).list_actions():

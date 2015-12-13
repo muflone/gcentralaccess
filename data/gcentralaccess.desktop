@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+Name=gCentralAccess
+Comment=Manage external resources from a centralized management console
+Comment[en]=Manage external resources from a centralized management console
+Comment[it]=Gestisci risorse esterne da una console di gestione centralizzata
+Terminal=false
+Categories=Network;GTK;
+Icon=gcentralaccess
+TryExec=gcentralaccess
+Exec=gcentralaccess

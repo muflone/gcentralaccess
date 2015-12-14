@@ -47,10 +47,10 @@ class UIMain(object):
         self.ui = GtkBuilderLoader(FILE_UI_MAIN)
         self.ui.win_main.set_application(self.application)
         self.ui.win_main.set_title(APP_NAME)
-        # Set the actions accelerator group
+        # Connect the actions accelerators
         for group_name in ('actions_application', ):
             for action in self.ui.get_object(group_name).list_actions():
-                action.set_accel_group(self.ui.accelerators)
+                action.connect_accelerator()
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

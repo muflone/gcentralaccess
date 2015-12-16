@@ -85,9 +85,11 @@ class Settings(object):
         """Get the specified setting with a fallback value"""
         section, option, option_type = setting
         if option_type is int:
-            return self.get_int(section, option, default and default or 0)
+            return self.get_int(section, option,
+                                default and default or 0)
         elif option_type is bool:
-            return self.get_boolean(section, option, default if True else False)
+            return self.get_boolean(section, option,
+                                    default if True else False)
         else:
             return self.get(section, option, default)
 
@@ -110,7 +112,8 @@ class Settings(object):
         file_settings.close()
 
     def logText(self, text, verbose_level=VERBOSE_LEVEL_NORMAL):
-        """Print a text with current date and time based on verbose level"""
+        """Print a text with current date and time based on the
+        verbose level"""
         if verbose_level <= self.options.verbose_level:
             print '[%s] %s' % (time.strftime('%Y/%m/%d %H:%M:%S'), text)
 

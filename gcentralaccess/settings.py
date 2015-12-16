@@ -115,6 +115,11 @@ class Settings(object):
         """Return the list of the sections"""
         return self.config.sections()
 
+    def get_options(self, section):
+        """Return the list of the options in a section"""
+        print 'options', self.config.options(section)
+        return self.config.options(section)
+
     def logText(self, text, verbose_level=VERBOSE_LEVEL_NORMAL):
         """Print a text with current date and time based on the
         verbose level"""

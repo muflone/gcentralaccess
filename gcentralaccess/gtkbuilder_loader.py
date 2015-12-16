@@ -18,9 +18,6 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import gi
-gi.require_version('Gtk', '3.0')
-
 from gi.repository import Gtk
 
 

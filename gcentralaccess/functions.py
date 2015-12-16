@@ -20,9 +20,10 @@
 
 from gettext import gettext as _
 from gettext import dgettext
-from gi.repository import Gtk
-
 from .constants import *
+import gi
+if gi.require_version('Gtk', '3.0') is None:
+    from gi.repository import Gtk
 
 
 def show_dialog_fileopen(parent, title):

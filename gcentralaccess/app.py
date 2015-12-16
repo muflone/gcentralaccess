@@ -18,14 +18,11 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import gi
-gi.require_version('Gtk', '3.0')
-
-from gi.repository import Gtk, Gio
-
 from .ui_main import UIMain
 from .constants import *
 from .gtkbuilder_loader import GtkBuilderLoader
+from gi.repository import Gtk
+from gi.repository import Gio
 
 
 class Application(Gtk.Application):

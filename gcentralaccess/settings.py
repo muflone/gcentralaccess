@@ -120,6 +120,11 @@ class Settings(object):
         print 'options', self.config.options(section)
         return self.config.options(section)
 
+    def clear(self):
+        """Remove every data in the settings"""
+        for section in self.get_sections():
+            self.config.remove_section(section)
+
     def logText(self, text, verbose_level=VERBOSE_LEVEL_NORMAL):
         """Print a text with current date and time based on the
         verbose level"""

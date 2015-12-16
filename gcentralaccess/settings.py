@@ -111,6 +111,10 @@ class Settings(object):
         self.config.write(file_settings)
         file_settings.close()
 
+    def get_sections(self):
+        """Return the list of the sections"""
+        return self.config.sections()
+
     def logText(self, text, verbose_level=VERBOSE_LEVEL_NORMAL):
         """Print a text with current date and time based on the
         verbose level"""

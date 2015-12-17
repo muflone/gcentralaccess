@@ -18,7 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .ui_main import UIMain
+from .ui.main import UIMain
 from .constants import *
 from .gtkbuilder_loader import GtkBuilderLoader
 from gi.repository import Gtk

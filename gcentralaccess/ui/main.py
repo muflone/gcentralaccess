@@ -18,15 +18,15 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .constants import (
+from gcentralaccess.constants import (
     FILE_UI_MAIN, APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
-from .functions import show_dialog_fileopen, _
-from .settings import Settings
-from .gtkbuilder_loader import GtkBuilderLoader
-from .ui.about import UIAbout
-from .ui.services import UIServices
-from .model_services import ModelServices
+from gcentralaccess.functions import show_dialog_fileopen, _
+from gcentralaccess.settings import Settings
+from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
+from .about import UIAbout
+from .services import UIServices
+from gcentralaccess.model_services import ModelServices
 from gi.repository import Gtk
 from gi.repository import Gdk
 

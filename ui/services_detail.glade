@@ -134,6 +134,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Name</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_name</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">0</property>
               </object>
@@ -148,6 +149,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Description</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_description</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -185,8 +187,9 @@
               <object class="GtkLabel" id="lbl_command">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Command</property>
+                <property name="label" translatable="yes">Co_mmand</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_command</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">0</property>
               </object>

@@ -41,6 +41,8 @@
       <column type="gchararray"/>
       <!-- column-name Command -->
       <column type="gchararray"/>
+      <!-- column-name Terminal -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkDialog" id="dialog_services">

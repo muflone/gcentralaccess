@@ -44,15 +44,17 @@ class UIServiceDetail(object):
         self.name = ''
         self.description = ''
         self.command = ''
+        self.terminal = False
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
     def show(self, default_name, default_description, default_command, 
-             title, treeiter):
+             default_terminal, title, treeiter):
         """Show the Services detail dialog"""
         self.ui.txt_name.set_text(default_name)
         self.ui.txt_description.set_text(default_description)
         self.ui.txt_command.set_text(default_command)
+        self.ui.chk_terminal.set_active(default_terminal)
         self.ui.txt_name.grab_focus()
         self._edit_service_set_error(None, None)
         self.ui.dialog_edit_service.set_title(title)
@@ -62,6 +64,7 @@ class UIServiceDetail(object):
         self.name = self.ui.txt_name.get_text().strip()
         self.description = self.ui.txt_description.get_text().strip()
         self.command = self.ui.txt_command.get_text().strip()
+        self.terminal = self.ui.chk_terminal.get_active()
         return response
 
     def destroy(self):
@@ -74,6 +77,7 @@ class UIServiceDetail(object):
         name = self.ui.txt_name.get_text().strip()
         description = self.ui.txt_description.get_text().strip()
         command = self.ui.txt_command.get_text().strip()
+        terminal = self.ui.chk_terminal.get_active()
         if len(name) == 0:
             self._edit_service_set_error(
                 self.ui.txt_name,

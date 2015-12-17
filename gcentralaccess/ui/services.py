@@ -71,11 +71,13 @@ class UIServices(object):
         if dialog.show(default_name='',
                        default_description='',
                        default_command='',
+                       default_terminal=False,
                        title=_('Add new service'),
                        treeiter=None) == Gtk.ResponseType.OK:
             self.model.add_data(ServiceInfo(name=dialog.name,
                                   description=dialog.description,
-                                  command=dialog.command))
+                                  command=dialog.command,
+                                  terminal=dialog.terminal))
         dialog.destroy()
 
     def on_action_services_edit_activate(self, action):
@@ -86,12 +88,14 @@ class UIServices(object):
             name = self.model.get_name(selected_row)
             description = self.model.get_description(selected_row)
             command = self.model.get_command(selected_row)
+            terminal = self.model.get_terminal(selected_row)
             selected_iter = self.model.get_iter(name)
             dialog = UIServiceDetail(self.ui.dialog_services,
                                      self.model)
             if dialog.show(default_name=name,
                            default_description=description,
                            default_command=command,
+                           default_terminal=terminal,
                            title=_('Edit service'),
                            treeiter=selected_iter
                           ) == Gtk.ResponseType.OK:
@@ -99,7 +103,8 @@ class UIServices(object):
                 self.model.set_data(selected_iter, ServiceInfo(
                     name=dialog.name,
                     description=dialog.description,
-                    command=dialog.command))
+                    command=dialog.command,
+                    terminal=dialog.terminal))
             dialog.destroy()
 
     def on_action_services_remove_activate(self, action):

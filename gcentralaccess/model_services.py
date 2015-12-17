@@ -25,6 +25,7 @@ class ModelServices(object):
     COL_NAME = 0
     COL_DESCRIPTION = 1
     COL_COMMAND = 2
+    COL_TERMINAL = 3
 
     def __init__(self, model):
         self.model = model
@@ -40,7 +41,8 @@ class ModelServices(object):
             new_row = self.model.append((
                 service.name,
                 service.description,
-                service.command))
+                service.command,
+                service.terminal))
             self.rows[service.name] = new_row
             return new_row
 
@@ -59,6 +61,8 @@ class ModelServices(object):
                              service.description)
         self.model.set_value(treeiter, self.COL_COMMAND,
                              service.command)
+        self.model.set_value(treeiter, self.COL_TERMINAL,
+                             service.terminal)
 
     def get_name(self, treeiter):
         """Get the name from a TreeIter"""
@@ -71,6 +75,10 @@ class ModelServices(object):
     def get_command(self, treeiter):
         """Get the command from a TreeIter"""
         return self.model[treeiter][self.COL_COMMAND]
+
+    def get_terminal(self, treeiter):
+        """Get the terminal flag from a TreeIter"""
+        return self.model[treeiter][self.COL_TERMINAL]
 
     def get_iter(self, name):
         """Get a TreeIter from a name"""
@@ -88,7 +96,8 @@ class ModelServices(object):
             result[key] = ServiceInfo(
                 name=self.get_name(self.rows[key]),
                 description=self.get_description(self.rows[key]),
-                command=self.get_command(self.rows[key]))
+                command=self.get_command(self.rows[key]),
+                terminal=self.get_terminal(self.rows[key]))
         return result
 
     def load(self, services):

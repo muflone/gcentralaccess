@@ -22,9 +22,9 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository.GdkPixbuf import Pixbuf
 
-from .gtkbuilder_loader import GtkBuilderLoader
-from .constants import *
-from .functions import *
+from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
+from gcentralaccess.constants import *
+from gcentralaccess.functions import *
 
 
 class UIAbout(object):

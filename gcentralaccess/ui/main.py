@@ -24,7 +24,7 @@ from .constants import (
 from .functions import show_dialog_fileopen, _
 from .settings import Settings
 from .gtkbuilder_loader import GtkBuilderLoader
-from .ui_about import UIAbout
+from .ui.about import UIAbout
 from gi.repository import Gtk
 from gi.repository import Gdk
 

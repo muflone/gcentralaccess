@@ -75,9 +75,9 @@ class UIServices(object):
                        title=_('Add new service'),
                        treeiter=None) == Gtk.ResponseType.OK:
             self.model.add_data(ServiceInfo(name=dialog.name,
-                                  description=dialog.description,
-                                  command=dialog.command,
-                                  terminal=dialog.terminal))
+                                description=dialog.description,
+                                command=dialog.command,
+                                terminal=dialog.terminal))
         dialog.destroy()
 
     def on_action_services_edit_activate(self, action):
@@ -98,7 +98,7 @@ class UIServices(object):
                            default_terminal=terminal,
                            title=_('Edit service'),
                            treeiter=selected_iter
-                          ) == Gtk.ResponseType.OK:
+                           ) == Gtk.ResponseType.OK:
                 # Update values
                 self.model.set_data(selected_iter, ServiceInfo(
                     name=dialog.name,

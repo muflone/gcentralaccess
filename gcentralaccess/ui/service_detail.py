@@ -48,7 +48,7 @@ class UIServiceDetail(object):
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
-    def show(self, default_name, default_description, default_command, 
+    def show(self, default_name, default_description, default_command,
              default_terminal, title, treeiter):
         """Show the Services detail dialog"""
         self.ui.txt_name.set_text(default_name)

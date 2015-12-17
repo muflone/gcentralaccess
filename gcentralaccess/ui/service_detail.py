@@ -43,13 +43,16 @@ class UIServiceDetail(object):
         self.selected_iter = None
         self.name = ''
         self.description = ''
+        self.command = ''
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
-    def show(self, default_name, default_description, title, treeiter):
+    def show(self, default_name, default_description, default_command, 
+             title, treeiter):
         """Show the Services detail dialog"""
         self.ui.txt_name.set_text(default_name)
         self.ui.txt_description.set_text(default_description)
+        self.ui.txt_command.set_text(default_command)
         self.ui.txt_name.grab_focus()
         self._edit_service_set_error(None, None)
         self.ui.dialog_edit_service.set_title(title)
@@ -58,6 +61,7 @@ class UIServiceDetail(object):
         self.ui.dialog_edit_service.hide()
         self.name = self.ui.txt_name.get_text().strip()
         self.description = self.ui.txt_description.get_text().strip()
+        self.command = self.ui.txt_command.get_text().strip()
         return response
 
     def destroy(self):
@@ -69,6 +73,7 @@ class UIServiceDetail(object):
         """Check che service configuration before confirm"""
         name = self.ui.txt_name.get_text().strip()
         description = self.ui.txt_description.get_text().strip()
+        command = self.ui.txt_command.get_text().strip()
         if len(name) == 0:
             self._edit_service_set_error(
                 self.ui.txt_name,
@@ -77,6 +82,10 @@ class UIServiceDetail(object):
             self._edit_service_set_error(
                 self.ui.txt_description,
                 _('The service description is missing'))
+        elif len(command) == 0:
+            self._edit_service_set_error(
+                self.ui.txt_command,
+                _('The service command is missing'))
         elif '\'' in name or '\\' in name:
             self._edit_service_set_error(
                 self.ui.txt_name,
@@ -103,7 +112,8 @@ class UIServiceDetail(object):
             self.ui.lbl_error_message.set_text(error_message)
             self.ui.infobar_error_message.set_visible(True)
             if widget in (self.ui.txt_name,
-                          self.ui.txt_description):
+                          self.ui.txt_description,
+                          self.ui.txt_command):
                 widget.set_icon_from_icon_name(
                     Gtk.EntryIconPosition.SECONDARY, 'dialog-error')
                 widget.grab_focus()
@@ -112,6 +122,8 @@ class UIServiceDetail(object):
             self.ui.txt_name.set_icon_from_icon_name(
                 Gtk.EntryIconPosition.SECONDARY, None)
             self.ui.txt_description.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY, None)
+            self.ui.txt_command.set_icon_from_icon_name(
                 Gtk.EntryIconPosition.SECONDARY, None)
 
     def on_txt_service_name_description_changed(self, widget):

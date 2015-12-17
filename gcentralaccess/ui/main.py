@@ -33,6 +33,7 @@ from gi.repository import Gdk
 
 SECTION_WINDOW_NAME = 'main'
 SECTION_SERVICE_DESCRIPTION = 'description'
+SECTION_SERVICE_COMMAND = 'command'
 
 
 class UIMain(object):
@@ -47,7 +48,9 @@ class UIMain(object):
             self.services[key] = ServiceInfo(
                 name=key,
                 description=self.settings_services.get(
-                    key, SECTION_SERVICE_DESCRIPTION))
+                    key, SECTION_SERVICE_DESCRIPTION),
+                command=self.settings_services.get(
+                    key, SECTION_SERVICE_COMMAND))
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
@@ -107,3 +110,7 @@ class UIMain(object):
                 section=key,
                 option=SECTION_SERVICE_DESCRIPTION,
                 value=self.services[key].description)
+            self.settings_services.set(
+                section=key,
+                option=SECTION_SERVICE_COMMAND,
+                value=self.services[key].command)

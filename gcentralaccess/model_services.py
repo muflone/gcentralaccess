@@ -24,6 +24,7 @@ from .service_info import ServiceInfo
 class ModelServices(object):
     COL_NAME = 0
     COL_DESCRIPTION = 1
+    COL_COMMAND = 2
 
     def __init__(self, model):
         self.model = model
@@ -38,7 +39,8 @@ class ModelServices(object):
         if service.name not in self.rows:
             new_row = self.model.append((
                 service.name,
-                service.description))
+                service.description,
+                service.command))
             self.rows[service.name] = new_row
             return new_row
 
@@ -55,6 +57,8 @@ class ModelServices(object):
                              service.name)
         self.model.set_value(treeiter, self.COL_DESCRIPTION,
                              service.description)
+        self.model.set_value(treeiter, self.COL_COMMAND,
+                             service.command)
 
     def get_name(self, treeiter):
         """Get the name from a TreeIter"""
@@ -63,6 +67,10 @@ class ModelServices(object):
     def get_description(self, treeiter):
         """Get the description from a TreeIter"""
         return self.model[treeiter][self.COL_DESCRIPTION]
+
+    def get_command(self, treeiter):
+        """Get the command from a TreeIter"""
+        return self.model[treeiter][self.COL_COMMAND]
 
     def get_iter(self, name):
         """Get a TreeIter from a name"""
@@ -79,7 +87,8 @@ class ModelServices(object):
         for key in self.rows.iterkeys():
             result[key] = ServiceInfo(
                 name=self.get_name(self.rows[key]),
-                description=self.get_description(self.rows[key]))
+                description=self.get_description(self.rows[key]),
+                command=self.get_command(self.rows[key]))
         return result
 
     def load(self, services):

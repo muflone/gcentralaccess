@@ -20,22 +20,31 @@
 
 from .constants import (
     FILE_UI_MAIN, APP_NAME,
-    FILE_SETTINGS, FILE_WINDOWS_POSITION)
+    FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
 from .functions import show_dialog_fileopen, _
 from .settings import Settings
 from .gtkbuilder_loader import GtkBuilderLoader
 from .ui.about import UIAbout
+from .ui.services import UIServices
+from .model_services import ModelServices
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 SECTION_WINDOW_NAME = 'main'
+SECTION_SERVICE_DESCRIPTION = 'description'
 
 
 class UIMain(object):
     def __init__(self, application):
         self.application = application
+        self.services = {}
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
+        # Load services
+        self.settings_services = Settings(FILE_SERVICES)
+        for key in self.settings_services.get_sections():
+            self.services[key] = self.settings_services.get(
+                key, SECTION_SERVICE_DESCRIPTION)
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
@@ -63,6 +72,7 @@ class UIMain(object):
         self.settings_positions.save_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
         self.settings_positions.save()
+        self.settings_services.save()
         self.settings.save()
         self.about.destroy()
         self.application.quit()
@@ -76,3 +86,21 @@ class UIMain(object):
         event = Gdk.Event()
         event.key.type = Gdk.EventType.DELETE
         self.ui.win_main.event(event)
+
+    def on_action_services_activate(self, action):
+        """Edit services"""
+        dialog_services = UIServices(
+            win_parent=self.ui.win_main,
+            settings_positions=self.settings_positions)
+        # Load services list
+        dialog_services.model.load(self.services)
+        dialog_services.show()
+        # Get the new services list, clear and store the list again
+        self.services = dialog_services.model.dump()
+        dialog_services.destroy()
+        self.settings_services.clear()
+        for key in self.services.iterkeys():
+            self.settings_services.set(
+                section=key,
+                option=SECTION_SERVICE_DESCRIPTION,
+                value=self.services[key])

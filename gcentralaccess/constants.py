@@ -56,6 +56,8 @@ DIR_SETTINGS = BaseDirectory.save_config_path(DOMAIN_NAME)
 # Set the paths for the UI files
 FILE_UI_MAIN = os.path.join(DIR_UI, 'main.glade')
 FILE_UI_ABOUT = os.path.join(DIR_UI, 'about.glade')
+FILE_UI_SERVICES = os.path.join(DIR_UI, 'services.glade')
+FILE_UI_SERVICES_DETAIL = os.path.join(DIR_UI, 'services_detail.glade')
 FILE_UI_APPMENU = os.path.join(DIR_UI, 'appmenu.ui')
 # Set the paths for the data files
 FILE_ICON = os.path.join(DIR_DATA, 'gcentralaccess.png')
@@ -66,3 +68,4 @@ FILE_RESOURCES = os.path.join(DIR_DOCS, 'resources')
 # Set the paths for configuration files
 FILE_SETTINGS = os.path.join(DIR_SETTINGS, 'settings.conf')
 FILE_WINDOWS_POSITION = os.path.join(DIR_SETTINGS, 'windows.conf')
+FILE_SERVICES = os.path.join(DIR_SETTINGS, 'services.conf')

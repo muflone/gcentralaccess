@@ -27,6 +27,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
 from .services import UIServices
 from gcentralaccess.model_services import ModelServices
+from gcentralaccess.service_info import ServiceInfo
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -43,8 +44,10 @@ class UIMain(object):
         # Load services
         self.settings_services = Settings(FILE_SERVICES)
         for key in self.settings_services.get_sections():
-            self.services[key] = self.settings_services.get(
-                key, SECTION_SERVICE_DESCRIPTION)
+            self.services[key] = ServiceInfo(
+                name=key,
+                description=self.settings_services.get(
+                    key, SECTION_SERVICE_DESCRIPTION))
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
@@ -103,4 +106,4 @@ class UIMain(object):
             self.settings_services.set(
                 section=key,
                 option=SECTION_SERVICE_DESCRIPTION,
-                value=self.services[key])
+                value=self.services[key].description)

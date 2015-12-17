@@ -18,6 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+from .service_info import ServiceInfo
+
 
 class ModelServices(object):
     COL_NAME = 0
@@ -31,27 +33,28 @@ class ModelServices(object):
         """Clear the model"""
         return self.model.clear()
 
-    def add_data(self, name, description):
+    def add_data(self, service):
         """Add a new row to the model if it doesn't exists"""
-        if name not in self.rows:
+        if service.name not in self.rows:
             new_row = self.model.append((
-                name,
-                description))
-            self.rows[name] = new_row
+                service.name,
+                service.description))
+            self.rows[service.name] = new_row
             return new_row
 
-    def set_data(self, treeiter, name, description):
+    def set_data(self, treeiter, service):
         """Update an existing TreeIter"""
         old_name = self.get_name(treeiter)
         # If the new name differs from the old name then update the
         # TreeIters map in self.rows
-        if old_name != name:
+        if old_name != service.name:
             self.rows.pop(old_name)
-            self.rows[name] = treeiter
+            self.rows[service.name] = treeiter
         # Update values
-        self.model.set_value(treeiter, self.COL_NAME, name)
+        self.model.set_value(treeiter, self.COL_NAME,
+                             service.name)
         self.model.set_value(treeiter, self.COL_DESCRIPTION,
-                             description)
+                             service.description)
 
     def get_name(self, treeiter):
         """Get the name from a TreeIter"""
@@ -74,10 +77,12 @@ class ModelServices(object):
         """Extract the model data to a dict object"""
         result = {}
         for key in self.rows.iterkeys():
-            result[key] = self.get_description(self.rows[key])
+            result[key] = ServiceInfo(
+                name=self.get_name(self.rows[key]),
+                description=self.get_description(self.rows[key]))
         return result
 
     def load(self, services):
         """Load the model data from a dict object"""
         for key in sorted(services.iterkeys()):
-            self.add_data(key, services[key])
+            self.add_data(services[key])

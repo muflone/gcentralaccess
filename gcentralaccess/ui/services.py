@@ -24,6 +24,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import FILE_UI_SERVICES
 from gcentralaccess.functions import *
 from gcentralaccess.model_services import ModelServices
+from gcentralaccess.service_info import ServiceInfo
 from .service_detail import UIServiceDetail
 
 SECTION_WINDOW_NAME = 'services'
@@ -71,7 +72,8 @@ class UIServices(object):
                        default_description='',
                        title=_('Add new service'),
                        treeiter=None) == Gtk.ResponseType.OK:
-            self.model.add_data(dialog.name, dialog.description)
+            self.model.add_data(ServiceInfo(name=dialog.name,
+                                  description=dialog.description))
         dialog.destroy()
 
     def on_action_services_edit_activate(self, action):
@@ -90,9 +92,9 @@ class UIServices(object):
                            treeiter=selected_iter
                           ) == Gtk.ResponseType.OK:
                 # Update values
-                self.model.set_data(selected_iter,
-                                    dialog.name,
-                                    dialog.description)
+                self.model.set_data(selected_iter, ServiceInfo(
+                    name=dialog.name,
+                    description=dialog.description))
             dialog.destroy()
 
     def on_action_services_remove_activate(self, action):

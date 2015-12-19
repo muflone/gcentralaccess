@@ -90,3 +90,20 @@ class UIFileChooserOpenFile(UIFileChooser):
                                Gtk.FileChooserAction.OPEN, (
                                    _("Cancel"), Gtk.ResponseType.CANCEL,
                                    _("Open"), Gtk.ResponseType.OK))
+
+
+class UIFileChooserSaveFile(UIFileChooser):
+    def __init__(self, win_parent, title):
+        """Prepare the file chooser dialog"""
+        UIFileChooser.__init__(self, win_parent, title,
+                               Gtk.FileChooserAction.SAVE, (
+                                   _("Cancel"), Gtk.ResponseType.CANCEL,
+                                   _("Save"), Gtk.ResponseType.OK))
+
+    def set_overwrite_confirmation(self, confirmation):
+        """Set the overwrite confirmation"""
+        self.dialog.set_do_overwrite_confirmation(confirmation)
+
+    def get_overwrite_confirmation(self):
+        """Get the overwrite confirmation"""
+        return self.dialog.get_do_overwrite_confirmation()

@@ -20,6 +20,8 @@
 
 from gi.repository import Gtk
 
+from gcentralaccess.functions import *
+
 
 class UIFileChooser(Gtk.Window):
     def __init__(self, win_parent, title, action, buttons):
@@ -79,3 +81,12 @@ class UIFileChooser(Gtk.Window):
     def set_current_folder(self, folder_name):
         """Set the current folder"""
         return self.dialog.set_current_folder(folder_name)
+
+
+class UIFileChooserOpenFile(UIFileChooser):
+    def __init__(self, win_parent, title):
+        """Prepare the file chooser dialog"""
+        UIFileChooser.__init__(self, win_parent, title,
+                               Gtk.FileChooserAction.OPEN, (
+                                   _("Cancel"), Gtk.ResponseType.CANCEL,
+                                   _("Open"), Gtk.ResponseType.OK))

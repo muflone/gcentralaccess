@@ -107,3 +107,12 @@ class UIFileChooserSaveFile(UIFileChooser):
     def get_overwrite_confirmation(self):
         """Get the overwrite confirmation"""
         return self.dialog.get_do_overwrite_confirmation()
+
+
+class UIFileChooserSelectFolder(UIFileChooser):
+    def __init__(self, win_parent, title):
+        """Prepare the file chooser dialog"""
+        UIFileChooser.__init__(self, win_parent, title,
+                               Gtk.FileChooserAction.SELECT_FOLDER, (
+                                   _("Cancel"), Gtk.ResponseType.CANCEL,
+                                   _("OK"), Gtk.ResponseType.OK))

@@ -61,10 +61,25 @@ def get_ui_file(filename):
     return os.path.join(DIR_UI, filename)
 
 
+def check_invalid_input(widget, empty, separators, invalid_chars):
+    """Check the input for empty value or invalid characters"""
+    text = widget.get_text().strip()
+    if (not empty and len(text) == 0) or \
+            (not separators and ('/' in text)) or \
+            (not invalid_chars and ('\'' in text or '\\' in text)):
+        icon_name = 'dialog-error'
+    else:
+        icon_name = None
+    widget.set_icon_from_icon_name(
+        Gtk.EntryIconPosition.SECONDARY, icon_name)
+    return bool(icon_name)
+
+
 __all__ = [
     'readlines',
     'process_events',
     '_',
     'gtk30_',
-    'get_ui_file'
+    'get_ui_file',
+    'check_invalid_input'
 ]

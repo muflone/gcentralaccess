@@ -24,7 +24,8 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.functions import get_ui_file, _
+from gcentralaccess.functions import (
+    check_invalid_input, get_ui_file, _)
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 from .file_chooser import UIFileChooserOpenFile
 
@@ -145,13 +146,7 @@ class UIServiceDetail(object):
 
     def on_txt_name_description_changed(self, widget):
         """Check the service name or description fields"""
-        text = widget.get_text().strip()
-        if len(text) == 0 or '\'' in text or '\\' in text:
-            icon_name = 'dialog-error'
-        else:
-            icon_name = None
-        widget.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, icon_name)
+        check_invalid_input(widget, False, True, False)
 
     def on_txt_icon_changed(self, widget):
         """Check the icon field"""

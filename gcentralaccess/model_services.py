@@ -24,7 +24,7 @@ from gi.repository import GdkPixbuf
 
 
 class ModelServices(object):
-    COL_NAME = 0
+    COL_KEY = 0
     COL_DESCRIPTION = 1
     COL_COMMAND = 2
     COL_TERMINAL = 3
@@ -60,7 +60,7 @@ class ModelServices(object):
 
     def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
-        old_name = self.get_name(treeiter)
+        old_name = self.get_key(treeiter)
         # If the new name differs from the old name then update the
         # TreeIters map in self.rows
         if old_name != item.name:
@@ -72,16 +72,16 @@ class ModelServices(object):
             GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,
                                                    self.icon_size,
                                                    self.icon_size)
-        self.model.set_value(treeiter, self.COL_NAME, item.name)
+        self.model.set_value(treeiter, self.COL_KEY, item.name)
         self.model.set_value(treeiter, self.COL_DESCRIPTION, item.description)
         self.model.set_value(treeiter, self.COL_COMMAND, item.command)
         self.model.set_value(treeiter, self.COL_TERMINAL, item.terminal)
         self.model.set_value(treeiter, self.COL_ICON, icon)
         self.model.set_value(treeiter, self.COL_PIXBUF, pixbuf)
 
-    def get_name(self, treeiter):
+    def get_key(self, treeiter):
         """Get the name from a TreeIter"""
-        return self.model[treeiter][self.COL_NAME]
+        return self.model[treeiter][self.COL_KEY]
 
     def get_description(self, treeiter):
         """Get the description from a TreeIter"""
@@ -105,7 +105,7 @@ class ModelServices(object):
 
     def remove(self, treeiter):
         """Remove a TreeIter"""
-        self.rows.pop(self.get_name(treeiter))
+        self.rows.pop(self.get_key(treeiter))
         self.model.remove(treeiter)
 
     def dump(self):
@@ -113,7 +113,7 @@ class ModelServices(object):
         result = {}
         for key in self.rows.iterkeys():
             result[key] = ServiceInfo(
-                name=self.get_name(self.rows[key]),
+                name=self.get_key(self.rows[key]),
                 description=self.get_description(self.rows[key]),
                 command=self.get_command(self.rows[key]),
                 terminal=self.get_terminal(self.rows[key]),

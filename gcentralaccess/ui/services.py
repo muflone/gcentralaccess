@@ -91,7 +91,7 @@ class UIServices(object):
         selection = self.ui.tvw_services.get_selection().get_selected()
         selected_row = selection[1]
         if selected_row:
-            name = self.model.get_name(selected_row)
+            name = self.model.get_key(selected_row)
             description = self.model.get_description(selected_row)
             command = self.model.get_command(selected_row)
             terminal = self.model.get_terminal(selected_row)

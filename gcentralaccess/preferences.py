@@ -19,8 +19,12 @@
 ##
 
 SECTION_PREFERENCES = 'preferences'
+
 ICON_SIZE = 'icon size'
 DEFAULT_ICON_SIZE = 36
+
+PREVIEW_SIZE = 'preview size'
+DEFAULT_PREVIEW_SIZE = 128
 
 
 class Preferences(object):
@@ -30,6 +34,8 @@ class Preferences(object):
         self.options = {}
         self.options[ICON_SIZE] = self.settings.get_int(
             SECTION_PREFERENCES, ICON_SIZE, DEFAULT_ICON_SIZE)
+        self.options[PREVIEW_SIZE] = self.settings.get_int(
+            SECTION_PREFERENCES, PREVIEW_SIZE, DEFAULT_PREVIEW_SIZE)
 
     def get(self, option):
         """Returns a preferences option"""

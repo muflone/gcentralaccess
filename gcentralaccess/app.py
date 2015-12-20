@@ -19,7 +19,8 @@
 ##
 
 from .ui.main import UIMain
-from .constants import APP_ID, FILE_UI_APPMENU
+from .constants import APP_ID
+from .functions import get_ui_file
 from .gtkbuilder_loader import GtkBuilderLoader
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -44,7 +45,7 @@ class Application(Gtk.Application):
         action.connect("activate", self.on_app_quit_activate)
         self.add_action(action)
         # Add the app menu
-        builder_appmenu = GtkBuilderLoader(FILE_UI_APPMENU)
+        builder_appmenu = GtkBuilderLoader(get_ui_file('appmenu.ui'))
         self.set_app_menu(builder_appmenu.app_menu)
 
     def activate(self, application):

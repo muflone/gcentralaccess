@@ -21,8 +21,7 @@
 from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.constants import FILE_UI_SERVICES
-from gcentralaccess.functions import _
+from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import ICON_SIZE
 from gcentralaccess.model_services import ModelServices
 from gcentralaccess.service_info import ServiceInfo
@@ -37,7 +36,7 @@ class UIServices(object):
         self.preferences = preferences
         self.settings_positions = settings_positions
         # Load the user interface
-        self.ui = GtkBuilderLoader(FILE_UI_SERVICES)
+        self.ui = GtkBuilderLoader(get_ui_file('services.glade'))
         self.ui.dialog_services.set_transient_for(parent)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(

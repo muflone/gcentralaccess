@@ -24,8 +24,7 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.constants import FILE_UI_SERVICES_DETAIL
-from gcentralaccess.functions import _
+from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 from gcentralaccess.model_services import ModelServices
 from .file_chooser import UIFileChooserOpenFile
@@ -37,7 +36,7 @@ class UIServiceDetail(object):
     def __init__(self, parent, services, preferences):
         """Prepare the services detail dialog"""
         # Load the user interface
-        self.ui = GtkBuilderLoader(FILE_UI_SERVICES_DETAIL)
+        self.ui = GtkBuilderLoader(get_ui_file('services_detail.glade'))
         self.ui.dialog_edit_service.set_transient_for(parent)
         # Connect the actions accelerators
         for group_name in ('actions_edit_service', ):

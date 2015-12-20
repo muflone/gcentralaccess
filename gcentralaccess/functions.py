@@ -18,10 +18,13 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import os.path
 import gi
 
 from gettext import gettext as _
 from gettext import dgettext
+
+from .constants import DIR_UI
 
 if gi.require_version('Gtk', '3.0') is None:
     from gi.repository import Gtk
@@ -53,9 +56,15 @@ def gtk30_(message, context=None):
         context, message))
 
 
+def get_ui_file(filename):
+    """Return the full path of a Glade/UI file"""
+    return os.path.join(DIR_UI, filename)
+
+
 __all__ = [
     'readlines',
     'process_events',
     '_',
-    'gtk30_'
+    'gtk30_',
+    'get_ui_file'
 ]

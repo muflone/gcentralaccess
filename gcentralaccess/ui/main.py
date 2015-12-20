@@ -19,8 +19,9 @@
 ##
 
 from gcentralaccess.constants import (
-    FILE_UI_MAIN, APP_NAME,
+    APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
+from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -67,7 +68,7 @@ class UIMain(object):
 
     def loadUI(self):
         """Load the interface UI"""
-        self.ui = GtkBuilderLoader(FILE_UI_MAIN)
+        self.ui = GtkBuilderLoader(get_ui_file('main.glade'))
         self.ui.win_main.set_application(self.application)
         self.ui.win_main.set_title(APP_NAME)
         # Connect the actions accelerators

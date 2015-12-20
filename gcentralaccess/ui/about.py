@@ -27,8 +27,8 @@ from gcentralaccess.constants import (
     APP_NAME, APP_VERSION, APP_DESCRIPTION, APP_URL, APP_COPYRIGHT,
     APP_AUTHOR, APP_AUTHOR_EMAIL,
     FILE_CONTRIBUTORS, FILE_LICENSE, FILE_TRANSLATORS, FILE_RESOURCES,
-    FILE_ICON, FILE_UI_ABOUT)
-from gcentralaccess.functions import readlines, _
+    FILE_ICON)
+from gcentralaccess.functions import readlines, get_ui_file, _
 
 
 class UIAbout(object):
@@ -43,7 +43,7 @@ class UIAbout(object):
             if line not in translators:
                 translators.append(line)
         # Load the user interface
-        self.ui = GtkBuilderLoader(FILE_UI_ABOUT)
+        self.ui = GtkBuilderLoader(get_ui_file('about.glade'))
         # Set various properties
         self.ui.dialog_about.set_program_name(APP_NAME)
         self.ui.dialog_about.set_version('Version %s' % APP_VERSION)

@@ -22,7 +22,7 @@ from gcentralaccess.constants import (
     FILE_UI_MAIN, APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
 from gcentralaccess.functions import show_dialog_fileopen, _
-from gcentralaccess.preferences import Preferences, ICON_SIZE
+from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
@@ -47,7 +47,6 @@ class UIMain(object):
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
         self.preferences = Preferences(self.settings)
-        self.preferences.set(ICON_SIZE, self.preferences.get(ICON_SIZE))
         self.settings_services = Settings(FILE_SERVICES)
         # Load services
         for key in self.settings_services.get_sections():

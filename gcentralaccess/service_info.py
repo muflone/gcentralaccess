@@ -20,8 +20,9 @@
 
 
 class ServiceInfo(object):
-    def __init__(self, name, description, command, terminal):
+    def __init__(self, name, description, command, terminal, icon):
         self.name = name
         self.description = description
         self.command = command
         self.terminal = terminal
+        self.icon = icon

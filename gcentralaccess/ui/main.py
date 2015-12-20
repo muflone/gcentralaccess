@@ -36,12 +36,14 @@ SECTION_WINDOW_NAME = 'main'
 SECTION_SERVICE_DESCRIPTION = 'description'
 SECTION_SERVICE_COMMAND = 'command'
 SECTION_SERVICE_TERMINAL = 'terminal'
+SECTION_SERVICE_ICON = 'icon'
 
 
 class UIMain(object):
     def __init__(self, application):
         self.application = application
         self.services = {}
+        # Load settings
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
         self.preferences = Preferences(self.settings)
@@ -56,7 +58,9 @@ class UIMain(object):
                 command=self.settings_services.get(
                     key, SECTION_SERVICE_COMMAND),
                 terminal=self.settings_services.get_boolean(
-                    key, SECTION_SERVICE_TERMINAL))
+                    key, SECTION_SERVICE_TERMINAL),
+                icon=self.settings_services.get(
+                    key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
@@ -125,3 +129,7 @@ class UIMain(object):
                 section=key,
                 option=SECTION_SERVICE_TERMINAL,
                 value=self.services[key].terminal)
+            self.settings_services.set(
+                section=key,
+                option=SECTION_SERVICE_ICON,
+                value=self.services[key].icon)

@@ -16,6 +16,11 @@
         <property name="label" translatable="yes">_Cancel</property>
       </object>
     </child>
+    <child>
+      <object class="GtkAction" id="action_browse_icon">
+        <signal name="activate" handler="on_action_browse_icon_activate" swapped="no"/>
+      </object>
+    </child>
   </object>
   <object class="GtkDialog" id="dialog_edit_service">
     <property name="can_focus">False</property>
@@ -168,6 +173,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -181,6 +187,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -208,6 +215,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -223,6 +231,56 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_icon">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Icon:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_icon</property>
+                <property name="ellipsize">start</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="txt_icon">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <signal name="changed" handler="on_txt_icon_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btn_icon">
+                <property name="related_action">action_browse_icon</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">False</property>
+                <child>
+                  <object class="GtkImage" id="image_icon">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">image-missing</property>
+                    <property name="icon_size">3</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">4</property>
               </packing>
             </child>
             <child>
@@ -240,5 +298,10 @@
     <action-widgets>
       <action-widget response="-6">btn_cancel</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkFileFilter" id="filter_icon">
+    <mime-types>
+      <mime-type>image/*</mime-type>
+    </mime-types>
   </object>
 </interface>

@@ -19,6 +19,8 @@
 ##
 
 from .service_info import ServiceInfo
+from .preferences import ICON_SIZE
+from gi.repository import GdkPixbuf
 
 
 class ModelServices(object):
@@ -26,10 +28,13 @@ class ModelServices(object):
     COL_DESCRIPTION = 1
     COL_COMMAND = 2
     COL_TERMINAL = 3
+    COL_ICON = 4
+    COL_PIXBUF = 5
 
     def __init__(self, model, preferences):
         self.model = model
         self.rows = {}
+        self.icon_size = preferences.get(ICON_SIZE)
 
     def clear(self):
         """Clear the model"""
@@ -38,11 +43,18 @@ class ModelServices(object):
     def add_data(self, service):
         """Add a new row to the model if it doesn't exists"""
         if service.name not in self.rows:
+            icon = service.icon if service.icon is not None else ''
+            pixbuf = None if icon == '' else \
+                GdkPixbuf.Pixbuf.new_from_file_at_size(service.icon,
+                                                       self.icon_size,
+                                                       self.icon_size)
             new_row = self.model.append((
                 service.name,
                 service.description,
                 service.command,
-                service.terminal))
+                service.terminal,
+                icon,
+                pixbuf))
             self.rows[service.name] = new_row
             return new_row
 
@@ -55,6 +67,11 @@ class ModelServices(object):
             self.rows.pop(old_name)
             self.rows[service.name] = treeiter
         # Update values
+        icon = service.icon if service.icon is not None else ''
+        pixbuf = None if icon == '' else \
+            GdkPixbuf.Pixbuf.new_from_file_at_size(service.icon,
+                                                   self.icon_size,
+                                                   self.icon_size)
         self.model.set_value(treeiter, self.COL_NAME,
                              service.name)
         self.model.set_value(treeiter, self.COL_DESCRIPTION,
@@ -63,6 +80,8 @@ class ModelServices(object):
                              service.command)
         self.model.set_value(treeiter, self.COL_TERMINAL,
                              service.terminal)
+        self.model.set_value(treeiter, self.COL_ICON, icon)
+        self.model.set_value(treeiter, self.COL_PIXBUF, pixbuf)
 
     def get_name(self, treeiter):
         """Get the name from a TreeIter"""
@@ -79,6 +98,10 @@ class ModelServices(object):
     def get_terminal(self, treeiter):
         """Get the terminal flag from a TreeIter"""
         return self.model[treeiter][self.COL_TERMINAL]
+
+    def get_icon(self, treeiter):
+        """Get the icon from a TreeIter"""
+        return self.model[treeiter][self.COL_ICON]
 
     def get_iter(self, name):
         """Get a TreeIter from a name"""
@@ -97,7 +120,8 @@ class ModelServices(object):
                 name=self.get_name(self.rows[key]),
                 description=self.get_description(self.rows[key]),
                 command=self.get_command(self.rows[key]),
-                terminal=self.get_terminal(self.rows[key]))
+                terminal=self.get_terminal(self.rows[key]),
+                icon=self.get_icon(self.rows[key]))
         return result
 
     def load(self, services):

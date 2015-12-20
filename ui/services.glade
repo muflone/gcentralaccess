@@ -43,6 +43,10 @@
       <column type="gchararray"/>
       <!-- column-name Terminal -->
       <column type="gboolean"/>
+      <!-- column-name Icon -->
+      <column type="gchararray"/>
+      <!-- column-name Pixbuf -->
+      <column type="GdkPixbuf"/>
     </columns>
   </object>
   <object class="GtkDialog" id="dialog_services">
@@ -107,6 +111,12 @@
                     <property name="reorderable">True</property>
                     <property name="sort_indicator">True</property>
                     <property name="sort_column_id">0</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cell_icon"/>
+                      <attributes>
+                        <attribute name="pixbuf">5</attribute>
+                      </attributes>
+                    </child>
                     <child>
                       <object class="GtkCellRendererText" id="cell_name"/>
                       <attributes>

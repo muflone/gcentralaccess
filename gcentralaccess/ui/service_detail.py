@@ -18,13 +18,17 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import os.path
+
 from gi.repository import Gtk
+from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import FILE_UI_SERVICES_DETAIL
 from gcentralaccess.functions import *
 from gcentralaccess.preferences import ICON_SIZE
 from gcentralaccess.model_services import ModelServices
+from .file_chooser import UIFileChooserOpenFile
 
 SECTION_WINDOW_NAME = 'services'
 
@@ -46,18 +50,20 @@ class UIServiceDetail(object):
         self.description = ''
         self.command = ''
         self.terminal = False
+        self.icon = ''
         # Load settings
         self.icon_size = preferences.get(ICON_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
     def show(self, default_name, default_description, default_command,
-             default_terminal, title, treeiter):
+             default_terminal, default_icon, title, treeiter):
         """Show the Services detail dialog"""
         self.ui.txt_name.set_text(default_name)
         self.ui.txt_description.set_text(default_description)
         self.ui.txt_command.set_text(default_command)
         self.ui.chk_terminal.set_active(default_terminal)
+        self.ui.txt_icon.set_text(default_icon)
         self.ui.txt_name.grab_focus()
         self._edit_service_set_error(None, None)
         self.ui.dialog_edit_service.set_title(title)
@@ -68,6 +74,7 @@ class UIServiceDetail(object):
         self.description = self.ui.txt_description.get_text().strip()
         self.command = self.ui.txt_command.get_text().strip()
         self.terminal = self.ui.chk_terminal.get_active()
+        self.icon = self.ui.txt_icon.get_text().strip()
         return response
 
     def destroy(self):
@@ -81,6 +88,7 @@ class UIServiceDetail(object):
         description = self.ui.txt_description.get_text().strip()
         command = self.ui.txt_command.get_text().strip()
         terminal = self.ui.chk_terminal.get_active()
+        icon = self.ui.txt_icon.get_text().strip()
         if len(name) == 0:
             self._edit_service_set_error(
                 self.ui.txt_name,
@@ -142,3 +150,31 @@ class UIServiceDetail(object):
             icon_name = None
         widget.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY, icon_name)
+
+    def on_txt_icon_changed(self, widget):
+        """Check the icon field"""
+        text = widget.get_text().strip()
+        if len(text) > 0 and os.path.isfile(text):
+            self.ui.image_icon.set_from_pixbuf(
+                GdkPixbuf.Pixbuf.new_from_file_at_size(text,
+                                                       self.icon_size,
+                                                       self.icon_size))
+            icon_name = None
+        else:
+            icon_name = 'dialog-error' if len(text) > 0 else None
+            self.ui.image_icon.set_from_icon_name('image-missing',
+                                                  Gtk.IconSize.LARGE_TOOLBAR)
+        widget.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, icon_name)
+
+    def on_action_browse_icon_activate(self, action):
+        """Browse for an icon file"""
+        dialog = UIFileChooserOpenFile(self.ui.dialog_edit_service,
+                                       _("Select an icon"))
+        dialog.add_filter(_("All Image Files"), "image/*", None)
+        dialog.add_filter(_("All Files"), None, "*")
+        dialog.set_filename(self.ui.txt_icon.get_text())
+        filename = dialog.show()
+        if filename is not None:
+            self.ui.txt_icon.set_text(filename)
+        dialog.destroy()

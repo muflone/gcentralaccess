@@ -113,6 +113,10 @@ class UIServiceDetail(object):
             self._edit_service_set_error(
                 self.ui.txt_name,
                 _('A service with that name already exists'))
+        elif len(icon) > 0 and not os.path.isfile(icon):
+            self._edit_service_set_error(
+                self.ui.txt_icon,
+                _('The service icon doesn\'t exists'))
         else:
             self.ui.dialog_edit_service.response(Gtk.ResponseType.OK)
 

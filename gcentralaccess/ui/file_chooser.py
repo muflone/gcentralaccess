@@ -82,6 +82,14 @@ class UIFileChooser(Gtk.Window):
         """Set the current folder"""
         return self.dialog.set_current_folder(folder_name)
 
+    def set_preview_widget(self, widget, callback):
+        """Set a preview widget with a callback function to update preview"""
+        self.dialog.set_preview_widget(widget)
+        self.dialog.set_use_preview_label(False)
+        self.dialog.connect('update-preview', callback, widget,
+                            self.dialog.get_preview_filename,
+                            self.dialog.set_preview_widget_active)
+
 
 class UIFileChooserOpenFile(UIFileChooser):
     def __init__(self, parent, title):

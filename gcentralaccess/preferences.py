@@ -18,13 +18,15 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+DEFAULT_VALUES = {}
+
 SECTION_PREFERENCES = 'preferences'
 
 ICON_SIZE = 'icon size'
-DEFAULT_ICON_SIZE = 36
+DEFAULT_VALUES[ICON_SIZE] = 36
 
 PREVIEW_SIZE = 'preview size'
-DEFAULT_PREVIEW_SIZE = 128
+DEFAULT_VALUES[PREVIEW_SIZE] = 128
 
 
 class Preferences(object):
@@ -32,10 +34,9 @@ class Preferences(object):
         """Load settings into preferences"""
         self.settings = settings
         self.options = {}
-        self.options[ICON_SIZE] = self.settings.get_int(
-            SECTION_PREFERENCES, ICON_SIZE, DEFAULT_ICON_SIZE)
-        self.options[PREVIEW_SIZE] = self.settings.get_int(
-            SECTION_PREFERENCES, PREVIEW_SIZE, DEFAULT_PREVIEW_SIZE)
+        for option in (ICON_SIZE, PREVIEW_SIZE):
+            self.options[option] = self.settings.get_int(
+                SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
 
     def get(self, option):
         """Returns a preferences option"""

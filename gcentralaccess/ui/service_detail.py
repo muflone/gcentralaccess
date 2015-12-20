@@ -26,7 +26,6 @@ from gi.repository import GdkPixbuf
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
-from gcentralaccess.model_services import ModelServices
 from .file_chooser import UIFileChooserOpenFile
 
 SECTION_WINDOW_NAME = 'services'
@@ -42,7 +41,6 @@ class UIServiceDetail(object):
         for group_name in ('actions_edit_service', ):
             for action in self.ui.get_object(group_name).list_actions():
                 action.connect_accelerator()
-        # Load the services
         self.model = services
         self.selected_iter = None
         self.name = ''
@@ -93,26 +91,26 @@ class UIServiceDetail(object):
             self._edit_service_set_error(
                 self.ui.txt_name,
                 _('The service name is missing'))
-        elif len(description) == 0:
-            self._edit_service_set_error(
-                self.ui.txt_description,
-                _('The service description is missing'))
-        elif len(command) == 0:
-            self._edit_service_set_error(
-                self.ui.txt_command,
-                _('The service command is missing'))
         elif '\'' in name or '\\' in name:
             self._edit_service_set_error(
                 self.ui.txt_name,
                 _('The service name is invalid'))
-        elif '\'' in description or '\\' in description:
-            self._edit_service_set_error(
-                self.ui.txt_description,
-                _('The service description is invalid'))
         elif self.model.get_iter(name) not in (None, self.selected_iter):
             self._edit_service_set_error(
                 self.ui.txt_name,
                 _('A service with that name already exists'))
+        elif len(description) == 0:
+            self._edit_service_set_error(
+                self.ui.txt_description,
+                _('The service description is missing'))
+        elif '\'' in description or '\\' in description:
+            self._edit_service_set_error(
+                self.ui.txt_description,
+                _('The service description is invalid'))
+        elif len(command) == 0:
+            self._edit_service_set_error(
+                self.ui.txt_command,
+                _('The service command is missing'))
         elif len(icon) > 0 and not os.path.isfile(icon):
             self._edit_service_set_error(
                 self.ui.txt_icon,
@@ -145,7 +143,7 @@ class UIServiceDetail(object):
             self.ui.txt_command.set_icon_from_icon_name(
                 Gtk.EntryIconPosition.SECONDARY, None)
 
-    def on_txt_service_name_description_changed(self, widget):
+    def on_txt_name_description_changed(self, widget):
         """Check the service name or description fields"""
         text = widget.get_text().strip()
         if len(text) == 0 or '\'' in text or '\\' in text:

@@ -40,46 +40,42 @@ class ModelServices(object):
         """Clear the model"""
         return self.model.clear()
 
-    def add_data(self, service):
+    def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
-        if service.name not in self.rows:
-            icon = service.icon if service.icon is not None else ''
+        if item.name not in self.rows:
+            icon = item.icon if item.icon is not None else ''
             pixbuf = None if icon == '' else \
-                GdkPixbuf.Pixbuf.new_from_file_at_size(service.icon,
+                GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,
                                                        self.icon_size,
                                                        self.icon_size)
             new_row = self.model.append((
-                service.name,
-                service.description,
-                service.command,
-                service.terminal,
+                item.name,
+                item.description,
+                item.command,
+                item.terminal,
                 icon,
                 pixbuf))
-            self.rows[service.name] = new_row
+            self.rows[item.name] = new_row
             return new_row
 
-    def set_data(self, treeiter, service):
+    def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
         old_name = self.get_name(treeiter)
         # If the new name differs from the old name then update the
         # TreeIters map in self.rows
-        if old_name != service.name:
+        if old_name != item.name:
             self.rows.pop(old_name)
-            self.rows[service.name] = treeiter
+            self.rows[item.name] = treeiter
         # Update values
-        icon = service.icon if service.icon is not None else ''
+        icon = item.icon if item.icon is not None else ''
         pixbuf = None if icon == '' else \
-            GdkPixbuf.Pixbuf.new_from_file_at_size(service.icon,
+            GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,
                                                    self.icon_size,
                                                    self.icon_size)
-        self.model.set_value(treeiter, self.COL_NAME,
-                             service.name)
-        self.model.set_value(treeiter, self.COL_DESCRIPTION,
-                             service.description)
-        self.model.set_value(treeiter, self.COL_COMMAND,
-                             service.command)
-        self.model.set_value(treeiter, self.COL_TERMINAL,
-                             service.terminal)
+        self.model.set_value(treeiter, self.COL_NAME, item.name)
+        self.model.set_value(treeiter, self.COL_DESCRIPTION, item.description)
+        self.model.set_value(treeiter, self.COL_COMMAND, item.command)
+        self.model.set_value(treeiter, self.COL_TERMINAL, item.terminal)
         self.model.set_value(treeiter, self.COL_ICON, icon)
         self.model.set_value(treeiter, self.COL_PIXBUF, pixbuf)
 
@@ -124,7 +120,7 @@ class ModelServices(object):
                 icon=self.get_icon(self.rows[key]))
         return result
 
-    def load(self, services):
+    def load(self, items):
         """Load the model data from a dict object"""
-        for key in sorted(services.iterkeys()):
-            self.add_data(services[key])
+        for key in sorted(items.iterkeys()):
+            self.add_data(items[key])

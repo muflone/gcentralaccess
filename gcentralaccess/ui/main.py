@@ -27,7 +27,6 @@ from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
 from .services import UIServices
-from gcentralaccess.model_services import ModelServices
 from gcentralaccess.service_info import ServiceInfo
 from gi.repository import Gtk
 from gi.repository import Gdk

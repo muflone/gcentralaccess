@@ -167,7 +167,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
-                <signal name="changed" handler="on_txt_service_name_description_changed" swapped="no"/>
+                <signal name="changed" handler="on_txt_name_description_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -181,7 +181,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
-                <signal name="changed" handler="on_txt_service_name_description_changed" swapped="no"/>
+                <signal name="changed" handler="on_txt_name_description_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -287,7 +287,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>

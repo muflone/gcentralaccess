@@ -31,8 +31,9 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServices(object):
-    def __init__(self, parent, settings_positions, show=False):
+    def __init__(self, parent, preferences, settings_positions, show=False):
         """Prepare the services dialog and optionally show it immediately"""
+        self.preferences = preferences
         self.settings_positions = settings_positions
         # Load the user interface
         self.ui = GtkBuilderLoader(FILE_UI_SERVICES)
@@ -45,7 +46,7 @@ class UIServices(object):
             for action in self.ui.get_object(group_name).list_actions():
                 action.connect_accelerator()
         # Load the services
-        self.model = ModelServices(self.ui.store_services)
+        self.model = ModelServices(self.ui.store_services, preferences)
         self.selected_iter = None
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)

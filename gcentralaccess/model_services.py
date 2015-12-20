@@ -27,7 +27,7 @@ class ModelServices(object):
     COL_COMMAND = 2
     COL_TERMINAL = 3
 
-    def __init__(self, model):
+    def __init__(self, model, preferences):
         self.model = model
         self.rows = {}
 

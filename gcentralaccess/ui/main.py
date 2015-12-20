@@ -22,6 +22,7 @@ from gcentralaccess.constants import (
     FILE_UI_MAIN, APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
 from gcentralaccess.functions import show_dialog_fileopen, _
+from gcentralaccess.preferences import Preferences, ICON_SIZE
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
@@ -43,8 +44,10 @@ class UIMain(object):
         self.services = {}
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
-        # Load services
+        self.preferences = Preferences(self.settings)
+        self.preferences.set(ICON_SIZE, self.preferences.get(ICON_SIZE))
         self.settings_services = Settings(FILE_SERVICES)
+        # Load services
         for key in self.settings_services.get_sections():
             self.services[key] = ServiceInfo(
                 name=key,
@@ -100,6 +103,7 @@ class UIMain(object):
         """Edit services"""
         dialog_services = UIServices(
             parent=self.ui.win_main,
+            preferences=self.preferences,
             settings_positions=self.settings_positions)
         # Load services list
         dialog_services.model.load(self.services)

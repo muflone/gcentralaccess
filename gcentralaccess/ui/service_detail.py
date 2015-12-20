@@ -23,13 +23,14 @@ from gi.repository import Gtk
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import FILE_UI_SERVICES_DETAIL
 from gcentralaccess.functions import *
+from gcentralaccess.preferences import ICON_SIZE
 from gcentralaccess.model_services import ModelServices
 
 SECTION_WINDOW_NAME = 'services'
 
 
 class UIServiceDetail(object):
-    def __init__(self, parent, services):
+    def __init__(self, parent, services, preferences):
         """Prepare the services detail dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(FILE_UI_SERVICES_DETAIL)
@@ -45,6 +46,8 @@ class UIServiceDetail(object):
         self.description = ''
         self.command = ''
         self.terminal = False
+        # Load settings
+        self.icon_size = preferences.get(ICON_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

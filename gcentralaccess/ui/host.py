@@ -26,6 +26,7 @@ from gcentralaccess.functions import (
 from gcentralaccess.preferences import ICON_SIZE
 from gcentralaccess.model_destinations import ModelDestinations
 from gcentralaccess.destination_info import DestinationInfo
+from .destination import UIDestination
 
 SECTION_WINDOW_NAME = 'host'
 
@@ -71,7 +72,21 @@ class UIHost(object):
 
     def on_action_add_activate(self, action):
         """Add a new destination"""
-        pass
+        dialog = UIDestination(self.ui.dialog_host,
+                               self.model,
+                               self.preferences,
+                               self.settings_positions)
+        if dialog.show(default_name='',
+                       default_value='',
+                       default_type='ipv4',
+                       title=_('Add new destination'),
+                       treeiter=None) == Gtk.ResponseType.OK:
+            self.model.add_data(DestinationInfo(name=dialog.name,
+                                                value=dialog.value,
+                                                type=dialog.type))
+        # Get the new destinations list, clear and store the list again
+        print self.model.dump()
+        dialog.destroy()
 
     def on_action_edit_activate(self, action):
         """Edit the selected destination"""
@@ -82,7 +97,22 @@ class UIHost(object):
             value = self.model.get_value(selected_row)
             destination_type = self.model.get_type(selected_row)
             selected_iter = self.model.get_iter(name)
-            pass
+            dialog = UIDestination(self.ui.dialog_host,
+                                   self.model,
+                                   self.preferences,
+                                   self.settings_positions)
+            if dialog.show(default_name=name,
+                           default_value=value,
+                           default_type=destination_type,
+                           title=_('Edit destination'),
+                           treeiter=selected_iter
+                           ) == Gtk.ResponseType.OK:
+                # Update values
+                self.model.set_data(selected_iter, DestinationInfo(
+                    name=dialog.name,
+                    value=dialog.value,
+                    type=dialog.type))
+            dialog.destroy()
 
     def on_action_remove_activate(self, action):
         """Remove the selected destination"""

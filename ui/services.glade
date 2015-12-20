@@ -51,6 +51,7 @@
   </object>
   <object class="GtkDialog" id="dialog_services">
     <property name="can_focus">False</property>
+    <property name="border_width">2</property>
     <property name="title" translatable="yes">Configure services</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -61,6 +62,7 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">4</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
@@ -94,49 +96,56 @@
           <object class="GtkBox" id="box_services">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">1</property>
+            <property name="spacing">4</property>
             <child>
-              <object class="GtkTreeView" id="tvw_services">
+              <object class="GtkScrolledWindow" id="scroll_services">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="model">store_services</property>
-                <property name="search_column">0</property>
-                <signal name="row-activated" handler="on_tvw_services_row_activated" swapped="no"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="selection_services"/>
-                </child>
+                <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="column_name">
-                    <property name="title" translatable="yes">Name</property>
-                    <property name="reorderable">True</property>
-                    <property name="sort_indicator">True</property>
-                    <property name="sort_column_id">0</property>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cell_icon"/>
-                      <attributes>
-                        <attribute name="pixbuf">5</attribute>
-                      </attributes>
+                  <object class="GtkTreeView" id="tvw_services">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="model">store_services</property>
+                    <property name="search_column">0</property>
+                    <signal name="row-activated" handler="on_tvw_services_row_activated" swapped="no"/>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="selection_services"/>
                     </child>
                     <child>
-                      <object class="GtkCellRendererText" id="cell_name"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
+                      <object class="GtkTreeViewColumn" id="column_name">
+                        <property name="title" translatable="yes">Name</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">0</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cell_icon"/>
+                          <attributes>
+                            <attribute name="pixbuf">5</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cell_name"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="column_description">
-                    <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Description</property>
-                    <property name="reorderable">True</property>
-                    <property name="sort_indicator">True</property>
-                    <property name="sort_column_id">1</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cell_description"/>
-                      <attributes>
-                        <attribute name="text">1</attribute>
-                      </attributes>
+                      <object class="GtkTreeViewColumn" id="column_description">
+                        <property name="resizable">True</property>
+                        <property name="title" translatable="yes">Description</property>
+                        <property name="reorderable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cell_description"/>
+                          <attributes>
+                            <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
@@ -151,7 +160,6 @@
               <object class="GtkButtonBox" id="buttonbox_actions">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">2</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">5</property>
                 <property name="layout_style">start</property>

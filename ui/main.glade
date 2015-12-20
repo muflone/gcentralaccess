@@ -8,7 +8,7 @@
     <child>
       <object class="GtkAction" id="action_services">
         <property name="label" translatable="yes">_Services</property>
-        <property name="icon_name">applications-accessories</property>
+        <property name="icon_name">preferences-system</property>
         <signal name="activate" handler="on_action_services_activate" swapped="no"/>
       </object>
       <accelerator key="s" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>

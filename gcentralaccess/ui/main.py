@@ -18,15 +18,17 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import os.path
 from gcentralaccess.constants import (
     APP_NAME,
-    FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
+    FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
 from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
 from .services import UIServices
+from .host import UIHost
 from gcentralaccess.service_info import ServiceInfo
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -36,6 +38,9 @@ SECTION_SERVICE_DESCRIPTION = 'description'
 SECTION_SERVICE_COMMAND = 'command'
 SECTION_SERVICE_TERMINAL = 'terminal'
 SECTION_SERVICE_ICON = 'icon'
+SECTION_HOST = 'host'
+SECTION_HOST_NAME = 'name'
+SECTION_HOST_DESCRIPTION = 'description'
 
 
 class UIMain(object):
@@ -131,3 +136,20 @@ class UIMain(object):
                 section=key,
                 option=SECTION_SERVICE_ICON,
                 value=self.services[key].icon)
+
+    def on_action_new_activate(self, action):
+        """Define a new host"""
+        dialog = UIHost(
+            parent=self.ui.win_main,
+            preferences=self.preferences,
+            settings_positions=self.settings_positions)
+        response = dialog.show()
+        if response == Gtk.ResponseType.OK:
+            print dialog.name, dialog.description
+            settings_host = Settings(
+                os.path.join(DIR_HOSTS, '%s.conf' % dialog.name))
+            settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
+            settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
+                              dialog.description)
+            settings_host.save()
+            dialog.destroy()

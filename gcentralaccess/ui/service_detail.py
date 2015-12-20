@@ -25,7 +25,7 @@ from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import FILE_UI_SERVICES_DETAIL
-from gcentralaccess.functions import *
+from gcentralaccess.functions import _
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 from gcentralaccess.model_services import ModelServices
 from .file_chooser import UIFileChooserOpenFile

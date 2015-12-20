@@ -19,7 +19,7 @@
 ##
 
 from .ui.main import UIMain
-from .constants import *
+from .constants import APP_ID, FILE_UI_APPMENU
 from .gtkbuilder_loader import GtkBuilderLoader
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -53,8 +53,8 @@ class Application(Gtk.Application):
 
     def on_app_about_activate(self, action, data):
         """Show the about dialog from the app menu"""
-        self.ui.on_action_application_about_activate(action)
+        self.ui.on_action_about_activate(action)
 
     def on_app_quit_activate(self, action, data):
         """Quit the application from the app menu"""
-        self.ui.on_action_application_quit_activate(action)
+        self.ui.on_action_quit_activate(action)

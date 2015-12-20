@@ -20,7 +20,7 @@
 
 from gi.repository import Gtk
 
-from gcentralaccess.functions import *
+from gcentralaccess.functions import _
 
 
 class UIFileChooser(Gtk.Window):

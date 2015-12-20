@@ -23,8 +23,12 @@ from gi.repository import GLib
 from gi.repository.GdkPixbuf import Pixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.constants import *
-from gcentralaccess.functions import *
+from gcentralaccess.constants import (
+    APP_NAME, APP_VERSION, APP_DESCRIPTION, APP_URL, APP_COPYRIGHT,
+    APP_AUTHOR, APP_AUTHOR_EMAIL,
+    FILE_CONTRIBUTORS, FILE_LICENSE, FILE_TRANSLATORS, FILE_RESOURCES,
+    FILE_ICON, FILE_UI_ABOUT)
+from gcentralaccess.functions import readlines, _
 
 
 class UIAbout(object):

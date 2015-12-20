@@ -21,7 +21,6 @@
 from gcentralaccess.constants import (
     FILE_UI_MAIN, APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES)
-from gcentralaccess.functions import show_dialog_fileopen, _
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -92,11 +91,11 @@ class UIMain(object):
         self.about.destroy()
         self.application.quit()
 
-    def on_action_application_about_activate(self, action):
+    def on_action_about_activate(self, action):
         """Show the about dialog"""
         self.about.show()
 
-    def on_action_application_quit_activate(self, action):
+    def on_action_quit_activate(self, action):
         """Close the application by closing the main window"""
         event = Gdk.Event()
         event.key.type = Gdk.EventType.DELETE

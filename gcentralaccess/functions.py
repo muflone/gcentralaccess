@@ -18,33 +18,15 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import gi
+
 from gettext import gettext as _
 from gettext import dgettext
-from .constants import *
-import gi
+
 if gi.require_version('Gtk', '3.0') is None:
     from gi.repository import Gtk
 if gi.require_version('GdkPixbuf', '2.0') is None:
     from gi.repository import GdkPixbuf
-
-
-def show_dialog_fileopen(parent, title):
-    """Show a FileChooserDialog with open and cancel buttons"""
-    dialog = Gtk.FileChooserDialog(parent=parent,
-                                   flags=Gtk.DialogFlags.MODAL,
-                                   type=Gtk.WindowType.TOPLEVEL,
-                                   buttons=(Gtk.STOCK_CANCEL,
-                                            Gtk.ResponseType.CANCEL,
-                                            Gtk.STOCK_OPEN,
-                                            Gtk.ResponseType.OK))
-    if title:
-        dialog.set_title(title)
-    if dialog.run() == Gtk.ResponseType.OK:
-        result = dialog.get_filename()
-    else:
-        result = None
-    dialog.destroy()
-    return result
 
 
 def readlines(filename, empty_lines=False):
@@ -72,7 +54,6 @@ def gtk30_(message, context=None):
 
 
 __all__ = [
-    'show_dialog_fileopen',
     'readlines',
     'process_events',
     '_',

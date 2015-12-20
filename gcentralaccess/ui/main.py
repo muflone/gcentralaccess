@@ -71,7 +71,7 @@ class UIMain(object):
         self.ui.win_main.set_application(self.application)
         self.ui.win_main.set_title(APP_NAME)
         # Connect the actions accelerators
-        for group_name in ('actions_application', ):
+        for group_name in ('actions_application', 'actions_connections'):
             for action in self.ui.get_object(group_name).list_actions():
                 action.connect_accelerator()
         # Connect signals from the glade file to the module functions

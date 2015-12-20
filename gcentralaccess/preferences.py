@@ -35,8 +35,15 @@ class Preferences(object):
         self.settings = settings
         self.options = {}
         for option in (ICON_SIZE, PREVIEW_SIZE):
-            self.options[option] = self.settings.get_int(
-                SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
+            if isinstance(DEFAULT_VALUES[option], int):
+                self.options[option] = self.settings.get_int(
+                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
+            elif isinstance(DEFAULT_VALUES[option], bool):
+                self.options[option] = self.settings.get_boolean(
+                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
+            else:
+                self.options[option] = self.settings.get(
+                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
 
     def get(self, option):
         """Returns a preferences option"""

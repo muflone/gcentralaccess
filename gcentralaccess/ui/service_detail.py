@@ -25,7 +25,7 @@ from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    check_invalid_input, get_ui_file, _)
+    check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 from .file_chooser import UIFileChooserOpenFile
 
@@ -64,7 +64,6 @@ class UIServiceDetail(object):
         self.ui.chk_terminal.set_active(default_terminal)
         self.ui.txt_icon.set_text(default_icon)
         self.ui.txt_name.grab_focus()
-        self._edit_service_set_error(None, None)
         self.ui.dialog_edit_service.set_title(title)
         self.selected_iter = treeiter
         response = self.ui.dialog_edit_service.run()
@@ -83,39 +82,55 @@ class UIServiceDetail(object):
 
     def on_action_confirm_activate(self, action):
         """Check che service configuration before confirm"""
+        def show_error_message_on_infobar(widget, error_msg):
+            """Show the error message on the GtkInfoBar"""
+            set_error_message_on_infobar(
+                widget=widget,
+                widgets=(self.ui.txt_name, self.ui.txt_description,
+                         self.ui.txt_command),
+                label=self.ui.lbl_error_message,
+                infobar=self.ui.infobar_error_message,
+                error_msg=error_msg)
         name = self.ui.txt_name.get_text().strip()
         description = self.ui.txt_description.get_text().strip()
         command = self.ui.txt_command.get_text().strip()
         terminal = self.ui.chk_terminal.get_active()
         icon = self.ui.txt_icon.get_text().strip()
         if len(name) == 0:
-            self._edit_service_set_error(
+            # Show error for missing service name
+            show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('The service name is missing'))
         elif '\'' in name or '\\' in name:
-            self._edit_service_set_error(
+            # Show error for invalid service name
+            show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('The service name is invalid'))
         elif self.model.get_iter(name) not in (None, self.selected_iter):
-            self._edit_service_set_error(
+            # Show error for existing service name
+            show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('A service with that name already exists'))
         elif len(description) == 0:
-            self._edit_service_set_error(
+            # Show error for missing service description
+            show_error_message_on_infobar(
                 self.ui.txt_description,
                 _('The service description is missing'))
         elif '\'' in description or '\\' in description:
-            self._edit_service_set_error(
+            # Show error for invalid service description
+            show_error_message_on_infobar(
                 self.ui.txt_description,
                 _('The service description is invalid'))
         elif len(command) == 0:
-            self._edit_service_set_error(
+            # Show error for missing service description
+            show_error_message_on_infobar(
                 self.ui.txt_command,
                 _('The service command is missing'))
         elif len(icon) > 0 and not os.path.isfile(icon):
-            self._edit_service_set_error(
+            # Show error for missing service description
+            show_error_message_on_infobar(
                 self.ui.txt_icon,
-                _('The service icon doesn\'t exists'))
+                _('The service icon doesn''t exists'))
         else:
             self.ui.dialog_edit_service.response(Gtk.ResponseType.OK)
 
@@ -123,26 +138,6 @@ class UIServiceDetail(object):
         """Close the infobar"""
         if response_id == Gtk.ResponseType.CLOSE:
             self.ui.infobar_error_message.set_visible(False)
-
-    def _edit_service_set_error(self, widget, error_message):
-        """Show an error message for a widget"""
-        if error_message:
-            self.ui.lbl_error_message.set_text(error_message)
-            self.ui.infobar_error_message.set_visible(True)
-            if widget in (self.ui.txt_name,
-                          self.ui.txt_description,
-                          self.ui.txt_command):
-                widget.set_icon_from_icon_name(
-                    Gtk.EntryIconPosition.SECONDARY, 'dialog-error')
-                widget.grab_focus()
-        else:
-            self.ui.infobar_error_message.set_visible(False)
-            self.ui.txt_name.set_icon_from_icon_name(
-                Gtk.EntryIconPosition.SECONDARY, None)
-            self.ui.txt_description.set_icon_from_icon_name(
-                Gtk.EntryIconPosition.SECONDARY, None)
-            self.ui.txt_command.set_icon_from_icon_name(
-                Gtk.EntryIconPosition.SECONDARY, None)
 
     def on_txt_name_description_changed(self, widget):
         """Check the service name or description fields"""

@@ -75,11 +75,27 @@ def check_invalid_input(widget, empty, separators, invalid_chars):
     return bool(icon_name)
 
 
+def set_error_message_on_infobar(widget, widgets, label, infobar, error_msg):
+    """Show an error message for a widget"""
+    if error_msg:
+        label.set_text(error_msg)
+        infobar.set_visible(True)
+        if widget in widgets:
+            widget.set_icon_from_icon_name(
+                Gtk.EntryIconPosition.SECONDARY, 'dialog-error')
+            widget.grab_focus()
+    else:
+        infobar.set_visible(False)
+        for w in widgets:
+            w.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, None)
+
+
 __all__ = [
     'readlines',
     'process_events',
     '_',
     'gtk30_',
     'get_ui_file',
-    'check_invalid_input'
+    'check_invalid_input',
+    'set_error_message_on_infobar'
 ]

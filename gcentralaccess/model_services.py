@@ -18,13 +18,13 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+from .model_abstract import ModelAbstract
 from .service_info import ServiceInfo
 from .preferences import ICON_SIZE
 from gi.repository import GdkPixbuf
 
 
-class ModelServices(object):
-    COL_KEY = 0
+class ModelServices(ModelAbstract):
     COL_DESCRIPTION = 1
     COL_COMMAND = 2
     COL_TERMINAL = 3
@@ -32,16 +32,12 @@ class ModelServices(object):
     COL_PIXBUF = 5
 
     def __init__(self, model, preferences):
-        self.model = model
-        self.rows = {}
+        super(self.__class__, self).__init__(model, preferences)
         self.icon_size = preferences.get(ICON_SIZE)
-
-    def clear(self):
-        """Clear the model"""
-        return self.model.clear()
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
+        super(self.__class__, self).add_data(item)
         if item.name not in self.rows:
             icon = item.icon if item.icon is not None else ''
             pixbuf = None if icon == '' else \
@@ -60,12 +56,7 @@ class ModelServices(object):
 
     def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
-        old_name = self.get_key(treeiter)
-        # If the new name differs from the old name then update the
-        # TreeIters map in self.rows
-        if old_name != item.name:
-            self.rows.pop(old_name)
-            self.rows[item.name] = treeiter
+        super(self.__class__, self).set_data(treeiter, item)
         # Update values
         icon = item.icon if item.icon is not None else ''
         pixbuf = None if icon == '' else \
@@ -78,10 +69,6 @@ class ModelServices(object):
         self.model.set_value(treeiter, self.COL_TERMINAL, item.terminal)
         self.model.set_value(treeiter, self.COL_ICON, icon)
         self.model.set_value(treeiter, self.COL_PIXBUF, pixbuf)
-
-    def get_key(self, treeiter):
-        """Get the name from a TreeIter"""
-        return self.model[treeiter][self.COL_KEY]
 
     def get_description(self, treeiter):
         """Get the description from a TreeIter"""
@@ -99,17 +86,9 @@ class ModelServices(object):
         """Get the icon from a TreeIter"""
         return self.model[treeiter][self.COL_ICON]
 
-    def get_iter(self, name):
-        """Get a TreeIter from a name"""
-        return self.rows.get(name)
-
-    def remove(self, treeiter):
-        """Remove a TreeIter"""
-        self.rows.pop(self.get_key(treeiter))
-        self.model.remove(treeiter)
-
     def dump(self):
         """Extract the model data to a dict object"""
+        super(self.__class__, self).dump()
         result = {}
         for key in self.rows.iterkeys():
             result[key] = ServiceInfo(
@@ -119,8 +98,3 @@ class ModelServices(object):
                 terminal=self.get_terminal(self.rows[key]),
                 icon=self.get_icon(self.rows[key]))
         return result
-
-    def load(self, items):
-        """Load the model data from a dict object"""
-        for key in sorted(items.iterkeys()):
-            self.add_data(items[key])

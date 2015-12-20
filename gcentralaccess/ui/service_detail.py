@@ -26,7 +26,7 @@ from gi.repository import GdkPixbuf
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import FILE_UI_SERVICES_DETAIL
 from gcentralaccess.functions import *
-from gcentralaccess.preferences import ICON_SIZE
+from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 from gcentralaccess.model_services import ModelServices
 from .file_chooser import UIFileChooserOpenFile
 
@@ -53,6 +53,7 @@ class UIServiceDetail(object):
         self.icon = ''
         # Load settings
         self.icon_size = preferences.get(ICON_SIZE)
+        self.preview_size = preferences.get(PREVIEW_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -173,11 +174,31 @@ class UIServiceDetail(object):
 
     def on_action_browse_icon_activate(self, action):
         """Browse for an icon file"""
+        def update_preview_cb(widget, image, get_preview_filename, set_active):
+            """Update preview by trying to load the image"""
+            try:
+                # Try to load the image from the previewed file
+                image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_size(
+                    get_preview_filename(),
+                    self.preview_size,
+                    self.preview_size))
+                set_active(True)
+            except:
+                # Hide the preview widget for errors
+                image.set_from_pixbuf(None)
+                set_active(False)
+        # Prepare the browse for icon dialog
         dialog = UIFileChooserOpenFile(self.ui.dialog_edit_service,
                                        _("Select an icon"))
         dialog.add_filter(_("All Image Files"), "image/*", None)
         dialog.add_filter(_("All Files"), None, "*")
         dialog.set_filename(self.ui.txt_icon.get_text())
+        # Set the image preview widget
+        image_preview = Gtk.Image()
+        image_preview.set_hexpand(False)
+        image_preview.set_size_request(self.preview_size, -1)
+        dialog.set_preview_widget(image_preview, update_preview_cb)
+        # Show the browse for icon dialog
         filename = dialog.show()
         if filename is not None:
             self.ui.txt_icon.set_text(filename)

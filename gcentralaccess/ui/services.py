@@ -31,12 +31,12 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServices(object):
-    def __init__(self, win_parent, settings_positions, show=False):
+    def __init__(self, parent, settings_positions, show=False):
         """Prepare the services dialog and optionally show it immediately"""
         self.settings_positions = settings_positions
         # Load the user interface
         self.ui = GtkBuilderLoader(FILE_UI_SERVICES)
-        self.ui.dialog_services.set_transient_for(win_parent)
+        self.ui.dialog_services.set_transient_for(parent)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.dialog_services, SECTION_WINDOW_NAME)

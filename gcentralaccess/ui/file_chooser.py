@@ -24,9 +24,9 @@ from gcentralaccess.functions import *
 
 
 class UIFileChooser(Gtk.Window):
-    def __init__(self, win_parent, title, action, buttons):
+    def __init__(self, parent, title, action, buttons):
         """Prepare the file chooser dialog"""
-        self.dialog = Gtk.FileChooserDialog(title, win_parent, action, buttons)
+        self.dialog = Gtk.FileChooserDialog(title, parent, action, buttons)
 
     def show(self):
         """Show the dialog"""
@@ -84,18 +84,18 @@ class UIFileChooser(Gtk.Window):
 
 
 class UIFileChooserOpenFile(UIFileChooser):
-    def __init__(self, win_parent, title):
+    def __init__(self, parent, title):
         """Prepare the file chooser dialog"""
-        UIFileChooser.__init__(self, win_parent, title,
+        UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.OPEN, (
                                    _("Cancel"), Gtk.ResponseType.CANCEL,
                                    _("Open"), Gtk.ResponseType.OK))
 
 
 class UIFileChooserSaveFile(UIFileChooser):
-    def __init__(self, win_parent, title):
+    def __init__(self, parent, title):
         """Prepare the file chooser dialog"""
-        UIFileChooser.__init__(self, win_parent, title,
+        UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.SAVE, (
                                    _("Cancel"), Gtk.ResponseType.CANCEL,
                                    _("Save"), Gtk.ResponseType.OK))
@@ -110,9 +110,9 @@ class UIFileChooserSaveFile(UIFileChooser):
 
 
 class UIFileChooserSelectFolder(UIFileChooser):
-    def __init__(self, win_parent, title):
+    def __init__(self, parent, title):
         """Prepare the file chooser dialog"""
-        UIFileChooser.__init__(self, win_parent, title,
+        UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.SELECT_FOLDER, (
                                    _("Cancel"), Gtk.ResponseType.CANCEL,
                                    _("OK"), Gtk.ResponseType.OK))

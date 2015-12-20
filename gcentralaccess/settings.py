@@ -33,7 +33,7 @@ SIZE_HEIGHT = 'height'
 
 class Settings(object):
     def __init__(self, filename):
-        # Command line options and arguments
+        """Initialize settings and command line options"""
         parser = optparse.OptionParser(usage='usage: %prog [options]')
         parser.set_defaults(verbose_level=VERBOSE_LEVEL_NORMAL)
         parser.add_option('-v', '--verbose', dest='verbose_level',

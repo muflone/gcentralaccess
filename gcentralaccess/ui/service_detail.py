@@ -29,11 +29,11 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServiceDetail(object):
-    def __init__(self, win_parent, services):
+    def __init__(self, parent, services):
         """Prepare the services detail dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(FILE_UI_SERVICES_DETAIL)
-        self.ui.dialog_edit_service.set_transient_for(win_parent)
+        self.ui.dialog_edit_service.set_transient_for(parent)
         # Connect the actions accelerators
         for group_name in ('actions_edit_service', ):
             for action in self.ui.get_object(group_name).list_actions():

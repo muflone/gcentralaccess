@@ -99,7 +99,7 @@ class UIMain(object):
     def on_action_services_activate(self, action):
         """Edit services"""
         dialog_services = UIServices(
-            win_parent=self.ui.win_main,
+            parent=self.ui.win_main,
             settings_positions=self.settings_positions)
         # Load services list
         dialog_services.model.load(self.services)

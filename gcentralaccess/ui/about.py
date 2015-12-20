@@ -28,7 +28,7 @@ from gcentralaccess.functions import *
 
 
 class UIAbout(object):
-    def __init__(self, win_parent, show=False):
+    def __init__(self, parent, show=False):
         """Prepare the about dialog and optionally show it immediately"""
         # Retrieve the translators list
         translators = []
@@ -67,7 +67,7 @@ class UIAbout(object):
                     resource_type, (resource_url,))
         icon_logo = Pixbuf.new_from_file(FILE_ICON)
         self.ui.dialog_about.set_logo(icon_logo)
-        self.ui.dialog_about.set_transient_for(win_parent)
+        self.ui.dialog_about.set_transient_for(parent)
         # Optionally show the dialog
         if show:
             self.show()

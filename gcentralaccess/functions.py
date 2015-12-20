@@ -24,6 +24,8 @@ from .constants import *
 import gi
 if gi.require_version('Gtk', '3.0') is None:
     from gi.repository import Gtk
+if gi.require_version('GdkPixbuf', '2.0') is None:
+    from gi.repository import GdkPixbuf
 
 
 def show_dialog_fileopen(parent, title):

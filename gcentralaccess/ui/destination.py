@@ -87,7 +87,7 @@ class UIDestination(object):
             """Show the error message on the GtkInfoBar"""
             set_error_message_on_infobar(
                 widget=widget,
-                widgets=(self.ui.txt_name, self.ui.txt_description),
+                widgets=(self.ui.txt_name, self.ui.txt_value),
                 label=self.ui.lbl_error_message,
                 infobar=self.ui.infobar_error_message,
                 error_msg=error_msg)

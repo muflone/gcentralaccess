@@ -31,8 +31,8 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServices(object):
-    def __init__(self, parent, preferences, settings_positions, show=False):
-        """Prepare the services dialog and optionally show it immediately"""
+    def __init__(self, parent, preferences, settings_positions):
+        """Prepare the services dialog"""
         self.preferences = preferences
         self.settings_positions = settings_positions
         # Load the user interface
@@ -51,9 +51,6 @@ class UIServices(object):
         self.ui.cell_icon.props.height = self.preferences.get(ICON_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
-        # Optionally show the dialog
-        if show:
-            self.show()
 
     def show(self):
         """Show the Services dialog"""

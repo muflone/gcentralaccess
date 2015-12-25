@@ -32,10 +32,11 @@ SECTION_WINDOW_NAME = 'host'
 
 
 class UIHost(object):
-    def __init__(self, parent, preferences, settings_positions):
+    def __init__(self, parent, hosts, preferences, settings_positions):
         """Prepare the host dialog"""
         self.preferences = preferences
         self.settings_positions = settings_positions
+        self.hosts = hosts
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('host.glade'))
         self.ui.dialog_host.set_transient_for(parent)
@@ -145,8 +146,7 @@ class UIHost(object):
             show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('The host name is invalid'))
-        elif self.destinations.get_iter(name) not in (
-                None, self.selected_iter):
+        elif self.hosts.get_iter(name) not in (None, self.selected_iter):
             # Show error for existing host name
             show_error_message_on_infobar(
                 self.ui.txt_name,

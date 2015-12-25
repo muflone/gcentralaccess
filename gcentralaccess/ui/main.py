@@ -30,6 +30,8 @@ from .about import UIAbout
 from .services import UIServices
 from .host import UIHost
 from gcentralaccess.service_info import ServiceInfo
+from gcentralaccess.host_info import HostInfo
+from gcentralaccess.model_hosts import ModelHosts
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -65,6 +67,7 @@ class UIMain(object):
                 icon=self.settings_services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
+        self.model = ModelHosts(self.ui.store_connections, self.preferences)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
@@ -141,6 +144,7 @@ class UIMain(object):
         """Define a new host"""
         dialog = UIHost(
             parent=self.ui.win_main,
+            hosts=self.model,
             preferences=self.preferences,
             settings_positions=self.settings_positions)
         response = dialog.show()
@@ -153,3 +157,5 @@ class UIMain(object):
                               dialog.description)
             settings_host.save()
             dialog.destroy()
+            self.model.add_data(HostInfo(name=dialog.name,
+                                         description=dialog.description))

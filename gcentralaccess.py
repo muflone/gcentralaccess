@@ -23,12 +23,6 @@
 import gettext
 import locale
 
-import gi
-if gi.require_version('Gtk', '3.0') is None:
-    from gi.repository import Gtk
-if gi.require_version('GdkPixbuf', '2.0') is None:
-    from gi.repository import GdkPixbuf
-
 from gcentralaccess.app import Application
 
 if __name__ == '__main__':

@@ -17,3 +17,10 @@
 #  with this program; if not, write to the Free Software Foundation, Inc.,
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
+
+import gi
+
+if gi.require_version('Gtk', '3.0') is None:
+    from gi.repository import Gtk
+if gi.require_version('GdkPixbuf', '2.0') is None:
+    from gi.repository import GdkPixbuf

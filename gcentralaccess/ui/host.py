@@ -47,7 +47,8 @@ class UIHost(object):
             for action in self.ui.get_object(group_name).list_actions():
                 action.connect_accelerator()
         # Load the destinations
-        self.model = ModelDestinations(self.ui.store_destinations, preferences)
+        self.destinations = ModelDestinations(
+            self.ui.store_destinations, preferences)
         self.selected_iter = None
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
@@ -73,7 +74,7 @@ class UIHost(object):
     def on_action_add_activate(self, action):
         """Add a new destination"""
         dialog = UIDestination(self.ui.dialog_host,
-                               self.model,
+                               self.destinations,
                                self.preferences,
                                self.settings_positions)
         if dialog.show(default_name='',
@@ -81,11 +82,11 @@ class UIHost(object):
                        default_type='ipv4',
                        title=_('Add new destination'),
                        treeiter=None) == Gtk.ResponseType.OK:
-            self.model.add_data(DestinationInfo(name=dialog.name,
-                                                value=dialog.value,
-                                                type=dialog.type))
+            self.destinations.add_data(DestinationInfo(name=dialog.name,
+                                                       value=dialog.value,
+                                                       type=dialog.type))
         # Get the new destinations list, clear and store the list again
-        print self.model.dump()
+        print self.destinations.dump()
         dialog.destroy()
 
     def on_action_edit_activate(self, action):
@@ -93,12 +94,12 @@ class UIHost(object):
         selection = self.ui.tvw_destinations.get_selection().get_selected()
         selected_row = selection[1]
         if selected_row:
-            name = self.model.get_key(selected_row)
-            value = self.model.get_value(selected_row)
-            destination_type = self.model.get_type(selected_row)
-            selected_iter = self.model.get_iter(name)
+            name = self.destinations.get_key(selected_row)
+            value = self.destinations.get_value(selected_row)
+            destination_type = self.destinations.get_type(selected_row)
+            selected_iter = self.destinations.get_iter(name)
             dialog = UIDestination(self.ui.dialog_host,
-                                   self.model,
+                                   self.destinations,
                                    self.preferences,
                                    self.settings_positions)
             if dialog.show(default_name=name,
@@ -108,10 +109,10 @@ class UIHost(object):
                            treeiter=selected_iter
                            ) == Gtk.ResponseType.OK:
                 # Update values
-                self.model.set_data(selected_iter, DestinationInfo(
-                    name=dialog.name,
-                    value=dialog.value,
-                    type=dialog.type))
+                self.destinations.set_data(
+                    selected_iter, DestinationInfo(name=dialog.name,
+                                                   value=dialog.value,
+                                                   type=dialog.type))
             dialog.destroy()
 
     def on_action_remove_activate(self, action):
@@ -119,7 +120,7 @@ class UIHost(object):
         selection = self.ui.tvw_destinations.get_selection().get_selected()
         selected_row = selection[1]
         if selected_row:
-            self.model.remove(selected_row)
+            self.destinations.remove(selected_row)
 
     def on_tvw_destinations_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
@@ -147,7 +148,8 @@ class UIHost(object):
             show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('The host name is invalid'))
-        elif self.model.get_iter(name) not in (None, self.selected_iter):
+        elif self.destinations.get_iter(name) not in (
+                None, self.selected_iter):
             # Show error for existing host name
             show_error_message_on_infobar(
                 self.ui.txt_name,

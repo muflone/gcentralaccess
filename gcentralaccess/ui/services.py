@@ -77,10 +77,10 @@ class UIServices(object):
                        title=_('Add new service'),
                        treeiter=None) == Gtk.ResponseType.OK:
             self.model.add_data(ServiceInfo(name=dialog.name,
-                                description=dialog.description,
-                                command=dialog.command,
-                                terminal=dialog.terminal,
-                                icon=dialog.icon))
+                                            description=dialog.description,
+                                            command=dialog.command,
+                                            terminal=dialog.terminal,
+                                            icon=dialog.icon))
         dialog.destroy()
 
     def on_action_services_edit_activate(self, action):

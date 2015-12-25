@@ -67,7 +67,7 @@
       <column type="gchararray"/>
       <!-- column-name Services -->
       <column type="gchararray"/>
-      <!-- column-name Pixbuf -->
+      <!-- column-name Icon -->
       <column type="GdkPixbuf"/>
     </columns>
   </object>

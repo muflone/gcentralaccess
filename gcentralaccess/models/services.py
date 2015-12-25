@@ -18,9 +18,9 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .model_abstract import ModelAbstract
+from .abstract import ModelAbstract
 from .service_info import ServiceInfo
-from .preferences import ICON_SIZE
+from gcentralaccess.preferences import ICON_SIZE
 from gi.repository import GdkPixbuf
 
 

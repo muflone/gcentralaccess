@@ -29,9 +29,9 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from .about import UIAbout
 from .services import UIServices
 from .host import UIHost
-from gcentralaccess.service_info import ServiceInfo
-from gcentralaccess.host_info import HostInfo
-from gcentralaccess.model_hosts import ModelHosts
+from gcentralaccess.models.service_info import ServiceInfo
+from gcentralaccess.models.host_info import HostInfo
+from gcentralaccess.models.hosts import ModelHosts
 from gi.repository import Gtk
 from gi.repository import Gdk
 

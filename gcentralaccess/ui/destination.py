@@ -25,7 +25,7 @@ from gi.repository import Gtk
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
-from gcentralaccess.model_destinations import ModelDestinations
+from gcentralaccess.models.destinations import ModelDestinations
 
 SECTION_WINDOW_NAME = 'destination'
 DESTINATION_TYPE_PLACEHOLDERS = {

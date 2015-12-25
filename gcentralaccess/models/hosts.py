@@ -18,7 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .model_abstract import ModelAbstract
+from .abstract import ModelAbstract
 from .host_info import HostInfo
 
 

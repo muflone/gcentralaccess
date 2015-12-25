@@ -32,8 +32,8 @@ from gcentralaccess.functions import readlines, get_ui_file, _
 
 
 class UIAbout(object):
-    def __init__(self, parent, show=False):
-        """Prepare the about dialog and optionally show it immediately"""
+    def __init__(self, parent):
+        """Prepare the about dialog"""
         # Retrieve the translators list
         translators = []
         for line in readlines(FILE_TRANSLATORS, False):
@@ -72,9 +72,6 @@ class UIAbout(object):
         icon_logo = Pixbuf.new_from_file(FILE_ICON)
         self.ui.dialog_about.set_logo(icon_logo)
         self.ui.dialog_about.set_transient_for(parent)
-        # Optionally show the dialog
-        if show:
-            self.show()
 
     def show(self):
         """Show the About dialog"""

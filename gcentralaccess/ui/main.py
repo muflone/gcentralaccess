@@ -65,7 +65,6 @@ class UIMain(object):
                 icon=self.settings_services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
-        self.about = UIAbout(self.ui.win_main, False)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
@@ -93,12 +92,13 @@ class UIMain(object):
         self.settings_positions.save()
         self.settings_services.save()
         self.settings.save()
-        self.about.destroy()
         self.application.quit()
 
     def on_action_about_activate(self, action):
         """Show the about dialog"""
-        self.about.show()
+        dialog = UIAbout(self.ui.win_main)
+        dialog.show()
+        dialog.destroy()
 
     def on_action_quit_activate(self, action):
         """Close the application by closing the main window"""

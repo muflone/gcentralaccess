@@ -18,8 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .abstract import ModelAbstract
-from .host_info import HostInfo
+from gcentralaccess.models.abstract import ModelAbstract
+from gcentralaccess.models.host_info import HostInfo
 
 
 class ModelHosts(ModelAbstract):

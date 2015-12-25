@@ -22,7 +22,7 @@ import optparse
 import time
 import ConfigParser
 
-from .constants import (
+from gcentralaccess.constants import (
     VERBOSE_LEVEL_QUIET, VERBOSE_LEVEL_NORMAL, VERBOSE_LEVEL_MAX)
 
 POSITION_LEFT = 'left'

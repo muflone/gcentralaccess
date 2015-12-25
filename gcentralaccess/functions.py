@@ -19,17 +19,12 @@
 ##
 
 import os.path
-import gi
-
 from gettext import gettext as _
 from gettext import dgettext
 
-from .constants import DIR_UI
+from gi.repository import Gtk
 
-if gi.require_version('Gtk', '3.0') is None:
-    from gi.repository import Gtk
-if gi.require_version('GdkPixbuf', '2.0') is None:
-    from gi.repository import GdkPixbuf
+from gcentralaccess.constants import DIR_UI
 
 
 def readlines(filename, empty_lines=False):

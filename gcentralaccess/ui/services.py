@@ -23,9 +23,11 @@ from gi.repository import Gtk
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import ICON_SIZE
+
 from gcentralaccess.models.services import ModelServices
 from gcentralaccess.models.service_info import ServiceInfo
-from .service_detail import UIServiceDetail
+
+from gcentralaccess.ui.service_detail import UIServiceDetail
 
 SECTION_WINDOW_NAME = 'services'
 

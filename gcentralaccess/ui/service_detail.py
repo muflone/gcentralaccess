@@ -27,7 +27,8 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
-from .file_chooser import UIFileChooserOpenFile
+
+from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
 
 SECTION_WINDOW_NAME = 'services'
 

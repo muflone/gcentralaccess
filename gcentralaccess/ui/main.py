@@ -19,6 +19,10 @@
 ##
 
 import os.path
+
+from gi.repository import Gtk
+from gi.repository import Gdk
+
 from gcentralaccess.constants import (
     APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
@@ -26,14 +30,14 @@ from gcentralaccess.functions import get_ui_file, _
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from .about import UIAbout
-from .services import UIServices
-from .host import UIHost
+
 from gcentralaccess.models.service_info import ServiceInfo
 from gcentralaccess.models.host_info import HostInfo
 from gcentralaccess.models.hosts import ModelHosts
-from gi.repository import Gtk
-from gi.repository import Gdk
+
+from gcentralaccess.ui.about import UIAbout
+from gcentralaccess.ui.services import UIServices
+from gcentralaccess.ui.host import UIHost
 
 SECTION_WINDOW_NAME = 'main'
 SECTION_SERVICE_DESCRIPTION = 'description'

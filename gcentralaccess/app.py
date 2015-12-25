@@ -18,12 +18,14 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from .ui.main import UIMain
-from .constants import APP_ID
-from .functions import get_ui_file
-from .gtkbuilder_loader import GtkBuilderLoader
 from gi.repository import Gtk
 from gi.repository import Gio
+
+from gcentralaccess.constants import APP_ID
+from gcentralaccess.functions import get_ui_file
+from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
+
+from gcentralaccess.ui.main import UIMain
 
 
 class Application(Gtk.Application):

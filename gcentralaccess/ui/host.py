@@ -24,9 +24,11 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
 from gcentralaccess.preferences import ICON_SIZE
+
 from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo
-from .destination import UIDestination
+
+from gcentralaccess.ui.destination import UIDestination
 
 SECTION_WINDOW_NAME = 'host'
 

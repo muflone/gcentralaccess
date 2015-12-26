@@ -28,6 +28,8 @@ from gcentralaccess.models.services import ModelServices
 from gcentralaccess.models.service_info import ServiceInfo
 
 from gcentralaccess.ui.service_detail import UIServiceDetail
+from gcentralaccess.ui.message_dialog import (
+    show_message_dialog, UIMessageDialogNoYes)
 
 SECTION_WINDOW_NAME = 'services'
 
@@ -120,7 +122,14 @@ class UIServices(object):
         """Remove the selected service"""
         selection = self.ui.tvw_services.get_selection().get_selected()
         selected_row = selection[1]
-        if selected_row:
+        if selected_row and show_message_dialog(
+                class_=UIMessageDialogNoYes,
+                parent=self.ui.dialog_services,
+                message_type=Gtk.MessageType.WARNING,
+                title=None,
+                msg1=_("Remove service"),
+                msg2=_("Remove the selected service?"),
+                is_response_id=Gtk.ResponseType.YES):
             self.model.remove(selected_row)
 
     def on_tvw_services_row_activated(self, widget, treepath, column):

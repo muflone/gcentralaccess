@@ -29,6 +29,8 @@ from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo
 
 from gcentralaccess.ui.destination import UIDestination
+from gcentralaccess.ui.message_dialog import (
+    show_message_dialog, UIMessageDialogNoYes)
 
 SECTION_WINDOW_NAME = 'host'
 
@@ -123,7 +125,14 @@ class UIHost(object):
         """Remove the selected destination"""
         selection = self.ui.tvw_destinations.get_selection().get_selected()
         selected_row = selection[1]
-        if selected_row:
+        if selected_row and show_message_dialog(
+                class_=UIMessageDialogNoYes,
+                parent=self.ui.dialog_host,
+                message_type=Gtk.MessageType.WARNING,
+                title=None,
+                msg1=_("Remove destination"),
+                msg2=_("Remove the selected destination?"),
+                is_response_id=Gtk.ResponseType.YES):
             self.destinations.remove(selected_row)
 
     def on_tvw_destinations_row_activated(self, widget, treepath, column):

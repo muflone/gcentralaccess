@@ -124,7 +124,7 @@ class UIHost(object):
 
     def on_tvw_destinations_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
-        self.on_action_edit_activate(widget)
+        self.ui.action_edit.activate()
 
     def on_action_confirm_activate(self, action):
         """Check che host configuration before confirm"""

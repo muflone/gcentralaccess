@@ -18,9 +18,17 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+from gcentralaccess.functions import _
+
 
 class DestinationInfo(object):
     def __init__(self, name, value, type):
         self.name = name
         self.value = value
         self.type = type
+        self.type_local = {
+            'ipv4': _('IPv4 Address'),
+            'ipv6': _('IPv6 Address'),
+            'mac': _('MAC Address'),
+            'filename': _('Filename')
+        }.get(type, _('Custom destination'))

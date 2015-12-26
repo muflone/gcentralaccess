@@ -25,6 +25,7 @@ from gcentralaccess.models.destination_info import DestinationInfo
 class ModelDestinations(ModelAbstract):
     COL_VALUE = 1
     COL_TYPE = 2
+    COL_TYPE_LOCAL = 3
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -33,7 +34,8 @@ class ModelDestinations(ModelAbstract):
             new_row = self.model.append((
                 item.name,
                 item.value,
-                item.type))
+                item.type,
+                item.type_local))
             self.rows[item.name] = new_row
             return new_row
 
@@ -44,6 +46,7 @@ class ModelDestinations(ModelAbstract):
         self.model.set_value(treeiter, self.COL_KEY, item.name)
         self.model.set_value(treeiter, self.COL_VALUE, item.value)
         self.model.set_value(treeiter, self.COL_TYPE, item.type)
+        self.model.set_value(treeiter, self.COL_TYPE_LOCAL, item.type_local)
 
     def get_value(self, treeiter):
         """Get the value from a TreeIter"""

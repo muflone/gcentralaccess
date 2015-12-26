@@ -65,6 +65,7 @@ class UIDestination(object):
              title, treeiter):
         """Show the destination dialog"""
         self.ui.txt_name.set_text(default_name)
+        self.ui.cbo_type.set_active_id(default_type)
         self.ui.txt_value.set_text(default_value)
         self.ui.txt_name.grab_focus()
         self.ui.dialog_destination.set_title(title)

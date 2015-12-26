@@ -151,7 +151,10 @@ class UIMain(object):
             hosts=self.model,
             preferences=self.preferences,
             settings_positions=self.settings_positions)
-        response = dialog.show()
+        response = dialog.show(default_name='',
+                               default_description='',
+                               title=_('Add a new host'),
+                               treeiter=None)
         if response == Gtk.ResponseType.OK:
             settings_host = Settings(
                 os.path.join(DIR_HOSTS, '%s.conf' % dialog.name))

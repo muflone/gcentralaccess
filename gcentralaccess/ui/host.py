@@ -86,7 +86,6 @@ class UIHost(object):
                                                        value=dialog.value,
                                                        type=dialog.type))
         # Get the new destinations list, clear and store the list again
-        print self.destinations.dump()
         dialog.destroy()
 
     def on_action_edit_activate(self, action):

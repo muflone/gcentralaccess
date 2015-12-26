@@ -59,7 +59,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkTreeStore" id="store_connections">
+  <object class="GtkTreeStore" id="store_hosts">
     <columns>
       <!-- column-name Name -->
       <column type="gchararray"/>

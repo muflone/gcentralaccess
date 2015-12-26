@@ -71,7 +71,7 @@ class UIMain(object):
                 icon=self.settings_services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
-        self.model = ModelHosts(self.ui.store_connections, self.preferences)
+        self.model = ModelHosts(self.ui.store_hosts, self.preferences)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
@@ -153,13 +153,12 @@ class UIMain(object):
             settings_positions=self.settings_positions)
         response = dialog.show()
         if response == Gtk.ResponseType.OK:
-            print dialog.name, dialog.description
             settings_host = Settings(
                 os.path.join(DIR_HOSTS, '%s.conf' % dialog.name))
             settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
             settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
                               dialog.description)
             settings_host.save()
-            dialog.destroy()
             self.model.add_data(HostInfo(name=dialog.name,
                                          description=dialog.description))
+        dialog.destroy()

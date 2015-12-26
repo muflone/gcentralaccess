@@ -117,7 +117,6 @@ class Settings(object):
 
     def get_options(self, section):
         """Return the list of the options in a section"""
-        print 'options', self.config.options(section)
         return self.config.options(section)
 
     def clear(self):

@@ -259,14 +259,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkBox" id="box_destinations">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="spacing">4</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <object class="GtkScrolledWindow" id="scroll_destinations">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
@@ -280,7 +280,7 @@
                         <property name="search_column">0</property>
                         <signal name="row-activated" handler="on_tvw_destinations_row_activated" swapped="no"/>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="selection_services"/>
+                          <object class="GtkTreeSelection" id="selection_destinations"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="column_name">

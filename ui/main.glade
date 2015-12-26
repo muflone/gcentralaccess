@@ -193,7 +193,7 @@
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="is_focus">True</property>
-                <property name="model">store_connections</property>
+                <property name="model">store_hosts</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="tvw_selection"/>
                 </child>

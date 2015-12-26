@@ -72,6 +72,7 @@ class UIDestination(object):
         response = self.ui.dialog_destination.run()
         self.ui.dialog_destination.hide()
         self.name = self.ui.txt_name.get_text().strip()
+        self.type = self.ui.cbo_type.get_active_id()
         self.value = self.ui.txt_value.get_text().strip()
         return response
 

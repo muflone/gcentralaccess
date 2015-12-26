@@ -66,7 +66,7 @@ class UIServices(object):
         self.ui.dialog_services.destroy()
         self.ui.dialog_services = None
 
-    def on_action_services_add_activate(self, action):
+    def on_action_add_activate(self, action):
         """Add a new service"""
         dialog = UIServiceDetail(self.ui.dialog_services,
                                  self.model,
@@ -85,7 +85,7 @@ class UIServices(object):
                                             icon=dialog.icon))
         dialog.destroy()
 
-    def on_action_services_edit_activate(self, action):
+    def on_action_edit_activate(self, action):
         """Edit the selected service"""
         selection = self.ui.tvw_services.get_selection().get_selected()
         selected_row = selection[1]
@@ -116,7 +116,7 @@ class UIServices(object):
                     icon=dialog.icon))
             dialog.destroy()
 
-    def on_action_services_remove_activate(self, action):
+    def on_action_remove_activate(self, action):
         """Remove the selected service"""
         selection = self.ui.tvw_services.get_selection().get_selected()
         selected_row = selection[1]
@@ -125,4 +125,4 @@ class UIServices(object):
 
     def on_tvw_services_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
-        self.on_action_services_edit_activate(widget)
+        self.ui.action_edit.activate()

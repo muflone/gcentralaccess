@@ -18,6 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import os
 import os.path
 
 from gi.repository import Gtk
@@ -34,6 +35,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.models.service_info import ServiceInfo
 from gcentralaccess.models.host_info import HostInfo
 from gcentralaccess.models.hosts import ModelHosts
+from gcentralaccess.models.destination_info import DestinationInfo
 
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
@@ -47,6 +49,7 @@ SECTION_SERVICE_ICON = 'icon'
 SECTION_HOST = 'host'
 SECTION_HOST_NAME = 'name'
 SECTION_HOST_DESCRIPTION = 'description'
+SECTION_DESTINATIONS = 'destinations'
 
 
 class UIMain(object):
@@ -72,6 +75,22 @@ class UIMain(object):
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts, self.preferences)
+        # Load hosts
+        for filename in os.listdir(DIR_HOSTS):
+            settings_host = Settings(os.path.join(DIR_HOSTS, filename))
+            name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
+            description = settings_host.get(SECTION_HOST,
+                                            SECTION_HOST_DESCRIPTION)
+            self.model.add_data(HostInfo(name=name, description=description))
+            # Load host destinations
+            if SECTION_DESTINATIONS in settings_host.get_sections():
+                for option in settings_host.get_options(SECTION_DESTINATIONS):
+                    values = settings_host.get(SECTION_DESTINATIONS, option)
+                    type, value = values.split(':', 1)
+                    self.model.add_destination(name,
+                                               DestinationInfo(option,
+                                                               value,
+                                                               type))
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
@@ -156,12 +175,21 @@ class UIMain(object):
                                title=_('Add a new host'),
                                treeiter=None)
         if response == Gtk.ResponseType.OK:
+            # Save host settings
             settings_host = Settings(
                 os.path.join(DIR_HOSTS, '%s.conf' % dialog.name))
             settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
             settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
                               dialog.description)
-            settings_host.save()
             self.model.add_data(HostInfo(name=dialog.name,
                                          description=dialog.description))
+            # Save host destinations
+            destinations = dialog.destinations.dump()
+            for key in destinations:
+                destination = destinations[key]
+                self.model.add_destination(dialog.name, destination)
+                settings_host.set(
+                    SECTION_DESTINATIONS, destination.name,
+                    '%s:%s' % (destination.type, destination.value))
+            settings_host.save()
         dialog.destroy()

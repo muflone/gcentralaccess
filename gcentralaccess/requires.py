@@ -18,4 +18,9 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import gcentralaccess.requires
+import gi
+
+if gi.require_version('Gtk', '3.0') is None:
+    from gi.repository import Gtk
+if gi.require_version('GdkPixbuf', '2.0') is None:
+    from gi.repository import GdkPixbuf

@@ -46,9 +46,8 @@ class UIServices(object):
         self.settings_positions.restore_window_position(
             self.ui.dialog_services, SECTION_WINDOW_NAME)
         # Connect the actions accelerators
-        for group_name in ('actions_services', ):
-            for action in self.ui.get_object(group_name).list_actions():
-                action.connect_accelerator()
+        for widget in self.ui.get_objects_by_type(Gtk.Action):
+            widget.connect_accelerator()
         # Load the services
         self.model = ModelServices(self.ui.store_services, preferences)
         self.selected_iter = None

@@ -48,9 +48,8 @@ class UIHost(object):
         self.settings_positions.restore_window_position(
             self.ui.dialog_host, SECTION_WINDOW_NAME)
         # Connect the actions accelerators
-        for group_name in ('actions_host', ):
-            for action in self.ui.get_object(group_name).list_actions():
-                action.connect_accelerator()
+        for widget in self.ui.get_objects_by_type(Gtk.Action):
+            widget.connect_accelerator()
         # Load the destinations
         self.destinations = ModelDestinations(
             self.ui.store_destinations, preferences)

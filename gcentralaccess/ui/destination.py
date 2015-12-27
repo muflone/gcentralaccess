@@ -49,9 +49,8 @@ class UIDestination(object):
         self.settings_positions.restore_window_position(
             self.ui.dialog_destination, SECTION_WINDOW_NAME)
         # Connect the actions accelerators
-        for group_name in ('actions_destination', ):
-            for action in self.ui.get_object(group_name).list_actions():
-                action.connect_accelerator()
+        for widget in self.ui.get_objects_by_type(Gtk.Action):
+            widget.connect_accelerator()
         self.model = destinations
         self.selected_iter = None
         self.name = ''

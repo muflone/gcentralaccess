@@ -128,7 +128,7 @@ class UIHost(object):
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.dialog_host,
-                message_type=Gtk.MessageType.WARNING,
+                message_type=Gtk.MessageType.QUESTION,
                 title=None,
                 msg1=_("Remove destination"),
                 msg2=_("Remove the selected destination?"),

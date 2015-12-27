@@ -31,6 +31,7 @@
         <property name="label" translatable="yes">Edit</property>
         <signal name="activate" handler="on_action_edit_activate" swapped="no"/>
       </object>
+      <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
     </child>
   </object>
   <object class="GtkListStore" id="store_services">
@@ -51,7 +52,7 @@
   </object>
   <object class="GtkDialog" id="dialog_services">
     <property name="can_focus">False</property>
-    <property name="border_width">2</property>
+    <property name="border_width">3</property>
     <property name="title" translatable="yes">Configure services</property>
     <property name="modal">True</property>
     <property name="default_width">400</property>
@@ -98,7 +99,7 @@
           <object class="GtkBox" id="box_services">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">4</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkScrolledWindow" id="scroll_services">
                 <property name="visible">True</property>
@@ -163,7 +164,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">5</property>
+                <property name="spacing">6</property>
                 <property name="layout_style">start</property>
                 <child>
                   <object class="GtkButton" id="btn_services_add">
@@ -176,7 +177,7 @@
                       <object class="GtkImage" id="image_services_add">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-add</property>
+                        <property name="icon_name">list-add</property>
                       </object>
                     </child>
                   </object>
@@ -198,7 +199,7 @@
                       <object class="GtkImage" id="image_services_edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-edit</property>
+                        <property name="icon_name">document-properties</property>
                       </object>
                     </child>
                   </object>
@@ -220,7 +221,7 @@
                       <object class="GtkImage" id="image_services_remove">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-remove</property>
+                        <property name="icon_name">list-remove</property>
                       </object>
                     </child>
                   </object>

@@ -31,6 +31,7 @@
         <property name="label" translatable="yes">Edit</property>
         <signal name="activate" handler="on_action_edit_activate" swapped="no"/>
       </object>
+      <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
     </child>
     <child>
       <object class="GtkAction" id="action_confirm">
@@ -53,7 +54,7 @@
   </object>
   <object class="GtkDialog" id="dialog_host">
     <property name="can_focus">False</property>
-    <property name="border_width">2</property>
+    <property name="border_width">3</property>
     <property name="title" translatable="yes">Configure host</property>
     <property name="modal">True</property>
     <property name="default_width">350</property>
@@ -177,14 +178,14 @@
               <object class="GtkGrid" id="grid_host">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">5</property>
-                <property name="column_spacing">7</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="lbl_destinations">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Configure d_estinations:</property>
+                    <property name="label" translatable="yes">Configure d_estinations</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">tvw_destinations</property>
                     <property name="xalign">0</property>
@@ -206,7 +207,7 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">txt_name</property>
                     <property name="ellipsize">middle</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -233,7 +234,7 @@
                     <property name="label" translatable="yes">_Description:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">txt_description</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -266,7 +267,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="spacing">4</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scroll_destinations">
                     <property name="visible">True</property>
@@ -343,7 +344,7 @@
                     <property name="hexpand">False</property>
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">5</property>
+                    <property name="spacing">6</property>
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="btn_destinations_add">
@@ -356,7 +357,7 @@
                           <object class="GtkImage" id="image_destinations_add">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-add</property>
+                            <property name="icon_name">list-add</property>
                           </object>
                         </child>
                       </object>
@@ -378,7 +379,7 @@
                           <object class="GtkImage" id="image_destinations_edit">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-edit</property>
+                            <property name="icon_name">document-properties</property>
                           </object>
                         </child>
                       </object>
@@ -400,7 +401,7 @@
                           <object class="GtkImage" id="image_destinations_remove">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-remove</property>
+                            <property name="icon_name">list-remove</property>
                           </object>
                         </child>
                       </object>

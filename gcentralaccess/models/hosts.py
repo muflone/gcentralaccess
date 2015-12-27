@@ -43,6 +43,11 @@ class ModelHosts(ModelAbstract):
             self.destinations[item.name] = {}
             return new_row
 
+    def remove(self, treeiter):
+        """Remove a TreeIter"""
+        self.destinations.pop(self.get_key(treeiter))
+        super(self.__class__, self).remove(treeiter)
+
     def add_destination(self, name, destination):
         """Add a new destination if it doesn't exists"""
         if destination.name not in self.destinations[name]:

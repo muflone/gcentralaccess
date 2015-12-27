@@ -40,6 +40,8 @@ from gcentralaccess.models.destination_info import DestinationInfo
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
 from gcentralaccess.ui.host import UIHost
+from gcentralaccess.ui.message_dialog import (
+    show_message_dialog, UIMessageDialogNoYes)
 
 SECTION_WINDOW_NAME = 'main'
 SECTION_SERVICE_DESCRIPTION = 'description'
@@ -255,3 +257,22 @@ class UIMain(object):
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
         self.ui.action_edit.activate()
+
+    def on_action_delete_activate(self, widget):
+        """Remove the selected host"""
+        selection = self.ui.tvw_connections.get_selection().get_selected()
+        selected_row = selection[1]
+        if selected_row and show_message_dialog(
+                class_=UIMessageDialogNoYes,
+                parent=self.ui.win_main,
+                message_type=Gtk.MessageType.QUESTION,
+                title=None,
+                msg1=_("Remove host"),
+                msg2=_("Remove the selected host?"),
+                is_response_id=Gtk.ResponseType.YES):
+            # Remove the configuration file
+            filename = os.path.join(
+                DIR_HOSTS, '%s.conf' % self.model.get_key(selected_row))
+            if os.path.isfile(filename):
+                os.unlink(filename)
+            self.model.remove(selected_row)

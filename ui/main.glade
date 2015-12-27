@@ -57,6 +57,7 @@
       <object class="GtkAction" id="action_delete">
         <property name="label" translatable="yes">Delete</property>
         <property name="icon_name">edit-delete</property>
+        <signal name="activate" handler="on_action_delete_activate" swapped="no"/>
       </object>
       <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
     </child>

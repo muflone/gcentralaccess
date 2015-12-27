@@ -193,3 +193,65 @@ class UIMain(object):
                     '%s:%s' % (destination.type, destination.value))
             settings_host.save()
         dialog.destroy()
+
+    def on_action_edit_activate(self, action):
+        """Define a new host"""
+        selection = self.ui.tvw_connections.get_selection().get_selected()
+        selected_row = selection[1]
+        if selected_row:
+            name = self.model.get_key(selected_row)
+            description = self.model.get_description(selected_row)
+            selected_iter = self.model.get_iter(name)
+            dialog = UIHost(
+                parent=self.ui.win_main,
+                hosts=self.model,
+                preferences=self.preferences,
+                settings_positions=self.settings_positions)
+            # Restore the destinations for the selected host
+            destinations = self.model.get_destinations(name)
+            for key in destinations:
+                dialog.destinations.add_data(destinations[key])
+            # Show the edit host dialog
+            response = dialog.show(default_name=name,
+                                   default_description=description,
+                                   title=_('Edit host'),
+                                   treeiter=selected_iter)
+            if response == Gtk.ResponseType.OK:
+                # Create a new setting file
+                new_filename = os.path.join(DIR_HOSTS, '%s.conf' % dialog.name)
+                tmp_filename = os.path.join('%s.tmp' % new_filename)
+                if os.path.isfile(tmp_filename):
+                    os.unlink(tmp_filename)
+                # Save host settings
+                settings_host = Settings(tmp_filename)
+                settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
+                settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
+                                  dialog.description)
+                self.model.add_data(HostInfo(name=dialog.name,
+                                             description=dialog.description))
+                # Save host destinations
+                self.model.clear_destinations(dialog.name)
+                destinations = dialog.destinations.dump()
+                for key in destinations:
+                    destination = destinations[key]
+                    self.model.add_destination(dialog.name, destination)
+                    settings_host.set(
+                        SECTION_DESTINATIONS, destination.name,
+                        '%s:%s' % (destination.type, destination.value))
+                settings_host.save()
+                # Save the changes to files
+                old_filename = os.path.join('%s.old' % new_filename)
+                try:
+                    if os.path.isfile(new_filename):
+                        os.rename(new_filename, old_filename)
+                    os.rename(tmp_filename, new_filename)
+                    if os.path.isfile(old_filename):
+                        os.unlink(old_filename)
+                finally:
+                    if os.path.isfile(tmp_filename):
+                        os.unlink(tmp_filename)
+            dialog.destroy()
+
+    def on_tvw_connections_row_activated(self, widget, treepath, column):
+        """Edit the selected row on activation"""
+        self.ui.action_edit.activate()

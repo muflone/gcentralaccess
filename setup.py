@@ -20,7 +20,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-from distutils.core import setup
+from distutils.core import setup, Command
 from distutils.command.install_scripts import install_scripts
 from distutils.command.install_data import install_data
 from distutils.log import info
@@ -88,6 +88,79 @@ class Install_Data(install_data):
             self.data_files.append((dest, [mo]))
 
 
+class Command_CreatePOT(Command):
+    description = "create base POT file"
+    user_options = [
+        ('use-intltool-extract', None, 'Use intltool-extract'),
+        ('keep-headers', None, 'Do not delete header files'),
+        ]
+    boolean_options = ('use-intltool-extract')
+
+    def initialize_options(self):
+        self.use_intltool_extract = False
+        self.keep_headers = False
+
+    def finalize_options(self):
+        self.dir_base = os.path.dirname(os.path.abspath(__file__))
+        self.dir_po = os.path.join(self.dir_base, 'po')
+
+    def run(self):
+        self.dir_ui = os.path.join(self.dir_base, 'ui')
+        file_pot = '%s.pot' % os.path.join(self.dir_po, DOMAIN_NAME)
+        list_files_process = []
+        list_files_remove = []
+        if self.use_intltool_extract:
+            # Scan *.glade and *.ui files to extract messages
+            for filename in list(chain(
+                    glob(os.path.join(self.dir_ui, '*.glade')),
+                    glob(os.path.join(self.dir_ui, '*.ui')))):
+                header_file = '%s.h' % filename
+                # Clear previous existing files
+                if os.path.isfile(header_file):
+                    os.unlink(header_file)
+                # Extract data from the interface files
+                subprocess.call(args=('intltool-extract',
+                                      '--quiet',
+                                      '--type=gettext/glade',
+                                      os.path.basename(filename)),
+                                cwd=os.path.dirname(filename))
+                if os.path.getsize(header_file) > 0:
+                    # Add the header files to the list of the files to process
+                    list_files_process.append(os.path.relpath(header_file,
+                                                              self.dir_base))
+                # All the header files must be removed after the process
+                list_files_remove.append(header_file)
+        else:
+            # Add *.glade and *.ui files to list of files to process
+            for filename in list(chain(
+                    glob(os.path.join(self.dir_ui, '*.glade')),
+                    glob(os.path.join(self.dir_ui, '*.ui')))):
+                list_files_process.append(os.path.relpath(filename,
+                                                          self.dir_base))
+        # Add *.py files to list of files to process
+        for filename in recursive_glob(self.dir_base, '*.py'):
+            list_files_process.append(os.path.relpath(filename,
+                                                      self.dir_base))
+        # Extract messages from the files to process
+        subprocess.call(
+            args=chain(('xgettext',
+                        '--keyword=_',
+                        '--keyword=N_',
+                        '--output=%s' % file_pot,
+                        '--add-location',
+                        '--package-name=%s' % APP_NAME,
+                        '--package-version=%s' % APP_VERSION,
+                        '--copyright-holder=%s' % APP_AUTHOR,
+                        '--msgid-bugs-address=%s' % APP_AUTHOR_EMAIL),
+                       list_files_process),
+            cwd=self.dir_base)
+        # Remove uneeded files if requested
+        if not self.keep_headers:
+            for filename in list_files_remove:
+                if os.path.isfile(filename):
+                    os.unlink(filename)
+
+
 setup(
     name=APP_NAME,
     version=APP_VERSION,
@@ -108,6 +181,7 @@ setup(
     ],
     cmdclass={
         'install_scripts': Install_Scripts,
-        'install_data': Install_Data
+        'install_data': Install_Data,
+        'create_pot': Command_CreatePOT
     }
 )

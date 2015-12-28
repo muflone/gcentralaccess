@@ -1,4 +1,4 @@
 /locale/
 *.pyc
 *.glade~
-
+/build/

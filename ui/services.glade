@@ -73,7 +73,6 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="btn_services_close">
-                <property name="label" translatable="yes">_Close</property>
                 <property name="use_action_appearance">True</property>
                 <property name="related_action">action_close</property>
                 <property name="visible">True</property>

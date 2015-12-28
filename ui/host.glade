@@ -48,7 +48,7 @@
       <column type="gchararray"/>
       <!-- column-name Type -->
       <column type="gchararray"/>
-      <!-- column-name Type localized -->
+      <!-- column-name Type_Localized -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -75,7 +75,6 @@
             <property name="layout_style">start</property>
             <child>
               <object class="GtkButton" id="btn_cancel">
-                <property name="label" translatable="yes">_Close</property>
                 <property name="use_action_appearance">True</property>
                 <property name="related_action">action_cancel</property>
                 <property name="visible">True</property>
@@ -94,7 +93,6 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_ok">
-                <property name="label" translatable="yes">_Cancel</property>
                 <property name="use_action_appearance">True</property>
                 <property name="related_action">action_confirm</property>
                 <property name="visible">True</property>

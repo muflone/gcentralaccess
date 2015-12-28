@@ -189,7 +189,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" comments="Use domain gtk30">_Type:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">txt_name</property>
+                <property name="mnemonic_widget">cbo_type</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">1</property>
               </object>
@@ -228,35 +228,5 @@
     <action-widgets>
       <action-widget response="-6">btn_cancel</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="list_types">
-    <columns>
-      <!-- column-name Name -->
-      <column type="gchararray"/>
-      <!-- column-name Description -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0">ipv4</col>
-        <col id="1" translatable="yes">IPv4 Address</col>
-      </row>
-      <row>
-        <col id="0">ipv6</col>
-        <col id="1" translatable="yes">IPv6 Address</col>
-      </row>
-      <row>
-        <col id="0">mac</col>
-        <col id="1" translatable="yes">MAC Address</col>
-      </row>
-      <row>
-        <col id="0">filename</col>
-        <col id="1" translatable="yes">Filename</col>
-      </row>
-      <row>
-        <col id="0">custom</col>
-        <col id="1" translatable="yes">Custom</col>
-      </row>
-    </data>
   </object>
 </interface>

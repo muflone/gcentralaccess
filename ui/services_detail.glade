@@ -18,6 +18,7 @@
     </child>
     <child>
       <object class="GtkAction" id="action_browse_icon">
+        <property name="label" translatable="yes">Browse for icon</property>
         <signal name="activate" handler="on_action_browse_icon_activate" swapped="no"/>
       </object>
     </child>
@@ -263,6 +264,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btn_icon">
+                <property name="use_action_appearance">False</property>
                 <property name="related_action">action_browse_icon</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

@@ -18,7 +18,9 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import os
 import os.path
+import fnmatch
 from gettext import gettext, dgettext
 
 from gi.repository import Gtk
@@ -98,6 +100,14 @@ def set_error_message_on_infobar(widget, widgets, label, infobar, error_msg):
             w.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, None)
 
 
+def recursive_glob(starting_path, pattern):
+    """Return a list of all the matching files recursively"""
+    result = []
+    for root, dirnames, filenames in os.walk(starting_path):
+        for filename in fnmatch.filter(filenames, pattern):
+            result.append(os.path.join(root, filename))
+    return result
+
 # This special alias is used to track localization requests to catch
 # by xgettext. The text() calls aren't tracked by xgettext
 _ = text
@@ -110,5 +120,6 @@ __all__ = [
     'localized_messages',
     'get_ui_file',
     'check_invalid_input',
-    'set_error_message_on_infobar'
+    'set_error_message_on_infobar',
+    'recursive_glob'
 ]

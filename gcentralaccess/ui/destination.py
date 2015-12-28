@@ -48,8 +48,9 @@ class UIDestination(object):
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.dialog_destination, SECTION_WINDOW_NAME)
-        # Connect the actions accelerators
+        # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
+            # Connect the actions accelerators
             widget.connect_accelerator()
         self.model = destinations
         self.selected_iter = None

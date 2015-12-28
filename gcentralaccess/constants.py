@@ -23,6 +23,7 @@ import os.path
 
 from xdg import BaseDirectory
 
+
 # Application constants
 APP_NAME = 'gCentralAccess'
 APP_VERSION = '0.0.1'

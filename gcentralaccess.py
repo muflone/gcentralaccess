@@ -20,9 +20,6 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import gettext
-import locale
-
 from gcentralaccess.app import Application
 
 if __name__ == '__main__':

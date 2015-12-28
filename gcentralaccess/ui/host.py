@@ -47,8 +47,9 @@ class UIHost(object):
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.dialog_host, SECTION_WINDOW_NAME)
-        # Connect the actions accelerators
+        # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
+            # Connect the actions accelerators
             widget.connect_accelerator()
         # Load the destinations
         self.destinations = ModelDestinations(

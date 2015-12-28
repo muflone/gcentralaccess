@@ -102,8 +102,9 @@ class UIMain(object):
         self.ui = GtkBuilderLoader(get_ui_file('main.glade'))
         self.ui.win_main.set_application(self.application)
         self.ui.win_main.set_title(APP_NAME)
-        # Connect the actions accelerators
+        # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
+            # Connect the actions accelerators
             widget.connect_accelerator()
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)

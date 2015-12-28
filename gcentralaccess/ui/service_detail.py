@@ -39,8 +39,9 @@ class UIServiceDetail(object):
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('services_detail.glade'))
         self.ui.dialog_edit_service.set_transient_for(parent)
-        # Connect the actions accelerators
+        # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
+            # Connect the actions accelerators
             widget.connect_accelerator()
         self.model = services
         self.selected_iter = None

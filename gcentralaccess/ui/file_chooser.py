@@ -20,7 +20,7 @@
 
 from gi.repository import Gtk
 
-from gcentralaccess.functions import _
+from gcentralaccess.functions import text
 
 
 class UIFileChooser(Gtk.Window):
@@ -96,8 +96,8 @@ class UIFileChooserOpenFile(UIFileChooser):
         """Prepare the file chooser dialog"""
         UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.OPEN, (
-                                   _("Cancel"), Gtk.ResponseType.CANCEL,
-                                   _("Open"), Gtk.ResponseType.OK))
+                                   text('_Cancel'), Gtk.ResponseType.CANCEL,
+                                   text('_Open'), Gtk.ResponseType.OK))
 
 
 class UIFileChooserSaveFile(UIFileChooser):
@@ -105,8 +105,8 @@ class UIFileChooserSaveFile(UIFileChooser):
         """Prepare the file chooser dialog"""
         UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.SAVE, (
-                                   _("Cancel"), Gtk.ResponseType.CANCEL,
-                                   _("Save"), Gtk.ResponseType.OK))
+                                   text('_Cancel'), Gtk.ResponseType.CANCEL,
+                                   text('_Save'), Gtk.ResponseType.OK))
 
     def set_overwrite_confirmation(self, confirmation):
         """Set the overwrite confirmation"""
@@ -122,5 +122,5 @@ class UIFileChooserSelectFolder(UIFileChooser):
         """Prepare the file chooser dialog"""
         UIFileChooser.__init__(self, parent, title,
                                Gtk.FileChooserAction.SELECT_FOLDER, (
-                                   _("Cancel"), Gtk.ResponseType.CANCEL,
-                                   _("OK"), Gtk.ResponseType.OK))
+                                   text('_Cancel'), Gtk.ResponseType.CANCEL,
+                                   text('_OK'), Gtk.ResponseType.OK))

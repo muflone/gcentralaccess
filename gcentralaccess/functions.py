@@ -19,12 +19,13 @@
 ##
 
 import os.path
-from gettext import gettext as _
-from gettext import dgettext
+from gettext import gettext, dgettext
 
 from gi.repository import Gtk
 
 from gcentralaccess.constants import DIR_UI
+
+localized_messages = {}
 
 
 def readlines(filename, empty_lines=False):
@@ -45,10 +46,22 @@ def process_events():
         Gtk.main_iteration()
 
 
-def gtk30_(message, context=None):
-    """Return a message translated from GTK+ 3 domain"""
-    return dgettext('gtk30', message if not context else '%s\04%s' % (
-        context, message))
+def text(message, gtk30=False, context=None):
+    """Return a translated message and cache it for reuse"""
+    if message not in localized_messages:
+        if gtk30:
+            # Get a message translated from GTK+ 3 domain
+            full_message = message if not context else '%s\04%s' % (
+                context, message)
+            localized_messages[message] = dgettext('gtk30', full_message)
+        else:
+            localized_messages[message] = gettext(message)
+    return localized_messages[message]
+
+
+def store_message(message, translated):
+    """Store a translated message in the localized_messages list"""
+    localized_messages[message] = translated
 
 
 def get_ui_file(filename):
@@ -85,11 +98,16 @@ def set_error_message_on_infobar(widget, widgets, label, infobar, error_msg):
             w.set_icon_from_icon_name(Gtk.EntryIconPosition.SECONDARY, None)
 
 
+# This special alias is used to track localization requests to catch
+# by xgettext. The text() calls aren't tracked by xgettext
+_ = text
+
 __all__ = [
     'readlines',
     'process_events',
+    'text',
     '_',
-    'gtk30_',
+    'localized_messages',
     'get_ui_file',
     'check_invalid_input',
     'set_error_message_on_infobar'

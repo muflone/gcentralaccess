@@ -25,7 +25,7 @@ from gi.repository import GdkPixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
+    check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 
 from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
@@ -177,7 +177,7 @@ class UIServiceDetail(object):
                 set_active(False)
         # Prepare the browse for icon dialog
         dialog = UIFileChooserOpenFile(self.ui.dialog_edit_service,
-                                       _("Select an icon"))
+                                       text("Select a File"))
         dialog.add_filter(_("All Image Files"), "image/*", None)
         dialog.add_filter(_("All Files"), None, "*")
         dialog.set_filename(self.ui.txt_icon.get_text())

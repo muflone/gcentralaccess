@@ -7,13 +7,13 @@
     <property name="accel_group">accelerators</property>
     <child>
       <object class="GtkAction" id="action_confirm">
-        <property name="label" translatable="yes">_OK</property>
+        <property name="label" comments="Use domain gtk30">_OK</property>
         <signal name="activate" handler="on_action_confirm_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="action_cancel">
-        <property name="label" translatable="yes">_Cancel</property>
+        <property name="label" comments="Use domain gtk30">_Cancel</property>
       </object>
     </child>
   </object>
@@ -133,7 +133,7 @@
               <object class="GtkLabel" id="lbl_name">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Name:</property>
+                <property name="label" comments="Use domain gtk30">_Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">txt_name</property>
                 <property name="ellipsize">middle</property>
@@ -148,7 +148,7 @@
               <object class="GtkLabel" id="lbl_value">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Value:</property>
+                <property name="label" comments="Use domain gtk30">_Value:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">txt_value</property>
                 <property name="xalign">1</property>
@@ -187,7 +187,7 @@
               <object class="GtkLabel" id="lbl_type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Type:</property>
+                <property name="label" comments="Use domain gtk30">_Type:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">txt_name</property>
                 <property name="ellipsize">middle</property>

@@ -27,7 +27,7 @@ from gi.repository import Gdk
 from gcentralaccess.constants import (
     APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
-from gcentralaccess.functions import get_ui_file, _
+from gcentralaccess.functions import get_ui_file, text, _
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -106,6 +106,16 @@ class UIMain(object):
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators
             widget.connect_accelerator()
+            # Set labels
+            widget.set_label(text(widget.get_label()))
+        # Initialize tooltips
+        for widget in self.ui.get_objects_by_type(Gtk.ToolButton):
+            action = widget.get_related_action()
+            if action:
+                widget.set_tooltip_text(action.get_label().replace('_', ''))
+        # Initialize column headers
+        for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
+            widget.set_title(text(widget.get_title()))
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

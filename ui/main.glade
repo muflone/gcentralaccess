@@ -15,14 +15,14 @@
     </child>
     <child>
       <object class="GtkAction" id="action_about">
-        <property name="label" translatable="yes">About</property>
+        <property name="label" comments="Use domain gtk30">_About</property>
         <property name="icon_name">help-about</property>
         <signal name="activate" handler="on_action_about_activate" swapped="no"/>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="action_quit">
-        <property name="label" translatable="yes">Quit</property>
+        <property name="label" comments="Use domain gtk30">_Quit</property>
         <property name="icon_name">application-exit</property>
         <signal name="activate" handler="on_action_quit_activate" swapped="no"/>
       </object>
@@ -33,7 +33,7 @@
     <property name="accel_group">accelerators</property>
     <child>
       <object class="GtkAction" id="action_new">
-        <property name="label" translatable="yes">New</property>
+        <property name="label" comments="Use domain gtk30">_New</property>
         <property name="icon_name">document-new</property>
         <signal name="activate" handler="on_action_new_activate" swapped="no"/>
       </object>
@@ -41,7 +41,7 @@
     </child>
     <child>
       <object class="GtkAction" id="action_edit">
-        <property name="label" translatable="yes">Edit connection</property>
+        <property name="label" comments="Use domain gtk30">_Edit</property>
         <property name="icon_name">document-properties</property>
         <signal name="activate" handler="on_action_edit_activate" swapped="no"/>
       </object>
@@ -49,13 +49,13 @@
     </child>
     <child>
       <object class="GtkAction" id="action_connect">
-        <property name="label" translatable="yes">Connect</property>
+        <property name="label" comments="Use domain gtk30">_Connect</property>
         <property name="icon_name">computer</property>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="action_delete">
-        <property name="label" translatable="yes">Delete</property>
+        <property name="label" comments="Use domain gtk30">_Delete</property>
         <property name="icon_name">edit-delete</property>
         <signal name="activate" handler="on_action_delete_activate" swapped="no"/>
       </object>
@@ -204,7 +204,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="column_name">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Name</property>
+                    <property name="title" comments="Use domain gtk30">Name</property>
                     <child>
                       <object class="GtkCellRendererText" id="cell_name"/>
                       <attributes>
@@ -228,7 +228,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="column_services">
                     <property name="resizable">True</property>
-                    <property name="title" translatable="yes">Services</property>
+                    <property name="title" comments="Use domain gtk30">Services</property>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cell_icon"/>
                       <attributes>

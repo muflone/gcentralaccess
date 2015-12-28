@@ -19,3 +19,19 @@
 ##
 
 import gcentralaccess.requires
+
+from gcentralaccess.functions import store_message, text, _
+
+# Import some translated messages from GTK+ domain
+store_message('_Type:', '_%s' % text(message='Type:', gtk30=True))
+store_message('_Icon:', '_%s:' % text(message='Icon', gtk30=True))
+for message in ('_OK', '_Cancel', '_Close', '_Open', '_Save', '_Connect',
+                '_Delete', 'Select a File', 'Services',
+                'Name', 'Type', 'Value', '_Name:', '_Value:'):
+    text(message=message, gtk30=True)
+# With domain context
+for message in ('_Add', '_Remove', '_Edit', '_New', '_Quit', '_About'):
+    text(message=message, gtk30=True, context='Stock label')
+# Remove the underscore
+for message in ('_Add', '_Remove', '_Edit', '_New', '_Connect', '_Delete'):
+    store_message(message.replace('_', ''), _(message).replace('_', ''))

@@ -21,7 +21,7 @@
 from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.functions import get_ui_file, _
+from gcentralaccess.functions import get_ui_file, text, _
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.services import ModelServices
@@ -49,6 +49,16 @@ class UIServices(object):
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators
             widget.connect_accelerator()
+            # Set labels
+            widget.set_label(text(widget.get_label()))
+        # Initialize tooltips
+        for widget in self.ui.get_objects_by_type(Gtk.Button):
+            action = widget.get_related_action()
+            if action:
+                widget.set_tooltip_text(action.get_label().replace('_', ''))
+        # Initialize column headers
+        for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
+            widget.set_title(text(widget.get_title()))
         # Load the services
         self.model = ModelServices(self.ui.store_services, preferences)
         self.selected_iter = None

@@ -7,7 +7,7 @@
     <property name="accel_group">accelerators</property>
     <child>
       <object class="GtkAction" id="action_add">
-        <property name="label" translatable="yes">Add</property>
+        <property name="label" comments="Use domain gtk30">_Add</property>
         <property name="icon_name">list-add</property>
         <signal name="activate" handler="on_action_add_activate" swapped="no"/>
       </object>
@@ -15,7 +15,7 @@
     </child>
     <child>
       <object class="GtkAction" id="action_remove">
-        <property name="label" translatable="yes">Remove</property>
+        <property name="label" comments="Use domain gtk30">_Remove</property>
         <property name="icon_name">list-remove</property>
         <signal name="activate" handler="on_action_remove_activate" swapped="no"/>
       </object>
@@ -23,12 +23,12 @@
     </child>
     <child>
       <object class="GtkAction" id="action_close">
-        <property name="label" translatable="yes">Close</property>
+        <property name="label" comments="Use domain gtk30">_Close</property>
       </object>
     </child>
     <child>
       <object class="GtkAction" id="action_edit">
-        <property name="label" translatable="yes">Edit</property>
+        <property name="label" comments="Use domain gtk30">_Edit</property>
         <signal name="activate" handler="on_action_edit_activate" swapped="no"/>
       </object>
       <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
@@ -117,7 +117,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_name">
-                        <property name="title" translatable="yes">Name</property>
+                        <property name="title" comments="Use domain gtk30">Name</property>
                         <property name="reorderable">True</property>
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">0</property>

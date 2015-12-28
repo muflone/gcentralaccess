@@ -24,7 +24,7 @@ from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    check_invalid_input, get_ui_file, set_error_message_on_infobar, _)
+    check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 
 from gcentralaccess.models.destinations import ModelDestinations
 
@@ -52,6 +52,17 @@ class UIDestination(object):
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators
             widget.connect_accelerator()
+            # Set labels
+            widget.set_label(text(widget.get_label()))
+        # Initialize labels
+        for widget in self.ui.get_objects_by_type(Gtk.Label):
+            widget.set_label(text(widget.get_label()))
+            widget.set_tooltip_text(widget.get_label().replace('_', ''))
+        # Initialize tooltips
+        for widget in self.ui.get_objects_by_type(Gtk.Button):
+            action = widget.get_related_action()
+            if action:
+                widget.set_tooltip_text(action.get_label().replace('_', ''))
         self.model = destinations
         self.selected_iter = None
         self.name = ''

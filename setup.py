@@ -161,6 +161,29 @@ class Command_CreatePOT(Command):
                     os.unlink(filename)
 
 
+class Command_Translations(Command):
+    description = "build translations"
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        self.dir_base = os.path.dirname(os.path.abspath(__file__))
+        self.dir_po = os.path.join(self.dir_base, 'po')
+        self.dir_mo = os.path.join(self.dir_base, 'locale')
+
+    def run(self):
+        for file_po in glob(os.path.join(self.dir_po, '*.po')):
+            lang = os.path.basename(file_po[:-3])
+            file_mo = os.path.join(self.dir_mo, lang, 'LC_MESSAGES',
+                                   '%s.mo' % DOMAIN_NAME)
+            dir_lang = os.path.dirname(file_mo)
+            if not os.path.exists(dir_lang):
+                os.makedirs(dir_lang)
+            subprocess.call(('msgfmt', '--output-file', file_mo, file_po))
+
+
 setup(
     name=APP_NAME,
     version=APP_VERSION,
@@ -182,6 +205,7 @@ setup(
     cmdclass={
         'install_scripts': Install_Scripts,
         'install_data': Install_Data,
-        'create_pot': Command_CreatePOT
+        'create_pot': Command_CreatePOT,
+        'translations': Command_Translations
     }
 )

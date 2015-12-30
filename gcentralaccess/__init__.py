@@ -18,9 +18,18 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import gettext
+import locale
+
 import gcentralaccess.requires
 
 from gcentralaccess.functions import store_message, text, _
+from gcentralaccess.constants import DOMAIN_NAME, DIR_LOCALE
+
+# Load domain for translation
+for module in (gettext, locale):
+    module.bindtextdomain(DOMAIN_NAME, DIR_LOCALE)
+    module.textdomain(DOMAIN_NAME)
 
 # Import some translated messages from GTK+ domain
 store_message('_Type:', '_%s' % text(message='Type:', gtk30=True))

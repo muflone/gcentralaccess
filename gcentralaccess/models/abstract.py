@@ -25,7 +25,11 @@ class ModelAbstract(object):
     def __init__(self, model, preferences):
         self.model = model
         self.preferences = preferences
+        # Fill the rows dictionary with the model items
         self.rows = {}
+        for row in self.model:
+            name = row[self.COL_KEY]
+            self.rows[name] = self.model.get_iter(row.path)
 
     def clear(self):
         """Clear the model"""

@@ -174,7 +174,10 @@ class Command_Translations(Command):
         self.dir_mo = os.path.join(self.dir_base, 'locale')
 
     def run(self):
+        file_pot = '%s.pot' % os.path.join(self.dir_po, DOMAIN_NAME)
         for file_po in glob(os.path.join(self.dir_po, '*.po')):
+            subprocess.call(('msgmerge', '--update', '--backup=off',
+                             file_po, file_pot))
             lang = os.path.basename(file_po[:-3])
             file_mo = os.path.join(self.dir_mo, lang, 'LC_MESSAGES',
                                    '%s.mo' % DOMAIN_NAME)

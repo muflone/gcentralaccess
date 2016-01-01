@@ -77,6 +77,11 @@ class Settings(object):
         """Get an integer option from a specific section"""
         return int(self.get(section, option, default))
 
+    def get_list(self, section, option, separator=','):
+        """Get an option list from a specific section"""
+        value = self.get(section, option, '')
+        return [v.strip() for v in value.split(separator)]
+
     def set_int(self, section, option, value):
         """Set an integer option from a specific section"""
         self.set(section, option, int(value))

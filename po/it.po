@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gCentralAccess 0.0.1\n"
 "Report-Msgid-Bugs-To: muflone@vbsimple.net\n"
-"POT-Creation-Date: 2015-12-28 01:49+0100\n"
+"POT-Creation-Date: 2016-01-01 17:20+0100\n"
 "PO-Revision-Date: 2015-12-28 01:49+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,37 +17,77 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ui/destination.glade:206 gcentralaccess/models/destination_info.py:30
-msgid "IPv4 Address"
-msgstr "Indirizzo IPv4"
-
-#: ui/destination.glade:207 gcentralaccess/models/destination_info.py:31
-msgid "IPv6 Address"
-msgstr "Indirizzo IPv6"
-
-#: ui/destination.glade:208 gcentralaccess/models/destination_info.py:32
-msgid "MAC Address"
-msgstr "Indirizzo MAC"
-
-#: ui/destination.glade:209 gcentralaccess/models/destination_info.py:33
-msgid "Filename"
-msgstr "Nome di file"
-
-#: ui/destination.glade:210 gcentralaccess/models/destination_info.py:34
-msgid "Custom destination"
-msgstr "Destinazione personalizzata"
-
 #: ui/services.glade:56
 msgid "Configure services"
 msgstr "Configura servizi"
 
-#: ui/services.glade:140 ui/main.glade:219
+#: ui/services.glade:141 ui/main.glade:281
 msgid "Description"
 msgstr "Descrizione"
 
 #: ui/main.glade:10
 msgid "_Services"
 msgstr "_Servizi"
+
+#: ui/main.glade:77
+msgid "IPv4 Address"
+msgstr "Indirizzo IPv4"
+
+#: ui/main.glade:82
+msgid "IPv6 Address"
+msgstr "Indirizzo IPv6"
+
+#: ui/main.glade:87
+msgid "MAC Address"
+msgstr "Indirizzo MAC"
+
+#: ui/main.glade:92
+msgid "HTTP URL"
+msgstr "URL HTTP"
+
+#: ui/main.glade:97
+msgid "HTTPS URL"
+msgstr "URL HTTPS"
+
+#: ui/main.glade:102
+msgid "Generic URL"
+msgstr "URL Generico"
+
+#: ui/main.glade:103
+msgid "protocol://url"
+msgstr "protocollo://url"
+
+#: ui/main.glade:107
+msgid "Directory path"
+msgstr "Percorso di directory"
+
+#: ui/main.glade:108
+msgid "/path/to/directory"
+msgstr "/percorso/della/directory"
+
+#: ui/main.glade:112
+msgid "File path"
+msgstr "Percorso di file"
+
+#: ui/main.glade:113
+msgid "/path/to/file"
+msgstr "/percorso/del/file"
+
+#: ui/main.glade:117
+msgid "Samba or Windows share"
+msgstr "Condivisione Samba o Windows"
+
+#: ui/main.glade:118
+msgid "smb://server/share"
+msgstr "smb://server/condivisione"
+
+#: ui/main.glade:122
+msgid "Custom destination"
+msgstr "Destinazione personalizzata"
+
+#: ui/main.glade:123
+msgid "custom destination"
+msgstr "destinazione personalizzata"
 
 #: ui/host.glade:58
 msgid "Configure host"
@@ -81,19 +121,19 @@ msgstr "Informazioni su gCentralAccess"
 msgid "_Quit"
 msgstr "_Esci"
 
-#: gcentralaccess/ui/main.py:187
+#: gcentralaccess/ui/main.py:193
 msgid "Add a new host"
 msgstr "Aggiungi un nuovo sistema"
 
-#: gcentralaccess/ui/main.py:229
+#: gcentralaccess/ui/main.py:236
 msgid "Edit host"
 msgstr "Modifica sistema"
 
-#: gcentralaccess/ui/main.py:280
+#: gcentralaccess/ui/main.py:287
 msgid "Remove host"
 msgstr "Rimuovi sistema"
 
-#: gcentralaccess/ui/main.py:281
+#: gcentralaccess/ui/main.py:288
 msgid "Remove the selected host?"
 msgstr "Rimuovere il sistema selezionato?"
 
@@ -133,35 +173,35 @@ msgstr "Tutti i file immagine"
 msgid "All Files"
 msgstr "Tutti i file"
 
-#: gcentralaccess/ui/host.py:104
+#: gcentralaccess/ui/host.py:108
 msgid "Add new destination"
 msgstr "Aggiungi una nuova destinazione"
 
-#: gcentralaccess/ui/host.py:128
+#: gcentralaccess/ui/host.py:136
 msgid "Edit destination"
 msgstr "Modifica destinazione"
 
-#: gcentralaccess/ui/host.py:147
+#: gcentralaccess/ui/host.py:158
 msgid "Remove destination"
 msgstr "Rimuovi destinazione"
 
-#: gcentralaccess/ui/host.py:148
+#: gcentralaccess/ui/host.py:159
 msgid "Remove the selected destination?"
 msgstr "Rimuovere la destinazione selezionata?"
 
-#: gcentralaccess/ui/host.py:172
+#: gcentralaccess/ui/host.py:183
 msgid "The host name is missing"
 msgstr "Il nome del sistema è mancante"
 
-#: gcentralaccess/ui/host.py:177
+#: gcentralaccess/ui/host.py:188
 msgid "The host name is invalid"
 msgstr "Il nome del sistema non è valido"
 
-#: gcentralaccess/ui/host.py:182
+#: gcentralaccess/ui/host.py:193
 msgid "A host with that name already exists"
 msgstr "Un sistema con quel nome esiste già"
 
-#: gcentralaccess/ui/host.py:187
+#: gcentralaccess/ui/host.py:198
 msgid "The host description is missing"
 msgstr "La descrizione del sistema è mancante"
 
@@ -181,27 +221,19 @@ msgstr "Rimuovi servizio"
 msgid "Remove the selected service?"
 msgstr "Rimuovere il servizio selezionato?"
 
-#: gcentralaccess/ui/destination.py:36
-msgid "/path/to/file"
-msgstr "/percorso/del/file"
-
-#: gcentralaccess/ui/destination.py:37
-msgid "custom destination"
-msgstr "destinazione personalizzata"
-
-#: gcentralaccess/ui/destination.py:115
+#: gcentralaccess/ui/destination.py:113
 msgid "The destination name is missing"
 msgstr "Il nome della destinazione è mancante"
 
-#: gcentralaccess/ui/destination.py:120
+#: gcentralaccess/ui/destination.py:118
 msgid "The destination name is invalid"
 msgstr "Il nome della destinazione non è valido"
 
-#: gcentralaccess/ui/destination.py:125
+#: gcentralaccess/ui/destination.py:123
 msgid "A destination with that name already exists"
 msgstr "Una destinazione con quel nome esiste già"
 
-#: gcentralaccess/ui/destination.py:130
+#: gcentralaccess/ui/destination.py:128
 msgid "The destination value is missing"
 msgstr "Il valore della destinazione è mancante"
 

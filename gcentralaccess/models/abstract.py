@@ -69,3 +69,7 @@ class ModelAbstract(object):
         """Load the model data from a dict object"""
         for key in sorted(items.iterkeys()):
             self.add_data(items[key])
+
+    def count(self):
+        """Return the number of items in the model"""
+        return len(self.model)

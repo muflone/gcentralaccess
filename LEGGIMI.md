@@ -3,7 +3,7 @@ gCentralAccess
 **Descrizione:** Gestisci risorse esterne da una console di gestione
 centralizzata.
 
-**Copyright:** 2015 Fabio Castelli (Muflone) <muflone(at)vbsimple.net>
+**Copyright:** 2015-2016 Fabio Castelli (Muflone) <muflone(at)vbsimple.net>
 
 **Licenza:** GPL-2+
 

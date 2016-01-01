@@ -4,7 +4,7 @@
 #     Project: gCentralAccess
 # Description: Manage external resources from a centralized management console
 #      Author: Fabio Castelli (Muflone) <muflone@vbsimple.net>
-#   Copyright: 2015 Fabio Castelli
+#   Copyright: 2015-2016 Fabio Castelli
 #     License: GPL-2+
 #  This program is free software; you can redistribute it and/or modify it
 #  under the terms of the GNU General Public License as published by the Free

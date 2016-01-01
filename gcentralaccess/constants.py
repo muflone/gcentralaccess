@@ -2,7 +2,7 @@
 #     Project: gCentralAccess
 # Description: Manage external resources from a centralized management console
 #      Author: Fabio Castelli (Muflone) <muflone@vbsimple.net>
-#   Copyright: 2015 Fabio Castelli
+#   Copyright: 2015-2016 Fabio Castelli
 #     License: GPL-2+
 #  This program is free software; you can redistribute it and/or modify it
 #  under the terms of the GNU General Public License as published by the Free
@@ -33,7 +33,7 @@ APP_ID = 'gcentralaccess.muflone.com'
 APP_URL = 'http://www.muflone.com/gcentralaccess/'
 APP_AUTHOR = 'Fabio Castelli'
 APP_AUTHOR_EMAIL = 'muflone@vbsimple.net'
-APP_COPYRIGHT = 'Copyright 2015 %s' % APP_AUTHOR
+APP_COPYRIGHT = 'Copyright 2015-2016 %s' % APP_AUTHOR
 # Other constants
 DOMAIN_NAME = 'gcentralaccess'
 VERBOSE_LEVEL_QUIET = 0

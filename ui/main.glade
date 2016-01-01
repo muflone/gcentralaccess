@@ -93,7 +93,7 @@
         <col id="2">http://url</col>
       </row>
       <row>
-        <col id="0" translatable="yes">https</col>
+        <col id="0">https</col>
         <col id="1" translatable="yes">HTTPS URL</col>
         <col id="2">https://url</col>
       </row>

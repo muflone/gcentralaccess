@@ -36,11 +36,13 @@ SECTION_WINDOW_NAME = 'host'
 
 
 class UIHost(object):
-    def __init__(self, parent, hosts, preferences, settings_positions):
+    def __init__(self, parent, hosts, destination_types, preferences,
+                 settings_positions):
         """Prepare the host dialog"""
         self.preferences = preferences
         self.settings_positions = settings_positions
         self.hosts = hosts
+        self.destination_types = destination_types
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('host.glade'))
         self.ui.dialog_host.set_transient_for(parent)
@@ -67,7 +69,8 @@ class UIHost(object):
             widget.set_title(text(widget.get_title()))
         # Load the destinations
         self.destinations = ModelDestinations(
-            self.ui.store_destinations, preferences)
+            self.ui.store_destinations, preferences,
+            self.destination_types)
         self.selected_iter = None
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
@@ -96,6 +99,7 @@ class UIHost(object):
         """Add a new destination"""
         dialog = UIDestination(self.ui.dialog_host,
                                self.destinations,
+                               self.destination_types,
                                self.preferences,
                                self.settings_positions)
         if dialog.show(default_name='',
@@ -103,9 +107,12 @@ class UIHost(object):
                        default_type='ipv4',
                        title=_('Add new destination'),
                        treeiter=None) == Gtk.ResponseType.OK:
+            treeiter = self.destination_types.get_iter(dialog.type)
+            type_local = self.destination_types.get_description(treeiter)
             self.destinations.add_data(DestinationInfo(name=dialog.name,
                                                        value=dialog.value,
-                                                       type=dialog.type))
+                                                       type=dialog.type,
+                                                       type_local=type_local))
         # Get the new destinations list, clear and store the list again
         dialog.destroy()
 
@@ -120,6 +127,7 @@ class UIHost(object):
             selected_iter = self.destinations.get_iter(name)
             dialog = UIDestination(self.ui.dialog_host,
                                    self.destinations,
+                                   self.destination_types,
                                    self.preferences,
                                    self.settings_positions)
             if dialog.show(default_name=name,
@@ -129,10 +137,13 @@ class UIHost(object):
                            treeiter=selected_iter
                            ) == Gtk.ResponseType.OK:
                 # Update values
+                treeiter = self.destination_types.get_iter(dialog.type)
+                type_local = self.destination_types.get_description(treeiter)
                 self.destinations.set_data(
                     selected_iter, DestinationInfo(name=dialog.name,
                                                    value=dialog.value,
-                                                   type=dialog.type))
+                                                   type=dialog.type,
+                                                   type_local=type_local))
             dialog.destroy()
 
     def on_action_remove_activate(self, action):

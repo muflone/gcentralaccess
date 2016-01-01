@@ -19,9 +19,8 @@
 ##
 
 
-class DestinationInfo(object):
-    def __init__(self, name, value, type, type_local):
+class DestinationTypeInfo(object):
+    def __init__(self, name, description, placeholder):
         self.name = name
-        self.value = value
-        self.type = type
-        self.type_local = type_local
+        self.description = description
+        self.placeholder = placeholder

@@ -19,17 +19,12 @@
 ##
 
 from gcentralaccess.models.abstract import ModelAbstract
-from gcentralaccess.models.destination_info import DestinationInfo
+from gcentralaccess.models.destination_type_info import DestinationTypeInfo
 
 
-class ModelDestinations(ModelAbstract):
-    COL_VALUE = 1
-    COL_TYPE = 2
-    COL_TYPE_LOCAL = 3
-
-    def __init__(self, model, preferences, destination_types):
-        super(self.__class__, self).__init__(model, preferences)
-        self.destination_types = destination_types
+class ModelDestinationTypes(ModelAbstract):
+    COL_DESCRIPTION = 1
+    COL_PLACEHOLDER = 2
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -48,28 +43,13 @@ class ModelDestinations(ModelAbstract):
         super(self.__class__, self).set_data(treeiter, item)
         # Update values
         self.model.set_value(treeiter, self.COL_KEY, item.name)
-        self.model.set_value(treeiter, self.COL_VALUE, item.value)
-        self.model.set_value(treeiter, self.COL_TYPE, item.type)
-        self.model.set_value(treeiter, self.COL_TYPE_LOCAL, item.type_local)
+        self.model.set_value(treeiter, self.COL_DESCRIPTION, item.value)
+        self.model.set_value(treeiter, self.COL_PLACEHOLDER, item.placeholder)
 
-    def get_value(self, treeiter):
-        """Get the value from a TreeIter"""
-        return self.model[treeiter][self.COL_VALUE]
+    def get_description(self, treeiter):
+        """Get the description from a TreeIter"""
+        return self.model[treeiter][self.COL_DESCRIPTION]
 
-    def get_type(self, treeiter):
-        """Get the type from a TreeIter"""
-        return self.model[treeiter][self.COL_TYPE]
-
-    def dump(self):
-        """Extract the model data to a dict object"""
-        super(self.__class__, self).dump()
-        result = {}
-        for key in self.rows.iterkeys():
-            type = self.get_type(self.rows[key])
-            treeiter = self.destination_types.get_iter(type)
-            result[key] = DestinationInfo(
-                name=self.get_key(self.rows[key]),
-                value=self.get_value(self.rows[key]),
-                type=type,
-                type_local=self.destination_types.get_description(treeiter))
-        return result
+    def get_placeholder(self, treeiter):
+        """Get the placeholder from a TreeIter"""
+        return self.model[treeiter][self.COL_PLACEHOLDER]

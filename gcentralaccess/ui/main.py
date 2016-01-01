@@ -36,6 +36,7 @@ from gcentralaccess.models.service_info import ServiceInfo
 from gcentralaccess.models.host_info import HostInfo
 from gcentralaccess.models.hosts import ModelHosts
 from gcentralaccess.models.destination_info import DestinationInfo
+from gcentralaccess.models.destination_types import ModelDestinationTypes
 
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
@@ -77,6 +78,9 @@ class UIMain(object):
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts, self.preferences)
+        # This model is shared across the main and the destination detail
+        self.destination_types = ModelDestinationTypes(
+            self.ui.store_destination_types, self.preferences)
         # Load hosts
         for filename in os.listdir(DIR_HOSTS):
             settings_host = Settings(os.path.join(DIR_HOSTS, filename))
@@ -89,10 +93,11 @@ class UIMain(object):
                 for option in settings_host.get_options(SECTION_DESTINATIONS):
                     values = settings_host.get(SECTION_DESTINATIONS, option)
                     type, value = values.split(':', 1)
-                    self.model.add_destination(name,
-                                               DestinationInfo(option,
-                                                               value,
-                                                               type))
+                    treeiter = self.destination_types.get_iter(type)
+                    type_local = self.destination_types.get_description(
+                        treeiter)
+                    self.model.add_destination(
+                        name, DestinationInfo(option, value, type, type_local))
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
@@ -180,6 +185,7 @@ class UIMain(object):
         dialog = UIHost(
             parent=self.ui.win_main,
             hosts=self.model,
+            destination_types=self.destination_types,
             preferences=self.preferences,
             settings_positions=self.settings_positions)
         response = dialog.show(default_name='',
@@ -217,6 +223,7 @@ class UIMain(object):
             dialog = UIHost(
                 parent=self.ui.win_main,
                 hosts=self.model,
+                destination_types=self.destination_types,
                 preferences=self.preferences,
                 settings_positions=self.settings_positions)
             # Restore the destinations for the selected host

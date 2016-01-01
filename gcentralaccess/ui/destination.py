@@ -27,19 +27,14 @@ from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 
 from gcentralaccess.models.destinations import ModelDestinations
+from gcentralaccess.models.destination_info import DestinationInfo
 
 SECTION_WINDOW_NAME = 'destination'
-DESTINATION_TYPE_PLACEHOLDERS = {
-    'ipv4': '.'.join(('123', ) * 4),
-    'ipv6': ':'.join(('abcd', ) * 8),
-    'mac': ':'.join(('12', ) * 6),
-    'filename': _('/path/to/file'),
-    'custom': _('custom destination')
-}
 
 
 class UIDestination(object):
-    def __init__(self, parent, destinations, preferences, settings_positions):
+    def __init__(self, parent, destinations, destination_types, preferences,
+                 settings_positions):
         """Prepare the destination dialog"""
         self.settings_positions = settings_positions
         # Load the user interface
@@ -63,7 +58,10 @@ class UIDestination(object):
             action = widget.get_related_action()
             if action:
                 widget.set_tooltip_text(action.get_label().replace('_', ''))
+        # Load destination types
+        self.ui.cbo_type.set_model(destination_types.model)
         self.model = destinations
+        self.destination_types = destination_types
         self.selected_iter = None
         self.name = ''
         self.value = ''
@@ -144,6 +142,6 @@ class UIDestination(object):
         """Update the placeholders for the selected destination type"""
         # Set the placeholder text, only for GTK+ 3.2.0 and higher
         if not Gtk.check_version(3, 2, 0):
-            active = self.ui.cbo_type.get_active_id()
+            treeiter = self.ui.cbo_type.get_active_iter()
             self.ui.txt_value.set_placeholder_text(
-                DESTINATION_TYPE_PLACEHOLDERS[active])
+                self.destination_types.get_placeholder(treeiter))

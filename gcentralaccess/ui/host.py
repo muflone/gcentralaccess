@@ -95,7 +95,7 @@ class UIHost(object):
         self.ui.dialog_host.destroy()
         self.ui.dialog_host = None
 
-    def on_action_add_activate(self, action):
+    def on_action_destinations_add_activate(self, action):
         """Add a new destination"""
         dialog = UIDestination(self.ui.dialog_host,
                                self.destinations,
@@ -116,7 +116,7 @@ class UIHost(object):
         # Get the new destinations list, clear and store the list again
         dialog.destroy()
 
-    def on_action_edit_activate(self, action):
+    def on_action_destinations_edit_activate(self, action):
         """Edit the selected destination"""
         selection = self.ui.tvw_destinations.get_selection().get_selected()
         selected_row = selection[1]
@@ -146,7 +146,7 @@ class UIHost(object):
                                                    type_local=type_local))
             dialog.destroy()
 
-    def on_action_remove_activate(self, action):
+    def on_action_destinations_remove_activate(self, action):
         """Remove the selected destination"""
         selection = self.ui.tvw_destinations.get_selection().get_selected()
         selected_row = selection[1]
@@ -162,7 +162,7 @@ class UIHost(object):
 
     def on_tvw_destinations_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
-        self.ui.action_edit.activate()
+        self.ui.action_destinations_edit.activate()
 
     def on_action_confirm_activate(self, action):
         """Check che host configuration before confirm"""

@@ -3,40 +3,43 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelerators"/>
-  <object class="GtkActionGroup" id="actions_host">
+  <object class="GtkActionGroup" id="actions_destinations">
     <property name="accel_group">accelerators</property>
     <child>
-      <object class="GtkAction" id="action_add">
+      <object class="GtkAction" id="action_destinations_add">
         <property name="label" comments="Use domain gtk30">_Add</property>
         <property name="icon_name">list-add</property>
-        <signal name="activate" handler="on_action_add_activate" swapped="no"/>
+        <signal name="activate" handler="on_action_destinations_add_activate" swapped="no"/>
       </object>
       <accelerator key="Insert"/>
     </child>
     <child>
-      <object class="GtkAction" id="action_remove">
+      <object class="GtkAction" id="action_destinations_remove">
         <property name="label" comments="Use domain gtk30">_Remove</property>
         <property name="icon_name">list-remove</property>
-        <signal name="activate" handler="on_action_remove_activate" swapped="no"/>
+        <signal name="activate" handler="on_action_destinations_remove_activate" swapped="no"/>
       </object>
       <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
     </child>
     <child>
-      <object class="GtkAction" id="action_cancel">
-        <property name="label" comments="Use domain gtk30">_Cancel</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkAction" id="action_edit">
+      <object class="GtkAction" id="action_destinations_edit">
         <property name="label" comments="Use domain gtk30">_Edit</property>
-        <signal name="activate" handler="on_action_edit_activate" swapped="no"/>
+        <signal name="activate" handler="on_action_destinations_edit_activate" swapped="no"/>
       </object>
       <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
     </child>
+  </object>
+  <object class="GtkActionGroup" id="actions_host">
+    <property name="accel_group">accelerators</property>
     <child>
       <object class="GtkAction" id="action_confirm">
         <property name="label" comments="Use domain gtk30">_OK</property>
         <signal name="activate" handler="on_action_confirm_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_cancel">
+        <property name="label" comments="Use domain gtk30">_Cancel</property>
       </object>
     </child>
   </object>
@@ -284,14 +287,14 @@
                           <object class="GtkTreeSelection" id="selection_destinations"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="column_name">
+                          <object class="GtkTreeViewColumn" id="column_destinations_name">
                             <property name="resizable">True</property>
                             <property name="title" comments="Use domain gtk30">Name</property>
                             <property name="reorderable">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">0</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cell_name"/>
+                              <object class="GtkCellRendererText" id="cell_destinations_name"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
                               </attributes>
@@ -299,14 +302,14 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="column_type">
+                          <object class="GtkTreeViewColumn" id="column_destinations_type">
                             <property name="resizable">True</property>
                             <property name="title" comments="Use domain gtk30">Type</property>
                             <property name="reorderable">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">3</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cell_type"/>
+                              <object class="GtkCellRendererText" id="cell_destinations_type"/>
                               <attributes>
                                 <attribute name="text">3</attribute>
                               </attributes>
@@ -314,14 +317,14 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="column_value">
+                          <object class="GtkTreeViewColumn" id="column_destinations_value">
                             <property name="resizable">True</property>
                             <property name="title" comments="Use domain gtk30">Value</property>
                             <property name="reorderable">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">1</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cell_value"/>
+                              <object class="GtkCellRendererText" id="cell_destinations_value"/>
                               <attributes>
                                 <attribute name="text">1</attribute>
                               </attributes>
@@ -338,7 +341,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="buttonbox_actions">
+                  <object class="GtkButtonBox" id="buttonbox_destinations">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">False</property>
@@ -349,7 +352,7 @@
                     <child>
                       <object class="GtkButton" id="btn_destinations_add">
                         <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_add</property>
+                        <property name="related_action">action_destinations_add</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -371,7 +374,7 @@
                     <child>
                       <object class="GtkButton" id="btn_destinations_edit">
                         <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_edit</property>
+                        <property name="related_action">action_destinations_edit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -393,7 +396,7 @@
                     <child>
                       <object class="GtkButton" id="btn_destinations_remove">
                         <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_remove</property>
+                        <property name="related_action">action_destinations_remove</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

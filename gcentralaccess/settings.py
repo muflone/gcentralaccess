@@ -80,7 +80,8 @@ class Settings(object):
     def get_list(self, section, option, separator=','):
         """Get an option list from a specific section"""
         value = self.get(section, option, '')
-        return [v.strip() for v in value.split(separator)]
+        if len(value):
+            return [v.strip() for v in value.split(separator)]
 
     def set_int(self, section, option, value):
         """Set an integer option from a specific section"""

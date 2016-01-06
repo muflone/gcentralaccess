@@ -34,9 +34,8 @@ class ModelDestinationTypes(ModelAbstract):
         if item.name not in self.rows:
             new_row = self.model.append((
                 item.name,
-                item.value,
-                item.type,
-                item.type_local))
+                item.description,
+                item.placeholder))
             self.rows[item.name] = new_row
             return new_row
 
@@ -45,7 +44,7 @@ class ModelDestinationTypes(ModelAbstract):
         super(self.__class__, self).set_data(treeiter, item)
         # Update values
         self.model.set_value(treeiter, self.COL_KEY, item.name)
-        self.model.set_value(treeiter, self.COL_DESCRIPTION, item.value)
+        self.model.set_value(treeiter, self.COL_DESCRIPTION, item.description)
         self.model.set_value(treeiter, self.COL_PLACEHOLDER, item.placeholder)
 
     def get_description(self, treeiter):

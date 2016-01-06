@@ -20,6 +20,7 @@
 
 from gi.repository import GdkPixbuf
 
+import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.abstract import ModelAbstract
@@ -33,9 +34,9 @@ class ModelServices(ModelAbstract):
     COL_ICON = 4
     COL_PIXBUF = 5
 
-    def __init__(self, model, preferences):
-        super(self.__class__, self).__init__(model, preferences)
-        self.icon_size = preferences.get(ICON_SIZE)
+    def __init__(self, model):
+        super(self.__class__, self).__init__(model)
+        self.icon_size = preferences.preferences.get(ICON_SIZE)
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""

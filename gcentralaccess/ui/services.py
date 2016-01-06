@@ -22,6 +22,7 @@ from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import get_ui_file, text, _
+import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.services import ModelServices
@@ -35,9 +36,8 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServices(object):
-    def __init__(self, parent, preferences, settings_positions):
+    def __init__(self, parent, settings_positions):
         """Prepare the services dialog"""
-        self.preferences = preferences
         self.settings_positions = settings_positions
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('services.glade'))
@@ -60,9 +60,9 @@ class UIServices(object):
         for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
             widget.set_title(text(widget.get_title()))
         # Load the services
-        self.model = ModelServices(self.ui.store_services, preferences)
+        self.model = ModelServices(self.ui.store_services)
         self.selected_iter = None
-        self.ui.cell_icon.props.height = self.preferences.get(ICON_SIZE)
+        self.ui.cell_icon.props.height = preferences.preferences.get(ICON_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -80,9 +80,7 @@ class UIServices(object):
 
     def on_action_add_activate(self, action):
         """Add a new service"""
-        dialog = UIServiceDetail(self.ui.dialog_services,
-                                 self.model,
-                                 self.preferences)
+        dialog = UIServiceDetail(self.ui.dialog_services, self.model)
         if dialog.show(default_name='',
                        default_description='',
                        default_command='',
@@ -108,9 +106,7 @@ class UIServices(object):
             terminal = self.model.get_terminal(selected_row)
             icon = self.model.get_icon(selected_row)
             selected_iter = self.model.get_iter(name)
-            dialog = UIServiceDetail(self.ui.dialog_services,
-                                     self.model,
-                                     self.preferences)
+            dialog = UIServiceDetail(self.ui.dialog_services, self.model)
             if dialog.show(default_name=name,
                            default_description=description,
                            default_command=command,

@@ -26,6 +26,7 @@ from gi.repository import GdkPixbuf
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
+import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 
 from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
@@ -34,7 +35,7 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServiceDetail(object):
-    def __init__(self, parent, services, preferences):
+    def __init__(self, parent, services):
         """Prepare the services detail dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('services_detail.glade'))
@@ -62,8 +63,8 @@ class UIServiceDetail(object):
         self.terminal = False
         self.icon = ''
         # Load settings
-        self.icon_size = preferences.get(ICON_SIZE)
-        self.preview_size = preferences.get(PREVIEW_SIZE)
+        self.icon_size = preferences.preferences.get(ICON_SIZE)
+        self.preview_size = preferences.preferences.get(PREVIEW_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

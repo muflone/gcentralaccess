@@ -23,6 +23,7 @@ from gi.repository import Gtk
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
+import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.destinations import ModelDestinations
@@ -36,10 +37,9 @@ SECTION_WINDOW_NAME = 'host'
 
 
 class UIHost(object):
-    def __init__(self, parent, hosts, destination_types, preferences,
+    def __init__(self, parent, hosts, destination_types,
                  settings_positions):
         """Prepare the host dialog"""
-        self.preferences = preferences
         self.settings_positions = settings_positions
         self.hosts = hosts
         self.destination_types = destination_types
@@ -69,7 +69,7 @@ class UIHost(object):
             widget.set_title(text(widget.get_title()))
         # Load the destinations
         self.destinations = ModelDestinations(
-            self.ui.store_destinations, preferences,
+            self.ui.store_destinations,
             self.destination_types)
         self.selected_iter = None
         # Connect signals from the glade file to the module functions
@@ -100,7 +100,6 @@ class UIHost(object):
         dialog = UIDestination(self.ui.dialog_host,
                                self.destinations,
                                self.destination_types,
-                               self.preferences,
                                self.settings_positions)
         if dialog.show(default_name='',
                        default_value='',
@@ -128,7 +127,6 @@ class UIHost(object):
             dialog = UIDestination(self.ui.dialog_host,
                                    self.destinations,
                                    self.destination_types,
-                                   self.preferences,
                                    self.settings_positions)
             if dialog.show(default_name=name,
                            default_value=value,

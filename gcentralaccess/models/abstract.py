@@ -22,9 +22,8 @@
 class ModelAbstract(object):
     COL_KEY = 0
 
-    def __init__(self, model, preferences):
+    def __init__(self, model):
         self.model = model
-        self.preferences = preferences
         # Fill the rows dictionary with the model items
         self.rows = {}
         for row in self.model:

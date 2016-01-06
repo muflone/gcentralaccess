@@ -28,6 +28,8 @@ DEFAULT_VALUES[ICON_SIZE] = 36
 PREVIEW_SIZE = 'preview size'
 DEFAULT_VALUES[PREVIEW_SIZE] = 128
 
+preferences = None
+
 
 class Preferences(object):
     def __init__(self, settings):

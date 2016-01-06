@@ -27,8 +27,8 @@ class ModelDestinations(ModelAbstract):
     COL_TYPE = 2
     COL_TYPE_LOCAL = 3
 
-    def __init__(self, model, preferences, destination_types):
-        super(self.__class__, self).__init__(model, preferences)
+    def __init__(self, model, destination_types):
+        super(self.__class__, self).__init__(model)
         self.destination_types = destination_types
 
     def add_data(self, item):

@@ -27,8 +27,8 @@ class ModelHosts(ModelAbstract):
     COL_SERVICE = 2
     COL_ICON = 3
 
-    def __init__(self, model, preferences):
-        super(self.__class__, self).__init__(model, preferences)
+    def __init__(self, model):
+        super(self.__class__, self).__init__(model)
         self.destinations = {}
 
     def add_data(self, item):

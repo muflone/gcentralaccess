@@ -28,6 +28,7 @@ from gcentralaccess.constants import (
     APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
 from gcentralaccess.functions import get_ui_file, text, _
+import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -62,7 +63,7 @@ class UIMain(object):
         # Load settings
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
-        self.preferences = Preferences(self.settings)
+        preferences.preferences = Preferences(self.settings)
         self.settings_services = Settings(FILE_SERVICES)
         # Load services
         for key in self.settings_services.get_sections():
@@ -77,10 +78,10 @@ class UIMain(object):
                 icon=self.settings_services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
-        self.model = ModelHosts(self.ui.store_hosts, self.preferences)
+        self.model = ModelHosts(self.ui.store_hosts)
         # This model is shared across the main and the destination detail
         self.destination_types = ModelDestinationTypes(
-            self.ui.store_destination_types, self.preferences)
+            self.ui.store_destination_types)
         # Load hosts
         for filename in os.listdir(DIR_HOSTS):
             settings_host = Settings(os.path.join(DIR_HOSTS, filename))
@@ -153,7 +154,6 @@ class UIMain(object):
         """Edit services"""
         dialog_services = UIServices(
             parent=self.ui.win_main,
-            preferences=self.preferences,
             settings_positions=self.settings_positions)
         # Load services list
         dialog_services.model.load(self.services)
@@ -186,7 +186,6 @@ class UIMain(object):
             parent=self.ui.win_main,
             hosts=self.model,
             destination_types=self.destination_types,
-            preferences=self.preferences,
             settings_positions=self.settings_positions)
         response = dialog.show(default_name='',
                                default_description='',
@@ -224,7 +223,6 @@ class UIMain(object):
                 parent=self.ui.win_main,
                 hosts=self.model,
                 destination_types=self.destination_types,
-                preferences=self.preferences,
                 settings_positions=self.settings_positions)
             # Restore the destinations for the selected host
             destinations = self.model.get_destinations(name)

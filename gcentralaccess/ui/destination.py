@@ -33,7 +33,7 @@ SECTION_WINDOW_NAME = 'destination'
 
 
 class UIDestination(object):
-    def __init__(self, parent, destinations, destination_types, preferences,
+    def __init__(self, parent, destinations, destination_types,
                  settings_positions):
         """Prepare the destination dialog"""
         self.settings_positions = settings_positions

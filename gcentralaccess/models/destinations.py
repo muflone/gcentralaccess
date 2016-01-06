@@ -43,7 +43,6 @@ class ModelDestinations(ModelAbstract):
     def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
         super(self.__class__, self).set_data(treeiter, item)
-        # Update values
         self.model.set_value(treeiter, self.COL_KEY, item.name)
         self.model.set_value(treeiter, self.COL_VALUE, item.value)
         self.model.set_value(treeiter, self.COL_TYPE, item.type)

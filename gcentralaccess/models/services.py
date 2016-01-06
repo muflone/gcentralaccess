@@ -60,7 +60,6 @@ class ModelServices(ModelAbstract):
     def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
         super(self.__class__, self).set_data(treeiter, item)
-        # Update values
         icon = item.icon if item.icon is not None else ''
         pixbuf = None if icon == '' else \
             GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,

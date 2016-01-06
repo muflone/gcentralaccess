@@ -58,11 +58,14 @@ class ModelDestinationTypes(ModelAbstract):
 def get_iter(destination_type):
     return destination_types.get_iter(destination_type)
 
+
 def get_description(treeiter):
     return destination_types.get_description(treeiter)
 
+
 def get_placeholder(treeiter):
     return destination_types.get_placeholder(treeiter)
+
 
 def get_model():
     return destination_types.model

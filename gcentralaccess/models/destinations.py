@@ -18,6 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.destination_info import DestinationInfo
 
@@ -26,10 +27,6 @@ class ModelDestinations(ModelAbstract):
     COL_VALUE = 1
     COL_TYPE = 2
     COL_TYPE_LOCAL = 3
-
-    def __init__(self, model, destination_types):
-        super(self.__class__, self).__init__(model)
-        self.destination_types = destination_types
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -66,10 +63,10 @@ class ModelDestinations(ModelAbstract):
         result = {}
         for key in self.rows.iterkeys():
             type = self.get_type(self.rows[key])
-            treeiter = self.destination_types.get_iter(type)
+            treeiter = destination_types.get_iter(type)
             result[key] = DestinationInfo(
                 name=self.get_key(self.rows[key]),
                 value=self.get_value(self.rows[key]),
                 type=type,
-                type_local=self.destination_types.get_description(treeiter))
+                type_local=destination_types.get_description(treeiter))
         return result

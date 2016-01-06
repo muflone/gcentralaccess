@@ -20,6 +20,7 @@
 
 from gi.repository import Gtk
 
+import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
@@ -37,12 +38,10 @@ SECTION_WINDOW_NAME = 'host'
 
 
 class UIHost(object):
-    def __init__(self, parent, hosts, destination_types,
-                 settings_positions):
+    def __init__(self, parent, hosts, settings_positions):
         """Prepare the host dialog"""
         self.settings_positions = settings_positions
         self.hosts = hosts
-        self.destination_types = destination_types
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('host.glade'))
         self.ui.dialog_host.set_transient_for(parent)
@@ -68,9 +67,7 @@ class UIHost(object):
         for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
             widget.set_title(text(widget.get_title()))
         # Load the destinations
-        self.destinations = ModelDestinations(
-            self.ui.store_destinations,
-            self.destination_types)
+        self.destinations = ModelDestinations(self.ui.store_destinations)
         self.selected_iter = None
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
@@ -99,15 +96,14 @@ class UIHost(object):
         """Add a new destination"""
         dialog = UIDestination(self.ui.dialog_host,
                                self.destinations,
-                               self.destination_types,
                                self.settings_positions)
         if dialog.show(default_name='',
                        default_value='',
                        default_type='ipv4',
                        title=_('Add new destination'),
                        treeiter=None) == Gtk.ResponseType.OK:
-            treeiter = self.destination_types.get_iter(dialog.type)
-            type_local = self.destination_types.get_description(treeiter)
+            treeiter = destination_types.get_iter(dialog.type)
+            type_local = destination_types.get_description(treeiter)
             self.destinations.add_data(DestinationInfo(name=dialog.name,
                                                        value=dialog.value,
                                                        type=dialog.type,
@@ -126,7 +122,6 @@ class UIHost(object):
             selected_iter = self.destinations.get_iter(name)
             dialog = UIDestination(self.ui.dialog_host,
                                    self.destinations,
-                                   self.destination_types,
                                    self.settings_positions)
             if dialog.show(default_name=name,
                            default_value=value,
@@ -135,8 +130,8 @@ class UIHost(object):
                            treeiter=selected_iter
                            ) == Gtk.ResponseType.OK:
                 # Update values
-                treeiter = self.destination_types.get_iter(dialog.type)
-                type_local = self.destination_types.get_description(treeiter)
+                treeiter = destination_types.get_iter(dialog.type)
+                type_local = destination_types.get_description(treeiter)
                 self.destinations.set_data(
                     selected_iter, DestinationInfo(name=dialog.name,
                                                    value=dialog.value,

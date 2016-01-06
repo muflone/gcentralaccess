@@ -21,6 +21,8 @@
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.destination_type_info import DestinationTypeInfo
 
+destination_types = None
+
 
 class ModelDestinationTypes(ModelAbstract):
     COL_DESCRIPTION = 1
@@ -53,3 +55,16 @@ class ModelDestinationTypes(ModelAbstract):
     def get_placeholder(self, treeiter):
         """Get the placeholder from a TreeIter"""
         return self.model[treeiter][self.COL_PLACEHOLDER]
+
+
+def get_iter(destination_type):
+    return destination_types.get_iter(destination_type)
+
+def get_description(treeiter):
+    return destination_types.get_description(treeiter)
+
+def get_placeholder(treeiter):
+    return destination_types.get_placeholder(treeiter)
+
+def get_model():
+    return destination_types.model

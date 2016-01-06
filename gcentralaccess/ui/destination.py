@@ -22,6 +22,7 @@ import os.path
 
 from gi.repository import Gtk
 
+import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
@@ -33,8 +34,7 @@ SECTION_WINDOW_NAME = 'destination'
 
 
 class UIDestination(object):
-    def __init__(self, parent, destinations, destination_types,
-                 settings_positions):
+    def __init__(self, parent, destinations, settings_positions):
         """Prepare the destination dialog"""
         self.settings_positions = settings_positions
         # Load the user interface
@@ -59,9 +59,8 @@ class UIDestination(object):
             if action:
                 widget.set_tooltip_text(action.get_label().replace('_', ''))
         # Load destination types
-        self.ui.cbo_type.set_model(destination_types.model)
+        self.ui.cbo_type.set_model(destination_types.get_model())
         self.model = destinations
-        self.destination_types = destination_types
         self.selected_iter = None
         self.name = ''
         self.value = ''
@@ -144,4 +143,4 @@ class UIDestination(object):
         if not Gtk.check_version(3, 2, 0):
             treeiter = self.ui.cbo_type.get_active_iter()
             self.ui.txt_value.set_placeholder_text(
-                self.destination_types.get_placeholder(treeiter))
+                destination_types.get_placeholder(treeiter))

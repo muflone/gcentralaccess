@@ -33,6 +33,7 @@ from gcentralaccess.preferences import Preferences
 from gcentralaccess.settings import Settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 
+import gcentralaccess.models.services as model_services
 from gcentralaccess.models.service_info import ServiceInfo
 from gcentralaccess.models.host_info import HostInfo
 from gcentralaccess.models.hosts import ModelHosts
@@ -60,7 +61,6 @@ SECTION_DESTINATIONS = 'destinations'
 class UIMain(object):
     def __init__(self, application):
         self.application = application
-        self.services = {}
         # Load settings
         self.settings = Settings(FILE_SETTINGS)
         self.settings_positions = Settings(FILE_WINDOWS_POSITION)
@@ -68,7 +68,7 @@ class UIMain(object):
         self.settings_services = Settings(FILE_SERVICES)
         # Load services
         for key in self.settings_services.get_sections():
-            self.services[key] = ServiceInfo(
+            model_services.services[key] = ServiceInfo(
                 name=key,
                 description=self.settings_services.get(
                     key, SECTION_SERVICE_DESCRIPTION),
@@ -156,29 +156,29 @@ class UIMain(object):
             parent=self.ui.win_main,
             settings_positions=self.settings_positions)
         # Load services list
-        dialog_services.model.load(self.services)
+        dialog_services.model.load(model_services.services)
         dialog_services.show()
         # Get the new services list, clear and store the list again
-        self.services = dialog_services.model.dump()
+        model_services.services = dialog_services.model.dump()
         dialog_services.destroy()
         self.settings_services.clear()
-        for key in self.services.iterkeys():
+        for key in model_services.services.iterkeys():
             self.settings_services.set(
                 section=key,
                 option=SECTION_SERVICE_DESCRIPTION,
-                value=self.services[key].description)
+                value=model_services.services[key].description)
             self.settings_services.set(
                 section=key,
                 option=SECTION_SERVICE_COMMAND,
-                value=self.services[key].command)
+                value=model_services.services[key].command)
             self.settings_services.set_boolean(
                 section=key,
                 option=SECTION_SERVICE_TERMINAL,
-                value=self.services[key].terminal)
+                value=model_services.services[key].terminal)
             self.settings_services.set(
                 section=key,
                 option=SECTION_SERVICE_ICON,
-                value=self.services[key].icon)
+                value=model_services.services[key].icon)
 
     def on_action_new_activate(self, action):
         """Define a new host"""

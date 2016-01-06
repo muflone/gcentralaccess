@@ -26,6 +26,8 @@ from gcentralaccess.preferences import ICON_SIZE
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.service_info import ServiceInfo
 
+services = {}
+
 
 class ModelServices(ModelAbstract):
     COL_DESCRIPTION = 1

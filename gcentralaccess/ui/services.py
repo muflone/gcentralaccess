@@ -63,6 +63,10 @@ class UIServices(object):
         self.model = ModelServices(self.ui.store_services)
         self.selected_iter = None
         self.ui.cell_icon.props.height = preferences.preferences.get(ICON_SIZE)
+        # Sort the data in the models
+        self.model.model.set_sort_column_id(
+            self.ui.column_name.get_sort_column_id(),
+            Gtk.SortType.ASCENDING)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

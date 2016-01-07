@@ -99,6 +99,10 @@ class UIMain(object):
                     type_local = destination_types.get_description(treeiter)
                     self.model.add_destination(
                         name, DestinationInfo(option, value, type, type_local))
+        # Sort the data in the models
+        self.model.model.set_sort_column_id(
+            self.ui.column_name.get_sort_column_id(),
+            Gtk.SortType.ASCENDING)
         # Restore the saved size and position
         self.settings_positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)

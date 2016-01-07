@@ -267,6 +267,9 @@
                   <object class="GtkTreeViewColumn" id="column_name">
                     <property name="resizable">True</property>
                     <property name="title" comments="Use domain gtk30">Name</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_indicator">True</property>
+                    <property name="sort_column_id">0</property>
                     <child>
                       <object class="GtkCellRendererText" id="cell_name"/>
                       <attributes>
@@ -279,6 +282,8 @@
                   <object class="GtkTreeViewColumn" id="column_description">
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes">Description</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">1</property>
                     <child>
                       <object class="GtkCellRendererText" id="cell_description"/>
                       <attributes>
@@ -291,6 +296,8 @@
                   <object class="GtkTreeViewColumn" id="column_services">
                     <property name="resizable">True</property>
                     <property name="title" comments="Use domain gtk30">Services</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">2</property>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cell_icon"/>
                       <attributes>

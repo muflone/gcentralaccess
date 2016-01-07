@@ -75,7 +75,7 @@ def check_invalid_input(widget, empty, separators, invalid_chars):
     """Check the input for empty value or invalid characters"""
     text = widget.get_text().strip()
     if (not empty and len(text) == 0) or \
-            (not separators and ('/' in text)) or \
+            (not separators and ('/' in text or ',' in text)) or \
             (not invalid_chars and ('\'' in text or '\\' in text)):
         icon_name = 'dialog-error'
     else:

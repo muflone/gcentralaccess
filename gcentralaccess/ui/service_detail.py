@@ -114,7 +114,7 @@ class UIServiceDetail(object):
             show_error_message_on_infobar(
                 self.ui.txt_name,
                 _('The service name is missing'))
-        elif '\'' in name or '\\' in name:
+        elif '\'' in name or '\\' in name or '/' in name or ',' in name:
             # Show error for invalid service name
             show_error_message_on_infobar(
                 self.ui.txt_name,
@@ -152,8 +152,12 @@ class UIServiceDetail(object):
         if response_id == Gtk.ResponseType.CLOSE:
             self.ui.infobar_error_message.set_visible(False)
 
-    def on_txt_name_description_changed(self, widget):
-        """Check the service name or description fields"""
+    def on_txt_name_changed(self, widget):
+        """Check the service name field"""
+        check_invalid_input(widget, False, False, False)
+
+    def on_txt_description_changed(self, widget):
+        """Check the service description field"""
         check_invalid_input(widget, False, True, False)
 
     def on_txt_icon_changed(self, widget):

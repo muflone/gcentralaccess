@@ -32,6 +32,7 @@ class ModelAbstract(object):
 
     def clear(self):
         """Clear the model"""
+        self.rows.clear()
         return self.model.clear()
 
     def add_data(self, item):

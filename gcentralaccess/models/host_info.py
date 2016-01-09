@@ -23,3 +23,13 @@ class HostInfo(object):
     def __init__(self, name, description):
         self.name = name
         self.description = description
+        self.destinations = {}
+
+    def add_destination(self, item):
+        """Add a new DestinationInfo object to destinations"""
+        self.destinations[item.name] = item
+
+    def clear_destinations(self):
+        """Remove any destinations"""
+        while self.destinations:
+            self.destinations.popitem()

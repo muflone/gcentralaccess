@@ -18,6 +18,11 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+from gi.repository import GdkPixbuf
+
+import gcentralaccess.preferences as preferences
+from gcentralaccess.preferences import ICON_SIZE
+
 
 class ServiceInfo(object):
     def __init__(self, name, description, command, terminal, icon):
@@ -26,3 +31,7 @@ class ServiceInfo(object):
         self.command = command
         self.terminal = terminal
         self.icon = icon
+        self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+            icon,
+            preferences.preferences.get(ICON_SIZE),
+            preferences.preferences.get(ICON_SIZE))

@@ -198,7 +198,7 @@ setup(
     description=APP_DESCRIPTION,
     license='GPL v2',
     scripts=['gcentralaccess.py'],
-    packages=['gcentralaccess'],
+    packages=['gcentralaccess', 'gcentralaccess.models', 'gcentralaccess.ui'],
     data_files=[
         ('share/gcentralaccess/data', ['data/gcentralaccess.png']),
         ('share/applications', ['data/gcentralaccess.desktop']),

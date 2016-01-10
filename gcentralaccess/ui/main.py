@@ -62,10 +62,10 @@ class UIMain(object):
     def __init__(self, application):
         self.application = application
         # Load settings
-        self.settings = settings.Settings(FILE_SETTINGS)
+        settings.settings = settings.Settings(FILE_SETTINGS)
         settings.positions = settings.Settings(FILE_WINDOWS_POSITION)
-        preferences.preferences = Preferences(self.settings)
         settings.services = settings.Settings(FILE_SERVICES)
+        preferences.preferences = Preferences()
         # Load services
         for key in settings.services.get_sections():
             model_services.services[key] = ServiceInfo(
@@ -139,7 +139,7 @@ class UIMain(object):
             self.ui.win_main, SECTION_WINDOW_NAME)
         settings.positions.save()
         settings.services.save()
-        self.settings.save()
+        settings.settings.save()
         self.application.quit()
 
     def on_action_about_activate(self, action):

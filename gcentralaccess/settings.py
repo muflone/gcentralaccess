@@ -30,6 +30,7 @@ POSITION_TOP = 'top'
 SIZE_WIDTH = 'width'
 SIZE_HEIGHT = 'height'
 
+settings = None
 positions = None
 services = None
 

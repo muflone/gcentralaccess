@@ -18,6 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import gcentralaccess.settings as settings
+
 DEFAULT_VALUES = {}
 
 SECTION_PREFERENCES = 'preferences'
@@ -32,19 +34,18 @@ preferences = None
 
 
 class Preferences(object):
-    def __init__(self, settings):
+    def __init__(self):
         """Load settings into preferences"""
-        self.settings = settings
         self.options = {}
         for option in (ICON_SIZE, PREVIEW_SIZE):
             if isinstance(DEFAULT_VALUES[option], int):
-                self.options[option] = self.settings.get_int(
+                self.options[option] = settings.settings.get_int(
                     SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
             elif isinstance(DEFAULT_VALUES[option], bool):
-                self.options[option] = self.settings.get_boolean(
+                self.options[option] = settings.settings.get_boolean(
                     SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
             else:
-                self.options[option] = self.settings.get(
+                self.options[option] = settings.settings.get(
                     SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
 
     def get(self, option):
@@ -55,8 +56,8 @@ class Preferences(object):
         """Set a preferences option"""
         self.options[option] = value
         if isinstance(value, int):
-            self.settings.set_int(SECTION_PREFERENCES, option, value)
+            settings.settings.set_int(SECTION_PREFERENCES, option, value)
         elif isinstance(value, bool):
-            self.settings.set_boolean(SECTION_PREFERENCES, option, value)
+            settings.settings.set_boolean(SECTION_PREFERENCES, option, value)
         else:
-            self.settings.set(SECTION_PREFERENCES, option, value)
+            settings.settings.set(SECTION_PREFERENCES, option, value)

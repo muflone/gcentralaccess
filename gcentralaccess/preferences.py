@@ -25,10 +25,10 @@ DEFAULT_VALUES = {}
 SECTION_PREFERENCES = 'preferences'
 
 ICON_SIZE = 'icon size'
-DEFAULT_VALUES[ICON_SIZE] = 36
+DEFAULT_VALUES[ICON_SIZE] = (SECTION_PREFERENCES, 36)
 
 PREVIEW_SIZE = 'preview size'
-DEFAULT_VALUES[PREVIEW_SIZE] = 128
+DEFAULT_VALUES[PREVIEW_SIZE] = (SECTION_PREFERENCES, 128)
 
 preferences = None
 
@@ -37,16 +37,17 @@ class Preferences(object):
     def __init__(self):
         """Load settings into preferences"""
         self.options = {}
-        for option in (ICON_SIZE, PREVIEW_SIZE):
-            if isinstance(DEFAULT_VALUES[option], int):
+        for option in DEFAULT_VALUES.keys():
+            section, default = DEFAULT_VALUES[option]
+            if isinstance(default, int):
                 self.options[option] = settings.settings.get_int(
-                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
-            elif isinstance(DEFAULT_VALUES[option], bool):
+                    section, option, default)
+            elif isinstance(default, bool):
                 self.options[option] = settings.settings.get_boolean(
-                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
+                    section, option, default)
             else:
                 self.options[option] = settings.settings.get(
-                    SECTION_PREFERENCES, option, DEFAULT_VALUES[option])
+                    section, option, default)
 
     def get(self, option):
         """Returns a preferences option"""
@@ -55,9 +56,15 @@ class Preferences(object):
     def set(self, option, value):
         """Set a preferences option"""
         self.options[option] = value
-        if isinstance(value, int):
-            settings.settings.set_int(SECTION_PREFERENCES, option, value)
-        elif isinstance(value, bool):
-            settings.settings.set_boolean(SECTION_PREFERENCES, option, value)
-        else:
-            settings.settings.set(SECTION_PREFERENCES, option, value)
+        if option in DEFAULT_VALUES:
+            section, default = DEFAULT_VALUES[option]
+            if value != default:
+                if isinstance(default, bool):
+                    settings.settings.set_boolean(section, option, value)
+                elif isinstance(default, int):
+                    settings.settings.set_int(section, option, value)
+                else:
+                    settings.settings.set(section, option, value)
+            else:
+                # Remove old option value
+                settings.settings.unset_option(section, option)

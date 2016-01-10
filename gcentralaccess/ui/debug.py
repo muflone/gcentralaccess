@@ -125,7 +125,7 @@ class UIDebug(object):
             (severity == WARNING and preferences.get(DEBUG_SHOW_WARNING)) or
                 (severity == ERROR and preferences.get(DEBUG_SHOW_ERROR))):
             timestamp = (DEBUG_FORMAT_TIMESTAMP.format(datetime.datetime.now())
-                         if preferences.get(DEBUG_TIMESTAMP) else '')
+                         \ if preferences.get(DEBUG_TIMESTAMP) else '')
             self.add_text(DEBUG_FORMAT.format(timestamp=timestamp,
                                               severity=severity,
                                               text=text))

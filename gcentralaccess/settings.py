@@ -30,6 +30,8 @@ POSITION_TOP = 'top'
 SIZE_WIDTH = 'width'
 SIZE_HEIGHT = 'height'
 
+positions = None
+
 
 class Settings(object):
     def __init__(self, filename):

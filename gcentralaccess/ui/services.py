@@ -23,6 +23,7 @@ from gi.repository import Gtk
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import get_ui_file, text, _
 import gcentralaccess.preferences as preferences
+import gcentralaccess.settings as settings
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.services import ModelServices
@@ -36,14 +37,13 @@ SECTION_WINDOW_NAME = 'services'
 
 
 class UIServices(object):
-    def __init__(self, parent, settings_positions):
+    def __init__(self, parent):
         """Prepare the services dialog"""
-        self.settings_positions = settings_positions
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('services.glade'))
         self.ui.dialog_services.set_transient_for(parent)
         # Restore the saved size and position
-        self.settings_positions.restore_window_position(
+        settings.positions.restore_window_position(
             self.ui.dialog_services, SECTION_WINDOW_NAME)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
@@ -77,7 +77,7 @@ class UIServices(object):
 
     def destroy(self):
         """Destroy the Services dialog"""
-        self.settings_positions.save_window_position(
+        settings.positions.save_window_position(
             self.ui.dialog_services, SECTION_WINDOW_NAME)
         self.ui.dialog_services.destroy()
         self.ui.dialog_services = None

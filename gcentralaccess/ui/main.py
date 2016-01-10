@@ -63,7 +63,7 @@ class UIMain(object):
         self.application = application
         # Load settings
         self.settings = settings.Settings(FILE_SETTINGS)
-        self.settings_positions = settings.Settings(FILE_WINDOWS_POSITION)
+        settings.positions = settings.Settings(FILE_WINDOWS_POSITION)
         preferences.preferences = Preferences(self.settings)
         self.settings_services = settings.Settings(FILE_SERVICES)
         # Load services
@@ -104,7 +104,7 @@ class UIMain(object):
             self.ui.column_name.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         # Restore the saved size and position
-        self.settings_positions.restore_window_position(
+        settings.positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
 
     def loadUI(self):
@@ -135,9 +135,9 @@ class UIMain(object):
 
     def on_win_main_delete_event(self, widget, event):
         """Save the settings and close the application"""
-        self.settings_positions.save_window_position(
+        settings.positions.save_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
-        self.settings_positions.save()
+        settings.positions.save()
         self.settings_services.save()
         self.settings.save()
         self.application.quit()
@@ -156,9 +156,7 @@ class UIMain(object):
 
     def on_action_services_activate(self, action):
         """Edit services"""
-        dialog_services = UIServices(
-            parent=self.ui.win_main,
-            settings_positions=self.settings_positions)
+        dialog_services = UIServices(parent=self.ui.win_main)
         # Load services list
         dialog_services.model.load(model_services.services)
         dialog_services.show()
@@ -186,10 +184,7 @@ class UIMain(object):
 
     def on_action_new_activate(self, action):
         """Define a new host"""
-        dialog = UIHost(
-            parent=self.ui.win_main,
-            hosts=self.model,
-            settings_positions=self.settings_positions)
+        dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
         response = dialog.show(default_name='',
                                default_description='',
                                title=_('Add a new host'),
@@ -222,10 +217,7 @@ class UIMain(object):
             name = self.model.get_key(selected_row)
             description = self.model.get_description(selected_row)
             selected_iter = self.model.get_iter(name)
-            dialog = UIHost(
-                parent=self.ui.win_main,
-                hosts=self.model,
-                settings_positions=self.settings_positions)
+            dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
             # Restore the destinations for the selected host
             destinations = self.model.get_destinations(name)
             for key in destinations:

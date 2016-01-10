@@ -22,6 +22,7 @@ import os.path
 
 from gi.repository import Gtk
 
+import gcentralaccess.settings as settings
 import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
@@ -34,14 +35,13 @@ SECTION_WINDOW_NAME = 'destination'
 
 
 class UIDestination(object):
-    def __init__(self, parent, destinations, settings_positions):
+    def __init__(self, parent, destinations):
         """Prepare the destination dialog"""
-        self.settings_positions = settings_positions
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('destination.glade'))
         self.ui.dialog_destination.set_transient_for(parent)
         # Restore the saved size and position
-        self.settings_positions.restore_window_position(
+        settings.positions.restore_window_position(
             self.ui.dialog_destination, SECTION_WINDOW_NAME)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
@@ -87,7 +87,7 @@ class UIDestination(object):
 
     def destroy(self):
         """Destroy the destination dialog"""
-        self.settings_positions.save_window_position(
+        settings.positions.save_window_position(
             self.ui.dialog_destination, SECTION_WINDOW_NAME)
         self.ui.dialog_destination.destroy()
         self.ui.dialog_destination = None

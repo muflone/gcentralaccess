@@ -25,6 +25,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 import gcentralaccess.preferences as preferences
+import gcentralaccess.settings as settings
 from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.destinations import ModelDestinations
@@ -38,15 +39,14 @@ SECTION_WINDOW_NAME = 'host'
 
 
 class UIHost(object):
-    def __init__(self, parent, hosts, settings_positions):
+    def __init__(self, parent, hosts):
         """Prepare the host dialog"""
-        self.settings_positions = settings_positions
         self.hosts = hosts
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('host.glade'))
         self.ui.dialog_host.set_transient_for(parent)
         # Restore the saved size and position
-        self.settings_positions.restore_window_position(
+        settings.positions.restore_window_position(
             self.ui.dialog_host, SECTION_WINDOW_NAME)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
@@ -87,7 +87,7 @@ class UIHost(object):
 
     def destroy(self):
         """Destroy the destinations dialog"""
-        self.settings_positions.save_window_position(
+        settings.positions.save_window_position(
             self.ui.dialog_host, SECTION_WINDOW_NAME)
         self.ui.dialog_host.destroy()
         self.ui.dialog_host = None

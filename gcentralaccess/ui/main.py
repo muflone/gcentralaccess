@@ -275,7 +275,7 @@ class UIMain(object):
         """Edit the selected row on activation"""
         self.ui.action_edit.activate()
 
-    def on_action_delete_activate(self, widget):
+    def on_action_delete_activate(self, action):
         """Remove the selected host"""
         selection = self.ui.tvw_connections.get_selection().get_selected()
         selected_row = selection[1]

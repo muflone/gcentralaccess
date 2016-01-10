@@ -129,6 +129,10 @@ class Settings(object):
         """Return the list of the options in a section"""
         return self.config.options(section)
 
+    def unset_option(self, section, option):
+        """Remove an option from a section"""
+        return self.config.remove_option(section, option)
+
     def clear(self):
         """Remove every data in the settings"""
         for section in self.get_sections():

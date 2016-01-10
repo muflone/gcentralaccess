@@ -1,4 +1,4 @@
-gCentralAccess [![Build Status](https://travis-ci.org/muflone/gcentralaccess.svg?branch=master)](https://travis-ci.org/muflone/gcentralaccess)
+gCentralAccess [![Build Status](https://travis-ci.org/muflone/gCentralAccess.svg?branch=master)](https://travis-ci.org/muflone/gCentralAccess)
 ==============
 **Description:** Manage external resources from a centralized management
 console.

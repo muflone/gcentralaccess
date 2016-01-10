@@ -281,6 +281,7 @@
                 <property name="has_focus">True</property>
                 <property name="is_focus">True</property>
                 <property name="model">store_hosts</property>
+                <signal name="cursor-changed" handler="on_tvw_connections_cursor_changed" swapped="no"/>
                 <signal name="row-activated" handler="on_tvw_connections_row_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="tvw_selection"/>

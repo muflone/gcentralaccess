@@ -56,6 +56,7 @@ SECTION_HOST = 'host'
 SECTION_HOST_NAME = 'name'
 SECTION_HOST_DESCRIPTION = 'description'
 SECTION_DESTINATIONS = 'destinations'
+SECTION_ASSOCIATIONS = 'associations'
 
 
 class UIMain(object):
@@ -86,22 +87,8 @@ class UIMain(object):
         # This model is shared across the main and the destination detail
         destination_types.destination_types = ModelDestinationTypes(
             self.ui.store_destination_types)
-        # Load hosts
-        for filename in os.listdir(DIR_HOSTS):
-            settings_host = settings.Settings(os.path.join(DIR_HOSTS, filename))
-            name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
-            description = settings_host.get(SECTION_HOST,
-                                            SECTION_HOST_DESCRIPTION)
-            self.model.add_data(HostInfo(name=name, description=description))
-            # Load host destinations
-            if SECTION_DESTINATIONS in settings_host.get_sections():
-                for option in settings_host.get_options(SECTION_DESTINATIONS):
-                    values = settings_host.get(SECTION_DESTINATIONS, option)
-                    type, value = values.split(':', 1)
-                    treeiter = destination_types.get_iter(type)
-                    type_local = destination_types.get_description(treeiter)
-                    self.model.add_destination(
-                        name, DestinationInfo(option, value, type, type_local))
+        self.hosts = {}
+        self.reload_hosts()
         # Sort the data in the models
         self.model.model.set_sort_column_id(
             self.ui.column_name.get_sort_column_id(),
@@ -129,6 +116,7 @@ class UIMain(object):
         # Initialize column headers
         for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
             widget.set_title(text(widget.get_title()))
+        self.ui.cell_name.props.height = preferences.get(preferences.ICON_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -185,6 +173,85 @@ class UIMain(object):
                 section=key,
                 option=SECTION_SERVICE_ICON,
                 value=model_services.services[key].icon)
+        self.reload_hosts()
+
+    def reload_hosts(self):
+        """Load hosts from the settings files"""
+        self.model.clear()
+        self.hosts.clear()
+        for filename in os.listdir(DIR_HOSTS):
+            settings_host = settings.Settings(
+                os.path.join(DIR_HOSTS, filename))
+            name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
+            description = settings_host.get(SECTION_HOST,
+                                            SECTION_HOST_DESCRIPTION)
+            host = HostInfo(name=name, description=description)
+            destinations = {}
+            # Load host destinations
+            if SECTION_DESTINATIONS in settings_host.get_sections():
+                for option in settings_host.get_options(SECTION_DESTINATIONS):
+                    values = settings_host.get(SECTION_DESTINATIONS, option)
+                    type, value = values.split(':', 1)
+                    treeiter = destination_types.get_iter(type)
+                    destinations[option] = DestinationInfo(
+                        name=option,
+                        value=value,
+                        type=type,
+                        type_local=destination_types.get_description(treeiter))
+                    # Load associations
+                    values = settings_host.get_list(SECTION_ASSOCIATIONS,
+                                                    option)
+                    if values:
+                        destinations[option].associations.extend(values)
+            self.add_host(host, destinations, False)
+
+    def add_host(self, host, destinations, update_settings):
+        """Add a new host along as with its destinations"""
+        # Add the host to the data and to the model
+        self.hosts[host.name] = host
+        treeiter = self.model.add_data(host)
+        # Add the destinations to the data
+        for destination_name in destinations:
+            destination = destinations[destination_name]
+            host.add_destination(item=destination)
+            # Add service associations to the model
+            for service_name in destination.associations:
+                if service_name in model_services.services:
+                    service = model_services.services[service_name]
+                    self.model.add_association(treeiter=treeiter,
+                                               destination=destination,
+                                               service=service)
+                else:
+                    debug.add_warning('service %s not found' % service_name)
+        # Update settings file if requested
+        if update_settings:
+            settings_host = settings.Settings(
+                os.path.join(DIR_HOSTS, '%s.conf' % host.name))
+            # Add host information
+            settings_host.set(SECTION_HOST, SECTION_HOST_NAME, host.name)
+            settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
+                              host.description)
+            # Add destinations
+            for key in host.destinations:
+                destination = host.destinations[key]
+                settings_host.set(SECTION_DESTINATIONS,
+                                  destination.name,
+                                  '%s:%s' % (destination.type,
+                                             destination.value))
+                # Add associations to the settings
+                settings_host.set(section=SECTION_ASSOCIATIONS,
+                                  option=destination.name,
+                                  value=','.join(destination.associations))
+            # Save the settings to the file
+            settings_host.save()
+
+    def remove_host(self, name):
+        """Remove a host by its name"""
+        filename = os.path.join(DIR_HOSTS, '%s.conf' % name)
+        if os.path.isfile(filename):
+            os.unlink(filename)
+        self.hosts.pop(name)
+        self.model.remove(self.model.get_iter(name))
 
     def on_action_new_activate(self, action):
         """Define a new host"""
@@ -194,23 +261,16 @@ class UIMain(object):
                                title=_('Add a new host'),
                                treeiter=None)
         if response == Gtk.ResponseType.OK:
-            # Save host settings
-            settings_host = Settings(
-                os.path.join(DIR_HOSTS, '%s.conf' % dialog.name))
-            settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
-            settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
-                              dialog.description)
-            self.model.add_data(HostInfo(name=dialog.name,
-                                         description=dialog.description))
-            # Save host destinations
             destinations = dialog.destinations.dump()
-            for key in destinations:
-                destination = destinations[key]
-                self.model.add_destination(dialog.name, destination)
-                settings_host.set(
-                    SECTION_DESTINATIONS, destination.name,
-                    '%s:%s' % (destination.type, destination.value))
-            settings_host.save()
+            associations = dialog.associations.dump()
+            for values in associations:
+                destination_name, service_name = associations[values]
+                destination = destinations[destination_name]
+                destination.associations.append(service_name)
+            self.add_host(HostInfo(name=dialog.name,
+                                   description=dialog.description),
+                          destinations=destinations,
+                          update_settings=True)
         dialog.destroy()
 
     def on_action_edit_activate(self, action):
@@ -223,49 +283,37 @@ class UIMain(object):
             selected_iter = self.model.get_iter(name)
             dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
             # Restore the destinations for the selected host
-            destinations = self.model.get_destinations(name)
-            for key in destinations:
-                dialog.destinations.add_data(destinations[key])
+            destinations = self.hosts[name].destinations
+            for destination_name in destinations:
+                dialog.destinations.add_data(destinations[destination_name])
+                destination = destinations[destination_name]
+                for service_name in destination.associations:
+                    if service_name in model_services.services:
+                        dialog.associations.add_data(
+                            index=dialog.associations.count(),
+                            name=destination_name,
+                            service=model_services.services[service_name])
+                    else:
+                        debug.add_warning('service %s not found' %
+                                          service_name)
             # Show the edit host dialog
             response = dialog.show(default_name=name,
                                    default_description=description,
                                    title=_('Edit host'),
                                    treeiter=selected_iter)
             if response == Gtk.ResponseType.OK:
-                # Create a new setting file
-                new_filename = os.path.join(DIR_HOSTS, '%s.conf' % dialog.name)
-                tmp_filename = os.path.join('%s.tmp' % new_filename)
-                if os.path.isfile(tmp_filename):
-                    os.unlink(tmp_filename)
-                # Save host settings
-                settings_host = Settings(tmp_filename)
-                settings_host.set(SECTION_HOST, SECTION_HOST_NAME, dialog.name)
-                settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
-                                  dialog.description)
-                self.model.add_data(HostInfo(name=dialog.name,
-                                             description=dialog.description))
-                # Save host destinations
-                self.model.clear_destinations(dialog.name)
+                # Remove older host and add the newer
                 destinations = dialog.destinations.dump()
-                for key in destinations:
-                    destination = destinations[key]
-                    self.model.add_destination(dialog.name, destination)
-                    settings_host.set(
-                        SECTION_DESTINATIONS, destination.name,
-                        '%s:%s' % (destination.type, destination.value))
-                settings_host.save()
-                # Save the changes to files
-                old_filename = os.path.join('%s.old' % new_filename)
-                try:
-                    if os.path.isfile(new_filename):
-                        os.rename(new_filename, old_filename)
-                    os.rename(tmp_filename, new_filename)
-                    if os.path.isfile(old_filename):
-                        os.unlink(old_filename)
-                finally:
-                    if os.path.isfile(tmp_filename):
-                        os.unlink(tmp_filename)
-            dialog.destroy()
+                associations = dialog.associations.dump()
+                for values in associations:
+                    destination_name, service_name = associations[values]
+                    destination = destinations[destination_name]
+                    destination.associations.append(service_name)
+                self.remove_host(name)
+                self.add_host(HostInfo(name=dialog.name,
+                                       description=dialog.description),
+                              destinations=destinations,
+                              update_settings=True)
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
@@ -283,12 +331,7 @@ class UIMain(object):
                 msg1=_("Remove host"),
                 msg2=_("Remove the selected host?"),
                 is_response_id=Gtk.ResponseType.YES):
-            # Remove the configuration file
-            filename = os.path.join(
-                DIR_HOSTS, '%s.conf' % self.model.get_key(selected_row))
-            if os.path.isfile(filename):
-                os.unlink(filename)
-            self.model.remove(selected_row)
+            self.remove_host(self.model.get_key(selected_row))
 
     def on_action_debug_toggled(self, action):
         """Show and hide the debug window"""

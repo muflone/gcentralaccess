@@ -227,6 +227,8 @@
               <object class="GtkTextView" id="textview_debug">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
                 <property name="editable">False</property>
                 <property name="buffer">buffer_debug</property>
               </object>

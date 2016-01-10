@@ -3,6 +3,32 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelerators"/>
+  <object class="GtkActionGroup" id="actions_associations">
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkAction" id="action_associations_add">
+        <property name="label" translatable="yes">_Add</property>
+        <property name="icon_name">list-add</property>
+        <signal name="activate" handler="on_action_associations_add_activate" swapped="no"/>
+      </object>
+      <accelerator key="Insert"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_associations_edit">
+        <property name="label" translatable="yes">_Edit</property>
+        <property name="icon_name">document-properties</property>
+      </object>
+      <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_associations_remove">
+        <property name="label" translatable="yes">_Remove</property>
+        <property name="icon_name">list-remove</property>
+        <signal name="activate" handler="on_action_associations_remove_activate" swapped="no"/>
+      </object>
+      <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+  </object>
   <object class="GtkActionGroup" id="actions_destinations">
     <property name="accel_group">accelerators</property>
     <child>
@@ -24,6 +50,7 @@
     <child>
       <object class="GtkAction" id="action_destinations_edit">
         <property name="label" comments="Use domain gtk30">_Edit</property>
+        <property name="icon_name">document-properties</property>
         <signal name="activate" handler="on_action_destinations_edit_activate" swapped="no"/>
       </object>
       <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
@@ -42,6 +69,37 @@
         <property name="label" comments="Use domain gtk30">_Cancel</property>
       </object>
     </child>
+  </object>
+  <object class="GtkActionGroup" id="actions_tabs">
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkAction" id="action_tab_page1">
+        <property name="label" translatable="yes">Configure d_estinations</property>
+        <signal name="activate" handler="on_action_tab_page_activate" swapped="no"/>
+      </object>
+      <accelerator key="1" modifiers="GDK_MOD1_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_tab_page2">
+        <property name="label" translatable="yes">Configure _associations</property>
+        <signal name="activate" handler="on_action_tab_page_activate" swapped="no"/>
+      </object>
+      <accelerator key="2" modifiers="GDK_MOD1_MASK"/>
+    </child>
+  </object>
+  <object class="GtkListStore" id="store_associations">
+    <columns>
+      <!-- column-name Index -->
+      <column type="gint"/>
+      <!-- column-name Destination_Name -->
+      <column type="gchararray"/>
+      <!-- column-name Service_Name -->
+      <column type="gchararray"/>
+      <!-- column-name Service_Description -->
+      <column type="gchararray"/>
+      <!-- column-name Service_Icon -->
+      <column type="GdkPixbuf"/>
+    </columns>
   </object>
   <object class="GtkListStore" id="store_destinations">
     <columns>
@@ -70,7 +128,7 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">5</property>
+        <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
@@ -171,262 +229,431 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box_host">
+          <object class="GtkGrid" id="grid_host">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
-              <object class="GtkGrid" id="grid_host">
+              <object class="GtkLabel" id="lbl_name">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <property name="row_homogeneous">True</property>
-                <child>
-                  <object class="GtkLabel" id="lbl_destinations">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Configure d_estinations</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">tvw_destinations</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="thin"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lbl_name">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" comments="Use domain gtk30">_Name:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">txt_name</property>
-                    <property name="ellipsize">middle</property>
-                    <property name="xalign">1</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="txt_name">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_txt_name_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="lbl_description">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Description:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">txt_description</property>
-                    <property name="xalign">1</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="txt_description">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_txt_description_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
+                <property name="label" comments="Use domain gtk30">_Name:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_name</property>
+                <property name="ellipsize">middle</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box_destinations">
+              <object class="GtkEntry" id="txt_name">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <signal name="changed" handler="on_txt_name_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_description">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Description:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">txt_description</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="txt_description">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
+                <signal name="changed" handler="on_txt_description_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkNotebook" id="notebook">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="spacing">6</property>
+                <signal name="switch-page" handler="on_notebook_switch_page" swapped="no"/>
                 <child>
-                  <object class="GtkScrolledWindow" id="scroll_destinations">
+                  <object class="GtkBox" id="box_destinations">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="border_width">8</property>
+                    <property name="spacing">8</property>
                     <child>
-                      <object class="GtkTreeView" id="tvw_destinations">
+                      <object class="GtkScrolledWindow" id="scroll_destinations">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="model">store_destinations</property>
-                        <property name="search_column">0</property>
-                        <signal name="row-activated" handler="on_tvw_destinations_row_activated" swapped="no"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="selection_destinations"/>
-                        </child>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkTreeViewColumn" id="column_destinations_name">
-                            <property name="resizable">True</property>
-                            <property name="title" comments="Use domain gtk30">Name</property>
-                            <property name="reorderable">True</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">0</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="cell_destinations_name"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
+                          <object class="GtkTreeView" id="tvw_destinations">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">store_destinations</property>
+                            <property name="search_column">0</property>
+                            <signal name="row-activated" handler="on_tvw_destinations_row_activated" swapped="no"/>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="selection_destinations"/>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="column_destinations_type">
-                            <property name="resizable">True</property>
-                            <property name="title" comments="Use domain gtk30">Type</property>
-                            <property name="reorderable">True</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">3</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cell_destinations_type"/>
-                              <attributes>
-                                <attribute name="text">3</attribute>
-                              </attributes>
+                              <object class="GtkTreeViewColumn" id="column_destinations_name">
+                                <property name="resizable">True</property>
+                                <property name="title" comments="Use domain gtk30">Name</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_destinations_name"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="column_destinations_value">
-                            <property name="resizable">True</property>
-                            <property name="title" comments="Use domain gtk30">Value</property>
-                            <property name="reorderable">True</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">1</property>
                             <child>
-                              <object class="GtkCellRendererText" id="cell_destinations_value"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
+                              <object class="GtkTreeViewColumn" id="column_destinations_type">
+                                <property name="resizable">True</property>
+                                <property name="title" comments="Use domain gtk30">Type</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">3</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_destinations_type"/>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="column_destinations_value">
+                                <property name="resizable">True</property>
+                                <property name="title" comments="Use domain gtk30">Value</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_destinations_value"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox_destinations">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="layout_style">start</property>
+                        <child>
+                          <object class="GtkButton" id="btn_destinations_add">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_destinations_add</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_destinations_add">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">list-add</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_destinations_edit">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_destinations_edit</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_destinations_edit">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">document-properties</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_destinations_remove">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_destinations_remove</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_destinations_remove">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">list-remove</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkButton" id="btn_destinations">
+                    <property name="use_action_appearance">True</property>
+                    <property name="related_action">action_tab_page1</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="focus_on_click">False</property>
+                  </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="tab_fill">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="buttonbox_destinations">
+                  <object class="GtkBox" id="box_associations">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <property name="layout_style">start</property>
+                    <property name="border_width">8</property>
+                    <property name="spacing">8</property>
                     <child>
-                      <object class="GtkButton" id="btn_destinations_add">
-                        <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_destinations_add</property>
+                      <object class="GtkScrolledWindow" id="scroll_associations">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkImage" id="image_destinations_add">
+                          <object class="GtkTreeView" id="tvw_associations">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">list-add</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">store_associations</property>
+                            <property name="search_column">0</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview_associations"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="column_associations_destination">
+                                <property name="resizable">True</property>
+                                <property name="title" comments="Use domain gtk30">Destination</property>
+                                <property name="clickable">True</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_associations_destination"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="column_associations_service">
+                                <property name="resizable">True</property>
+                                <property name="title" comments="Use domain gtk30">Service</property>
+                                <property name="clickable">True</property>
+                                <property name="reorderable">True</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">2</property>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cell_associations_icon"/>
+                                  <attributes>
+                                    <attribute name="pixbuf">4</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_associations_service"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                        <property name="non_homogeneous">True</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="btn_destinations_edit">
-                        <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_destinations_edit</property>
+                      <object class="GtkButtonBox" id="buttonbox_associations">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <property name="layout_style">start</property>
                         <child>
-                          <object class="GtkImage" id="image_destinations_edit">
+                          <object class="GtkButton" id="btn_associations_add">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_associations_add</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">document-properties</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_associations_add">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">list-add</property>
+                              </object>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_associations_edit">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_associations_edit</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_associations_edit">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">document-properties</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btn_associations_remove">
+                            <property name="use_action_appearance">False</property>
+                            <property name="related_action">action_associations_remove</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <child>
+                              <object class="GtkImage" id="image_associations_remove">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">list-remove</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                            <property name="non_homogeneous">True</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
-                        <property name="non_homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="btn_destinations_remove">
-                        <property name="use_action_appearance">False</property>
-                        <property name="related_action">action_destinations_remove</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <child>
-                          <object class="GtkImage" id="image_destinations_remove">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">list-remove</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                        <property name="non_homogeneous">True</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child type="tab">
+                  <object class="GtkButton" id="btn_associations">
+                    <property name="use_action_appearance">True</property>
+                    <property name="related_action">action_tab_page2</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="focus_on_click">False</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="tab_fill">False</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
               </packing>
             </child>
           </object>

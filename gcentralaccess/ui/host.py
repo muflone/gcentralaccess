@@ -27,10 +27,13 @@ from gcentralaccess.functions import (
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
+import gcentralaccess.models.services as model_services
 from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo
+from gcentralaccess.models.associations import ModelAssociations
 
 from gcentralaccess.ui.destination import UIDestination
+from gcentralaccess.ui.service_association import UIServiceAssociation
 from gcentralaccess.ui.message_dialog import (
     show_message_dialog, UIMessageDialogNoYes)
 
@@ -67,7 +70,12 @@ class UIHost(object):
             widget.set_title(text(widget.get_title()))
         # Load the destinations
         self.destinations = ModelDestinations(self.ui.store_destinations)
+        self.associations = ModelAssociations(self.ui.store_associations)
         self.selected_iter = None
+        # Sort the data in the models
+        self.destinations.model.set_sort_column_id(
+            self.ui.column_destinations_name.get_sort_column_id(),
+            Gtk.SortType.ASCENDING)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -78,6 +86,10 @@ class UIHost(object):
         self.ui.txt_name.grab_focus()
         self.ui.dialog_host.set_title(title)
         self.selected_iter = treeiter
+        self.associations.model.set_sort_column_id(
+            self.ui.column_associations_destination.get_sort_column_id(),
+            Gtk.SortType.ASCENDING)
+        # Show the dialog
         response = self.ui.dialog_host.run()
         self.ui.dialog_host.hide()
         self.name = self.ui.txt_name.get_text().strip()
@@ -93,9 +105,7 @@ class UIHost(object):
 
     def on_action_destinations_add_activate(self, action):
         """Add a new destination"""
-        dialog = UIDestination(self.ui.dialog_host,
-                               self.destinations,
-                               self.settings_positions)
+        dialog = UIDestination(self.ui.dialog_host, self.destinations)
         if dialog.show(default_name='',
                        default_value='',
                        default_type='ipv4',
@@ -119,9 +129,7 @@ class UIHost(object):
             value = self.destinations.get_value(selected_row)
             destination_type = self.destinations.get_type(selected_row)
             selected_iter = self.destinations.get_iter(name)
-            dialog = UIDestination(self.ui.dialog_host,
-                                   self.destinations,
-                                   self.settings_positions)
+            dialog = UIDestination(self.ui.dialog_host, self.destinations)
             if dialog.show(default_name=name,
                            default_value=value,
                            default_type=destination_type,
@@ -203,3 +211,37 @@ class UIHost(object):
     def on_txt_description_changed(self, widget):
         """Check the host description field"""
         check_invalid_input(widget, False, True, True)
+
+    def on_notebook_switch_page(self, widget, children, number):
+        """Disable GtkActionGroup on page change"""
+        self.ui.actions_destinations.set_sensitive(number == 0)
+        self.ui.actions_associations.set_sensitive(number != 0)
+
+    def on_action_tab_page_activate(self, action):
+        """Switch GtkNotebook page on GtkAction activation"""
+        self.ui.notebook.set_current_page(
+            0 if action is self.ui.action_tab_page1 else 1)
+
+    def on_action_associations_add_activate(self, action):
+        """Add a new service association"""
+        dialog = UIServiceAssociation(self.ui.dialog_host,
+                                      self.destinations)
+        if dialog.show(None, None) == Gtk.ResponseType.OK:
+            self.associations.add_data(self.associations.count() + 1,
+                                       dialog.destination,
+                                       model_services.services[dialog.service])
+        dialog.destroy()
+
+    def on_action_associations_remove_activate(self, action):
+        """Remove the selected destination"""
+        selection = self.ui.tvw_associations.get_selection().get_selected()
+        selected_row = selection[1]
+        if selected_row and show_message_dialog(
+                class_=UIMessageDialogNoYes,
+                parent=self.ui.dialog_host,
+                message_type=Gtk.MessageType.QUESTION,
+                title=None,
+                msg1=_("Remove association"),
+                msg2=_("Remove the selected association?"),
+                is_response_id=Gtk.ResponseType.YES):
+            self.associations.remove(selected_row)

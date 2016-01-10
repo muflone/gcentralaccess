@@ -25,3 +25,4 @@ class DestinationInfo(object):
         self.value = value
         self.type = type
         self.type_local = type_local
+        self.associations = []

@@ -27,10 +27,6 @@ class ModelHosts(ModelAbstract):
     COL_SERVICE = 2
     COL_ICON = 3
 
-    def __init__(self, model):
-        super(self.__class__, self).__init__(model)
-        self.destinations = {}
-
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
         super(self.__class__, self).add_data(item)
@@ -40,28 +36,7 @@ class ModelHosts(ModelAbstract):
                                                '',
                                                None))
             self.rows[item.name] = new_row
-            self.destinations[item.name] = {}
             return new_row
-
-    def remove(self, treeiter):
-        """Remove a TreeIter"""
-        self.destinations.pop(self.get_key(treeiter))
-        super(self.__class__, self).remove(treeiter)
-
-    def add_destination(self, name, destination):
-        """Add a new destination if it doesn't exists"""
-        if destination.name not in self.destinations[name]:
-            self.destinations[name][destination.name] = destination
-
-    def get_destinations(self, name):
-        """Get the destinations for the requested host"""
-        return self.destinations.get(name, None)
-
-    def clear_destinations(self, name):
-        """Clear the destinations for the requested host"""
-        if name in self.destinations:
-            while self.destinations[name]:
-                self.destinations[name].popitem()
 
     def set_data(self, treeiter, item):
         """Update an existing TreeIter"""
@@ -76,3 +51,11 @@ class ModelHosts(ModelAbstract):
     def get_description(self, treeiter):
         """Get the description from a TreeIter"""
         return self.model[treeiter][self.COL_DESCRIPTION]
+
+    def add_association(self, treeiter, destination, service):
+        """Add a new row to the model if it doesn't exists"""
+        new_row = self.model.append(treeiter, (destination.name,
+                                               destination.value,
+                                               service.name,
+                                               service.pixbuf))
+        return new_row

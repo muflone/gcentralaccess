@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkAccelGroup" id="accelerators"/>
+  <object class="GtkActionGroup" id="actions_debug">
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkToggleAction" id="action_show_timestamp">
+        <property name="label" translatable="yes">Show timestamp</property>
+        <property name="icon_name">x-office-calendar</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F7"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_follow_text">
+        <property name="label" translatable="yes">Follow the text</property>
+        <property name="icon_name">go-bottom</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F8"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_enable">
+        <property name="label" translatable="yes">Enable debug</property>
+        <property name="icon_name">media-record</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F5"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_enable_hidden">
+        <property name="label" translatable="yes">Disable debug if hidden</property>
+        <property name="icon_name">document-revert</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F6"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_clear">
+        <property name="label" translatable="yes">Clear text</property>
+        <property name="icon_name">document-new</property>
+        <signal name="activate" handler="on_action_clear_activate" swapped="no"/>
+      </object>
+      <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_show_info">
+        <property name="label" translatable="yes">Show info messages</property>
+        <property name="icon_name">dialog-information</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F2"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_show_warning">
+        <property name="label" translatable="yes">Show warning messages</property>
+        <property name="icon_name">dialog-warning</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F3"/>
+    </child>
+    <child>
+      <object class="GtkToggleAction" id="action_show_error">
+        <property name="label" translatable="yes">Show error messages</property>
+        <property name="icon_name">dialog-error</property>
+        <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
+      </object>
+      <accelerator key="F4"/>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="buffer_debug"/>
+  <object class="GtkWindow" id="window_debug">
+    <property name="can_focus">False</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="default_width">400</property>
+    <property name="default_height">250</property>
+    <property name="type_hint">menu</property>
+    <signal name="delete-event" handler="on_window_debug_delete_event" swapped="no"/>
+    <child>
+      <object class="GtkBox" id="box_debug">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkToolbar" id="toolbar_debug">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkToolButton" id="toolbutton_clear">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_clear</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_enable">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_enable</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_disable_when_hidden">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_enable_hidden</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton_separator1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_show_info">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_show_info</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_show_warning">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_show_warning</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_show_error">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_show_error</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton_separator2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_show_timestamp">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_show_timestamp</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="toolbutton_follow_text">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_follow_text</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scroll_debug">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="textview_debug">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="editable">False</property>
+                <property name="buffer">buffer_debug</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

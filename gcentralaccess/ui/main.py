@@ -41,6 +41,7 @@ from gcentralaccess.models.destination_info import DestinationInfo
 import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.destination_types import ModelDestinationTypes
 
+import gcentralaccess.ui.debug as debug
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
 from gcentralaccess.ui.host import UIHost
@@ -80,6 +81,9 @@ class UIMain(object):
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts)
+        # Prepare the debug dialog
+        debug.debug = debug.UIDebug(self.ui.win_main,
+                                    self.on_window_debug_delete_event)
         # This model is shared across the main and the destination detail
         destination_types.destination_types = ModelDestinationTypes(
             self.ui.store_destination_types)
@@ -135,6 +139,7 @@ class UIMain(object):
 
     def on_win_main_delete_event(self, widget, event):
         """Save the settings and close the application"""
+        debug.debug.destroy()
         settings.positions.save_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
         settings.positions.save()
@@ -285,3 +290,15 @@ class UIMain(object):
             if os.path.isfile(filename):
                 os.unlink(filename)
             self.model.remove(selected_row)
+
+    def on_action_debug_toggled(self, action):
+        """Show and hide the debug window"""
+        if self.ui.action_debug.get_active():
+            debug.debug.show()
+        else:
+            debug.debug.hide()
+
+    def on_window_debug_delete_event(self, widget, event):
+        """Catch the delete_event in the debug window to hide the window"""
+        self.ui.action_debug.set_active(False)
+        return True

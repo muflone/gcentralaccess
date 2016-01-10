@@ -68,3 +68,15 @@ class Preferences(object):
             else:
                 # Remove old option value
                 settings.settings.unset_option(section, option)
+
+
+def get(option):
+    """Returns a preferences option"""
+    if preferences:
+        return preferences.get(option)
+
+
+def set(option, value):
+    """Set a preferences option"""
+    if preferences:
+        return preferences.set(option, value)

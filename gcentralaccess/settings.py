@@ -31,6 +31,7 @@ SIZE_WIDTH = 'width'
 SIZE_HEIGHT = 'height'
 
 positions = None
+services = None
 
 
 class Settings(object):

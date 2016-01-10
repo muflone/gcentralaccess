@@ -65,18 +65,18 @@ class UIMain(object):
         self.settings = settings.Settings(FILE_SETTINGS)
         settings.positions = settings.Settings(FILE_WINDOWS_POSITION)
         preferences.preferences = Preferences(self.settings)
-        self.settings_services = settings.Settings(FILE_SERVICES)
+        settings.services = settings.Settings(FILE_SERVICES)
         # Load services
-        for key in self.settings_services.get_sections():
+        for key in settings.services.get_sections():
             model_services.services[key] = ServiceInfo(
                 name=key,
-                description=self.settings_services.get(
+                description=settings.services.get(
                     key, SECTION_SERVICE_DESCRIPTION),
-                command=self.settings_services.get(
+                command=settings.services.get(
                     key, SECTION_SERVICE_COMMAND),
-                terminal=self.settings_services.get_boolean(
+                terminal=settings.services.get_boolean(
                     key, SECTION_SERVICE_TERMINAL),
-                icon=self.settings_services.get(
+                icon=settings.services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts)
@@ -138,7 +138,7 @@ class UIMain(object):
         settings.positions.save_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
         settings.positions.save()
-        self.settings_services.save()
+        settings.services.save()
         self.settings.save()
         self.application.quit()
 
@@ -163,21 +163,21 @@ class UIMain(object):
         # Get the new services list, clear and store the list again
         model_services.services = dialog_services.model.dump()
         dialog_services.destroy()
-        self.settings_services.clear()
+        settings.services.clear()
         for key in model_services.services.iterkeys():
-            self.settings_services.set(
+            settings.services.set(
                 section=key,
                 option=SECTION_SERVICE_DESCRIPTION,
                 value=model_services.services[key].description)
-            self.settings_services.set(
+            settings.services.set(
                 section=key,
                 option=SECTION_SERVICE_COMMAND,
                 value=model_services.services[key].command)
-            self.settings_services.set_boolean(
+            settings.services.set_boolean(
                 section=key,
                 option=SECTION_SERVICE_TERMINAL,
                 value=model_services.services[key].terminal)
-            self.settings_services.set(
+            settings.services.set(
                 section=key,
                 option=SECTION_SERVICE_ICON,
                 value=model_services.services[key].icon)

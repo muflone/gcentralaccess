@@ -21,7 +21,6 @@
 from gi.repository import GdkPixbuf
 
 import gcentralaccess.preferences as preferences
-from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.service_info import ServiceInfo
@@ -36,19 +35,16 @@ class ModelServices(ModelAbstract):
     COL_ICON = 4
     COL_PIXBUF = 5
 
-    def __init__(self, model):
-        super(self.__class__, self).__init__(model)
-        self.icon_size = preferences.preferences.get(ICON_SIZE)
-
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
         super(self.__class__, self).add_data(item)
         if item.name not in self.rows:
             icon = item.icon if item.icon is not None else ''
+            icon_size = preferences.get(preferences.ICON_SIZE)
             pixbuf = None if icon == '' else \
                 GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,
-                                                       self.icon_size,
-                                                       self.icon_size)
+                                                       icon_size,
+                                                       icon_size)
             new_row = self.model.append((
                 item.name,
                 item.description,
@@ -63,10 +59,11 @@ class ModelServices(ModelAbstract):
         """Update an existing TreeIter"""
         super(self.__class__, self).set_data(treeiter, item)
         icon = item.icon if item.icon is not None else ''
+        icon_size = preferences.get(preferences.ICON_SIZE)
         pixbuf = None if icon == '' else \
             GdkPixbuf.Pixbuf.new_from_file_at_size(item.icon,
-                                                   self.icon_size,
-                                                   self.icon_size)
+                                                   icon_size,
+                                                   icon_size)
         self.model.set_value(treeiter, self.COL_KEY, item.name)
         self.model.set_value(treeiter, self.COL_DESCRIPTION, item.description)
         self.model.set_value(treeiter, self.COL_COMMAND, item.command)

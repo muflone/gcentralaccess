@@ -21,7 +21,6 @@
 from gi.repository import GdkPixbuf
 
 import gcentralaccess.preferences as preferences
-from gcentralaccess.preferences import ICON_SIZE
 
 
 class ServiceInfo(object):
@@ -33,5 +32,5 @@ class ServiceInfo(object):
         self.icon = icon
         self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             icon,
-            preferences.preferences.get(ICON_SIZE),
-            preferences.preferences.get(ICON_SIZE))
+            preferences.get(preferences.ICON_SIZE),
+            preferences.get(preferences.ICON_SIZE))

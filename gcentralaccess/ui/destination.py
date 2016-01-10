@@ -23,11 +23,11 @@ import os.path
 from gi.repository import Gtk
 
 import gcentralaccess.settings as settings
-import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 
+import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo
 

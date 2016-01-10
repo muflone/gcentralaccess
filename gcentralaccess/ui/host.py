@@ -26,7 +26,6 @@ from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
-from gcentralaccess.preferences import ICON_SIZE
 
 from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo

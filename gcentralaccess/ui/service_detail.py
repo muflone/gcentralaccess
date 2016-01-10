@@ -27,7 +27,6 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 import gcentralaccess.preferences as preferences
-from gcentralaccess.preferences import ICON_SIZE, PREVIEW_SIZE
 
 from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
 
@@ -62,9 +61,6 @@ class UIServiceDetail(object):
         self.command = ''
         self.terminal = False
         self.icon = ''
-        # Load settings
-        self.icon_size = preferences.preferences.get(ICON_SIZE)
-        self.preview_size = preferences.preferences.get(PREVIEW_SIZE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -164,10 +160,11 @@ class UIServiceDetail(object):
         """Check the icon field"""
         text = widget.get_text().strip()
         if len(text) > 0 and os.path.isfile(text):
+            icon_size = preferences.get(preferences.ICON_SIZE)
             self.ui.image_icon.set_from_pixbuf(
                 GdkPixbuf.Pixbuf.new_from_file_at_size(text,
-                                                       self.icon_size,
-                                                       self.icon_size))
+                                                       icon_size,
+                                                       icon_size))
             icon_name = None
         else:
             icon_name = 'dialog-error' if len(text) > 0 else None
@@ -184,8 +181,8 @@ class UIServiceDetail(object):
                 # Try to load the image from the previewed file
                 image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file_at_size(
                     get_preview_filename(),
-                    self.preview_size,
-                    self.preview_size))
+                    preferences.get(preferences.PREVIEW_SIZE),
+                    preferences.get(preferences.PREVIEW_SIZE)))
                 set_active(True)
             except:
                 # Hide the preview widget for errors
@@ -200,7 +197,8 @@ class UIServiceDetail(object):
         # Set the image preview widget
         image_preview = Gtk.Image()
         image_preview.set_hexpand(False)
-        image_preview.set_size_request(self.preview_size, -1)
+        image_preview.set_size_request(
+            preferences.get(preferences.PREVIEW_SIZE), -1)
         dialog.set_preview_widget(image_preview, update_preview_cb)
         # Show the browse for icon dialog
         filename = dialog.show()

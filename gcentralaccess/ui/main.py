@@ -29,7 +29,6 @@ from gcentralaccess.constants import (
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
 from gcentralaccess.functions import get_ui_file, text, _
 import gcentralaccess.preferences as preferences
-from gcentralaccess.preferences import Preferences
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 
@@ -66,7 +65,7 @@ class UIMain(object):
         settings.settings = settings.Settings(FILE_SETTINGS)
         settings.positions = settings.Settings(FILE_WINDOWS_POSITION)
         settings.services = settings.Settings(FILE_SERVICES)
-        preferences.preferences = Preferences()
+        preferences.preferences = preferences.Preferences()
         # Load services
         for key in settings.services.get_sections():
             model_services.services[key] = ServiceInfo(

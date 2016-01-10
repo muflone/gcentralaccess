@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+virtualenv:
+  system_site_packages: true
+sudo: false
+addons:
+  apt:
+    packages:
+    - python-gi                               # GObject
+    - gir1.2-gtk-3.0                          # gi.repository.gtk
+script:
+  - python setup.py install --optimize=1 --root=build
+  - ls -laR build

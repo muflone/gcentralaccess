@@ -20,6 +20,7 @@
 
 import gcentralaccess.settings as settings
 
+SAVE_DEFAULT_VALUES = False
 DEFAULT_VALUES = {}
 
 SECTION_PREFERENCES = 'preferences'
@@ -48,6 +49,9 @@ class Preferences(object):
             else:
                 self.options[option] = settings.settings.get(
                     section, option, default)
+            # Save the default value
+            if SAVE_DEFAULT_VALUES:
+                self.set(option, default)
 
     def get(self, option):
         """Returns a preferences option"""
@@ -58,7 +62,7 @@ class Preferences(object):
         self.options[option] = value
         if option in DEFAULT_VALUES:
             section, default = DEFAULT_VALUES[option]
-            if value != default:
+            if value != default or SAVE_DEFAULT_VALUES:
                 if isinstance(default, bool):
                     settings.settings.set_boolean(section, option, value)
                 elif isinstance(default, int):

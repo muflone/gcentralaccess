@@ -30,7 +30,7 @@ from gcentralaccess.constants import (
 from gcentralaccess.functions import get_ui_file, text, _
 import gcentralaccess.preferences as preferences
 from gcentralaccess.preferences import Preferences
-from gcentralaccess.settings import Settings
+import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 
 import gcentralaccess.models.services as model_services
@@ -62,10 +62,10 @@ class UIMain(object):
     def __init__(self, application):
         self.application = application
         # Load settings
-        self.settings = Settings(FILE_SETTINGS)
-        self.settings_positions = Settings(FILE_WINDOWS_POSITION)
+        self.settings = settings.Settings(FILE_SETTINGS)
+        self.settings_positions = settings.Settings(FILE_WINDOWS_POSITION)
         preferences.preferences = Preferences(self.settings)
-        self.settings_services = Settings(FILE_SERVICES)
+        self.settings_services = settings.Settings(FILE_SERVICES)
         # Load services
         for key in self.settings_services.get_sections():
             model_services.services[key] = ServiceInfo(
@@ -85,7 +85,7 @@ class UIMain(object):
             self.ui.store_destination_types)
         # Load hosts
         for filename in os.listdir(DIR_HOSTS):
-            settings_host = Settings(os.path.join(DIR_HOSTS, filename))
+            settings_host = settings.Settings(os.path.join(DIR_HOSTS, filename))
             name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
             description = settings_host.get(SECTION_HOST,
                                             SECTION_HOST_DESCRIPTION)

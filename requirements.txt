@@ -1,2 +1,2 @@
 pep8
-PyChecker
+http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download

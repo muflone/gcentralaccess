@@ -18,6 +18,8 @@ before_install:
 script:
   - python -m compileall .
   - pep8 . || true
-  - pychecker --no-shadow --blacklist GLib,gi._glib,gi._gobject,gi._gobject._gobject gcentralaccess.py
+  - pychecker --no-shadow
+    --blacklist gobject,GLib,gi._glib,gi._gobject,gi._gobject._gobject
+    gcentralaccess.py
   - python setup.py install --optimize=1 --root=build
   - ls -laR build

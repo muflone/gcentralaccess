@@ -10,13 +10,15 @@ addons:
     - python-gi                               # GObject
     - gir1.2-gtk-3.0                          # gi.repository.gtk
     - python-xdg                              # PyXDG
+    - pychecker                               # PyChecker
 install:
   - pip install -r requirements.txt
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - pep8 . || true
   - python -m compileall .
+  - pep8 . || true
+  - pychecker --no-shadow --blacklist GLib,gi._glib,gi._gobject,gi._gobject._gobject gcentralaccess.py
   - python setup.py install --optimize=1 --root=build
   - ls -laR build

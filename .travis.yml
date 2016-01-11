@@ -10,7 +10,6 @@ addons:
     - python-gi                               # GObject
     - gir1.2-gtk-3.0                          # gi.repository.gtk
     - python-xdg                              # PyXDG
-    - pep8                                    # pep8
 install:
   - pip install -r requirements.txt
 before_install:

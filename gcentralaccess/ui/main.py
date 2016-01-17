@@ -148,8 +148,7 @@ class UIMain(object):
 
     def on_action_services_activate(self, action):
         """Edit services"""
-        selection = self.ui.tvw_connections.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = self.get_selected_host_row()
         if selected_row:
             iter_parent = self.ui.store_hosts.iter_parent(selected_row)
             selected_path = self.model.model[selected_row].path
@@ -299,10 +298,9 @@ class UIMain(object):
 
     def on_action_edit_activate(self, action):
         """Define a new host"""
-        selection = self.ui.tvw_connections.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = self.get_selected_host_row()
         if selected_row:
-            if self.ui.store_hosts.iter_parent(selected_row) is None:
+            if self.is_selected_row_host():
                 # First level (host)
                 name = self.model.get_key(selected_row)
                 description = self.model.get_description(selected_row)
@@ -358,8 +356,7 @@ class UIMain(object):
 
     def on_action_delete_activate(self, action):
         """Remove the selected host"""
-        selection = self.ui.tvw_connections.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = self.get_selected_host_row()
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.win_main,
@@ -385,10 +382,8 @@ class UIMain(object):
     def on_tvw_connections_key_press_event(self, widget, event):
         """Expand and collapse nodes with keyboard arrows"""
         if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
-            selection = self.ui.tvw_connections.get_selection().get_selected()
-            selected_row = selection[1]
-            if (selected_row and
-                    self.ui.store_hosts.iter_parent(selected_row) is None):
+            selected_row = self.get_selected_host_row()
+            if (selected_row and self.is_selected_row_host()):
                 tree_path = self.model.get_path(selected_row)
                 expanded = self.ui.tvw_connections.row_expanded(tree_path)
                 if event.keyval == Gdk.KEY_Left and expanded:
@@ -397,3 +392,12 @@ class UIMain(object):
                 elif event.keyval == Gdk.KEY_Right and not expanded:
                     # Expand the selected node
                     self.ui.tvw_connections.expand_row(tree_path, False)
+
+    def get_selected_host_row(self):
+        """Return the currently selected row on the connections view"""
+        return self.ui.tvw_connections.get_selection().get_selected()[1]
+
+    def is_selected_row_host(self):
+        """Return if the currently selected row is an host"""
+        return self.ui.store_hosts.iter_parent(
+            self.get_selected_host_row()) is None

@@ -271,6 +271,11 @@ class UIMain(object):
                                    description=dialog.description),
                           destinations=destinations,
                           update_settings=True)
+            # Automatically select the newly added host
+            self.ui.tvw_connections.set_cursor(
+                path=self.model.get_path_by_name(dialog.name),
+                column=None,
+                start_editing=False)
         dialog.destroy()
 
     def on_action_edit_activate(self, action):
@@ -316,6 +321,12 @@ class UIMain(object):
                                            description=dialog.description),
                                   destinations=destinations,
                                   update_settings=True)
+                    
+                    # Automatically select again the previously selected host
+                    self.ui.tvw_connections.set_cursor(
+                        path=self.model.get_path_by_name(dialog.name),
+                        column=None,
+                        start_editing=False)
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""

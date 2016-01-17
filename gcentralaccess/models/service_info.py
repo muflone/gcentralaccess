@@ -33,4 +33,4 @@ class ServiceInfo(object):
         self.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
             icon,
             preferences.get(preferences.ICON_SIZE),
-            preferences.get(preferences.ICON_SIZE))
+            preferences.get(preferences.ICON_SIZE)) if icon else None

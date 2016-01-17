@@ -278,42 +278,44 @@ class UIMain(object):
         selection = self.ui.tvw_connections.get_selection().get_selected()
         selected_row = selection[1]
         if selected_row:
-            name = self.model.get_key(selected_row)
-            description = self.model.get_description(selected_row)
-            selected_iter = self.model.get_iter(name)
-            dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
-            # Restore the destinations for the selected host
-            destinations = self.hosts[name].destinations
-            for destination_name in destinations:
-                destination = destinations[destination_name]
-                dialog.destinations.add_data(destination)
-                for service_name in destination.associations:
-                    if service_name in model_services.services:
-                        dialog.associations.add_data(
-                            index=dialog.associations.count(),
-                            name=destination_name,
-                            service=model_services.services[service_name])
-                    else:
-                        debug.add_warning('service %s not found' %
-                                          service_name)
-            # Show the edit host dialog
-            response = dialog.show(default_name=name,
-                                   default_description=description,
-                                   title=_('Edit host'),
-                                   treeiter=selected_iter)
-            if response == Gtk.ResponseType.OK:
-                # Remove older host and add the newer
-                destinations = dialog.destinations.dump()
-                associations = dialog.associations.dump()
-                for values in associations:
-                    destination_name, service_name = associations[values]
+            if self.ui.store_hosts.iter_parent(selected_row) is None:
+                # First level (host)
+                name = self.model.get_key(selected_row)
+                description = self.model.get_description(selected_row)
+                selected_iter = self.model.get_iter(name)
+                dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
+                # Restore the destinations for the selected host
+                destinations = self.hosts[name].destinations
+                for destination_name in destinations:
                     destination = destinations[destination_name]
-                    destination.associations.append(service_name)
-                self.remove_host(name)
-                self.add_host(HostInfo(name=dialog.name,
-                                       description=dialog.description),
-                              destinations=destinations,
-                              update_settings=True)
+                    dialog.destinations.add_data(destination)
+                    for service_name in destination.associations:
+                        if service_name in model_services.services:
+                            dialog.associations.add_data(
+                                index=dialog.associations.count(),
+                                name=destination_name,
+                                service=model_services.services[service_name])
+                        else:
+                            debug.add_warning('service %s not found' %
+                                              service_name)
+                # Show the edit host dialog
+                response = dialog.show(default_name=name,
+                                       default_description=description,
+                                       title=_('Edit host'),
+                                       treeiter=selected_iter)
+                if response == Gtk.ResponseType.OK:
+                    # Remove older host and add the newer
+                    destinations = dialog.destinations.dump()
+                    associations = dialog.associations.dump()
+                    for values in associations:
+                        destination_name, service_name = associations[values]
+                        destination = destinations[destination_name]
+                        destination.associations.append(service_name)
+                    self.remove_host(name)
+                    self.add_host(HostInfo(name=dialog.name,
+                                           description=dialog.description),
+                                  destinations=destinations,
+                                  update_settings=True)
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""

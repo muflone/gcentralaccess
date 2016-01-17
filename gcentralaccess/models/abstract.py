@@ -56,6 +56,10 @@ class ModelAbstract(object):
         """Get a TreeIter from a name"""
         return self.rows.get(name)
 
+    def get_model_row(self, treeiter):
+        """Get a TreeModelRow from a TreeIter"""
+        return self.model[treeiter]
+
     def remove(self, treeiter):
         """Remove a TreeIter"""
         self.rows.pop(self.get_key(treeiter))

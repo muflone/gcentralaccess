@@ -52,6 +52,10 @@ class ModelHosts(ModelAbstract):
         """Get the description from a TreeIter"""
         return self.model[treeiter][self.COL_DESCRIPTION]
 
+    def get_service(self, treeiter):
+        """Get the service from a TreeIter"""
+        return self.model[treeiter][self.COL_SERVICE]
+
     def add_association(self, treeiter, destination, service):
         """Add a new row to the model if it doesn't exists"""
         new_row = self.model.append(treeiter, (destination.name,

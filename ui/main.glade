@@ -47,6 +47,10 @@
       </object>
       <accelerator key="Insert"/>
     </child>
+  </object>
+  <object class="GtkActionGroup" id="actions_host">
+    <property name="sensitive">False</property>
+    <property name="accel_group">accelerators</property>
     <child>
       <object class="GtkAction" id="action_edit">
         <property name="label" comments="Use domain gtk30">_Edit</property>
@@ -56,18 +60,23 @@
       <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
     </child>
     <child>
-      <object class="GtkAction" id="action_connect">
-        <property name="label" comments="Use domain gtk30">_Connect</property>
-        <property name="icon_name">computer</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkAction" id="action_delete">
         <property name="label" comments="Use domain gtk30">_Delete</property>
         <property name="icon_name">edit-delete</property>
         <signal name="activate" handler="on_action_delete_activate" swapped="no"/>
       </object>
       <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="actions_connection">
+    <property name="sensitive">False</property>
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkAction" id="action_connect">
+        <property name="label" comments="Use domain gtk30">_Connect</property>
+        <property name="icon_name">computer</property>
+        <signal name="activate" handler="on_action_connect_activate" swapped="no"/>
+      </object>
     </child>
   </object>
   <object class="GtkListStore" id="store_destination_types">

@@ -362,3 +362,19 @@ class UIMain(object):
         """Catch the delete_event in the debug window to hide the window"""
         self.ui.action_debug.set_active(False)
         return True
+
+    def on_tvw_connections_key_press_event(self, widget, event):
+        """Expand and collapse nodes with keyboard arrows"""
+        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
+            selection = self.ui.tvw_connections.get_selection().get_selected()
+            selected_row = selection[1]
+            if (selected_row and
+                    self.ui.store_hosts.iter_parent(selected_row) is None):
+                tree_path = self.model.get_path(selected_row)
+                expanded = self.ui.tvw_connections.row_expanded(tree_path)
+                if event.keyval == Gdk.KEY_Left and expanded:
+                    # Collapse the selected node
+                    self.ui.tvw_connections.collapse_row(tree_path)
+                elif event.keyval == Gdk.KEY_Right and not expanded:
+                    # Expand the selected node
+                    self.ui.tvw_connections.expand_row(tree_path, False)

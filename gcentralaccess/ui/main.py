@@ -20,6 +20,7 @@
 
 import os
 import os.path
+import subprocess
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -45,7 +46,7 @@ from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
 from gcentralaccess.ui.host import UIHost
 from gcentralaccess.ui.message_dialog import (
-    show_message_dialog, UIMessageDialogNoYes)
+    show_message_dialog, UIMessageDialogNoYes, UIMessageDialogClose)
 
 SECTION_WINDOW_NAME = 'main'
 SECTION_SERVICE_DESCRIPTION = 'description'
@@ -352,7 +353,13 @@ class UIMain(object):
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
-        self.ui.action_edit.activate()
+        selected_row = self.get_selected_host_row()
+        if selected_row and self.is_selected_row_host():
+            # Start host edit
+            self.ui.action_edit.activate()
+        else:
+            # Connect to the destination
+            self.ui.action_connect.activate()
 
     def on_action_delete_activate(self, action):
         """Remove the selected host"""
@@ -399,6 +406,53 @@ class UIMain(object):
                 elif event.keyval == Gdk.KEY_Right and not expanded:
                     # Expand the selected node
                     self.ui.tvw_connections.expand_row(tree_path, False)
+
+    def on_action_connect_activate(self, action):
+        """Establish the connection for the destination"""
+        selected_row = self.get_selected_host_row()
+        if selected_row and not self.is_selected_row_host():
+            host = self.hosts[self.model.get_key(
+                self.ui.store_hosts.iter_parent(selected_row))]
+            destination_name = self.model.get_key(selected_row)
+            destination = host.destinations[destination_name]
+            service_name = self.model.get_service(selected_row)
+            if service_name in destination.associations:
+                service = model_services.services[service_name]
+                command = service.command
+                # Prepares the map for destination arguments
+                destinations_map = {}
+                destinations_map['address'] = destination.value
+                for types in destination_types.destination_types.rows:
+                    destinations_map[types] = destination.value
+                # Execute command
+                try:
+                    command = command.format(**destinations_map)
+                    # Execute external process
+                    subprocess.Popen(args=command,
+                                     shell=True)
+                except KeyError as error:
+                    # An error occurred processing the command
+                    error_msg1 = _('Connection open failed')
+                    error_msg2 = _('An error occurred processing the '
+                                   'service command.')
+                    show_message_dialog(
+                        class_=UIMessageDialogClose,
+                        parent=self.ui.win_main,
+                        message_type=Gtk.MessageType.ERROR,
+                        title=None,
+                        msg1=error_msg1,
+                        msg2=error_msg2,
+                        is_response_id=None)
+                    debug.add_error(error_msg2)
+                    debug.add_error('Host: "%s"' % host.name)
+                    debug.add_error('Destination name: "%s"' % 
+                                    destination.name)
+                    debug.add_error('Destination value: "%s"' %
+                                    destination.value)
+                    debug.add_error('Service: %s' % service.name),
+                    debug.add_error('Command: "%s"' % command)
+            else:
+                debug.add_warning('service %s not found' % service_name)
 
     def get_selected_host_row(self):
         """Return the currently selected row on the connections view"""

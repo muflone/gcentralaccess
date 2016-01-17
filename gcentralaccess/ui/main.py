@@ -367,6 +367,13 @@ class UIMain(object):
                 is_response_id=Gtk.ResponseType.YES):
             self.remove_host(self.model.get_key(selected_row))
 
+    def on_tvw_connections_cursor_changed(self, widget):
+        """Set actions sensitiveness for host and connection"""
+        if self.get_selected_host_row():
+            self.ui.actions_connection.set_sensitive(
+                not self.is_selected_row_host())
+            self.ui.actions_host.set_sensitive(self.is_selected_row_host())
+
     def on_action_debug_toggled(self, action):
         """Show and hide the debug window"""
         if self.ui.action_debug.get_active():

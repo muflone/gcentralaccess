@@ -31,7 +31,7 @@
     </child>
     <child>
       <object class="GtkToggleAction" id="action_enable_hidden">
-        <property name="label" translatable="yes">Disable debug if hidden</property>
+        <property name="label" translatable="yes">Enable debug if hidden</property>
         <property name="icon_name">document-revert</property>
         <signal name="toggled" handler="on_action_set_debug_flag" swapped="no"/>
       </object>

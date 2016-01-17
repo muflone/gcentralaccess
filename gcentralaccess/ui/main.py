@@ -148,6 +148,17 @@ class UIMain(object):
 
     def on_action_services_activate(self, action):
         """Edit services"""
+        selection = self.ui.tvw_connections.get_selection().get_selected()
+        selected_row = selection[1]
+        if selected_row:
+            iter_parent = self.ui.store_hosts.iter_parent(selected_row)
+            selected_path = self.model.model[selected_row].path
+            # Get the path of the host
+            if iter_parent is None:
+                tree_path = self.model.model[selected_row].path
+            else:
+                tree_path = self.model.model[iter_parent].path
+            expanded = self.ui.tvw_connections.row_expanded(tree_path)
         dialog_services = UIServices(parent=self.ui.win_main)
         # Load services list
         dialog_services.model.load(model_services.services)
@@ -174,6 +185,14 @@ class UIMain(object):
                 option=SECTION_SERVICE_ICON,
                 value=model_services.services[key].icon)
         self.reload_hosts()
+        if selected_row:
+            # Automatically expand the row if it was expanded before
+            if expanded:
+                self.ui.tvw_connections.expand_row(tree_path, True)
+            # Automatically select again the previously selected row
+            self.ui.tvw_connections.set_cursor(path=selected_path,
+                                               column=None,
+                                               start_editing=False)
 
     def reload_hosts(self):
         """Load hosts from the settings files"""

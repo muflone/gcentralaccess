@@ -288,6 +288,8 @@ class UIMain(object):
                 name = self.model.get_key(selected_row)
                 description = self.model.get_description(selected_row)
                 selected_iter = self.model.get_iter(name)
+                expanded = self.ui.tvw_connections.row_expanded(
+                    self.model.get_path(selected_iter))
                 dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
                 # Restore the destinations for the selected host
                 destinations = self.hosts[name].destinations
@@ -321,12 +323,15 @@ class UIMain(object):
                                            description=dialog.description),
                                   destinations=destinations,
                                   update_settings=True)
-                    
+                    # Get the path of the host
+                    tree_path = self.model.get_path_by_name(dialog.name)
                     # Automatically select again the previously selected host
-                    self.ui.tvw_connections.set_cursor(
-                        path=self.model.get_path_by_name(dialog.name),
-                        column=None,
-                        start_editing=False)
+                    self.ui.tvw_connections.set_cursor(path=tree_path,
+                                                       column=None,
+                                                       start_editing=False)
+                    # Automatically expand the row if it was expanded before
+                    if expanded:
+                        self.ui.tvw_connections.expand_to_path(tree_path)
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""

@@ -331,7 +331,7 @@ class UIMain(object):
                                                        start_editing=False)
                     # Automatically expand the row if it was expanded before
                     if expanded:
-                        self.ui.tvw_connections.expand_to_path(tree_path)
+                        self.ui.tvw_connections.expand_row(tree_path, False)
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""

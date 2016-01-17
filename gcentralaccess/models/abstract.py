@@ -64,6 +64,10 @@ class ModelAbstract(object):
         """Get the path from a TreeIter"""
         return self.get_model_row(treeiter).path
 
+    def get_path_by_name(self, name):
+        """Get the path from a name"""
+        return self.get_model_row(self.get_iter(name)).path
+
     def remove(self, treeiter):
         """Remove a TreeIter"""
         self.rows.pop(self.get_key(treeiter))

@@ -285,8 +285,8 @@ class UIMain(object):
             # Restore the destinations for the selected host
             destinations = self.hosts[name].destinations
             for destination_name in destinations:
-                dialog.destinations.add_data(destinations[destination_name])
                 destination = destinations[destination_name]
+                dialog.destinations.add_data(destination)
                 for service_name in destination.associations:
                     if service_name in model_services.services:
                         dialog.associations.add_data(

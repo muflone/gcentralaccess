@@ -190,8 +190,8 @@ class UIProcesses(object):
 
     def on_tvw_processes_key_press_event(self, widget, event):
         """Expand and collapse nodes with keyboard arrows"""
-        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
-            selected_row = get_treeview_selected_row(self.ui.tvw_processes)
+        selected_row = get_treeview_selected_row(self.ui.tvw_processes)
+        if selected_row and event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
             iter_parent = self.ui.store_processes.iter_parent(selected_row)
             if selected_row and iter_parent is None:
                 tree_path = self.model.get_path(selected_row)

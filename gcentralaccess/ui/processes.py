@@ -92,6 +92,8 @@ class UIProcesses(object):
                                                    destination,
                                                    service,
                                                    process))
+        # Enable process actions
+        self.ui.actions_processes.set_sensitive(True)
         # Save process for further polling
         self.processes[self.model.get_key(treeiter)] = process
         self.model.add_detail(treeiter,

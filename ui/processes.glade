@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkAccelGroup" id="accelerators"/>
+  <object class="GtkActionGroup" id="actions_processes">
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkAction" id="action_kill">
+        <property name="label" translatable="yes">Kill process</property>
+        <property name="icon_name">media-playback-stop</property>
+        <signal name="activate" handler="on_action_process_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_pause">
+        <property name="label" translatable="yes">Pause process</property>
+        <property name="icon_name">media-playback-pause</property>
+        <signal name="activate" handler="on_action_process_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_resume">
+        <property name="label" translatable="yes">Resume process</property>
+        <property name="icon_name">media-playback-start</property>
+        <signal name="activate" handler="on_action_process_activate" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTreeStore" id="store_processes">
+    <columns>
+      <!-- column-name Index -->
+      <column type="gchararray"/>
+      <!-- column-name Timestamp -->
+      <column type="gchararray"/>
+      <!-- column-name Host -->
+      <column type="gchararray"/>
+      <!-- column-name Destination -->
+      <column type="gchararray"/>
+      <!-- column-name Service -->
+      <column type="gchararray"/>
+      <!-- column-name Description -->
+      <column type="gchararray"/>
+      <!-- column-name PID -->
+      <column type="gchararray"/>
+      <!-- column-name Icon -->
+      <column type="GdkPixbuf"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="window_processes">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Processes</property>
+    <property name="default_width">400</property>
+    <property name="default_height">200</property>
+    <signal name="delete-event" handler="on_window_processes_delete_event" swapped="no"/>
+    <child>
+      <object class="GtkBox" id="box_processes">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkToolbar" id="toolbar_debug">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkToolButton" id="toolbutton_pause">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_pause</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton_resume">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_resume</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton_kill">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_kill</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scroll_processes">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="tvw_processes">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">store_processes</property>
+                <signal name="row-activated" handler="on_tvw_processes_row_activated" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="tvw_selection_processes"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_index">
+                    <property name="title" translatable="yes">ID</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_indicator">True</property>
+                    <property name="sort_column_id">0</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cell_icon"/>
+                      <attributes>
+                        <attribute name="pixbuf">7</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_index"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_timestamp">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Time</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_timestamp"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_host">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Host</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">2</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_host"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_destination">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Destination</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">3</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_destination"/>
+                      <attributes>
+                        <attribute name="text">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_service">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Service</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">4</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_service"/>
+                      <attributes>
+                        <attribute name="text">4</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_process">
+                    <property name="title" translatable="yes">Process</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">6</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_pid"/>
+                      <attributes>
+                        <attribute name="text">6</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="column_description">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Description</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">5</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cell_description"/>
+                      <attributes>
+                        <attribute name="text">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

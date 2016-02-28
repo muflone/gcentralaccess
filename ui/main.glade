@@ -36,6 +36,14 @@
       </object>
       <accelerator key="F1" modifiers="GDK_SHIFT_MASK"/>
     </child>
+    <child>
+      <object class="GtkToggleAction" id="action_processes">
+        <property name="label" translatable="yes">_Processes</property>
+        <property name="icon_name">system-run</property>
+        <signal name="toggled" handler="on_action_processes_toggled" swapped="no"/>
+      </object>
+      <accelerator key="F2" modifiers="GDK_SHIFT_MASK"/>
+    </child>
   </object>
   <object class="GtkActionGroup" id="actions_connections">
     <property name="accel_group">accelerators</property>
@@ -249,6 +257,19 @@
               <object class="GtkToggleToolButton" id="tlb_debug">
                 <property name="use_action_appearance">True</property>
                 <property name="related_action">action_debug</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="tlb_processes">
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_processes</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="use_underline">True</property>

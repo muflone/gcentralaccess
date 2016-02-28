@@ -20,7 +20,6 @@
 
 import os
 import os.path
-import subprocess
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -42,6 +41,7 @@ import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.destination_types import ModelDestinationTypes
 
 import gcentralaccess.ui.debug as debug
+import gcentralaccess.ui.processes as processes
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
 from gcentralaccess.ui.host import UIHost
@@ -85,6 +85,9 @@ class UIMain(object):
         # Prepare the debug dialog
         debug.debug = debug.UIDebug(self.ui.win_main,
                                     self.on_window_debug_delete_event)
+        # Prepare the processes dialog
+        processes.processes = processes.UIProcesses(
+            self.ui.win_main, self.on_window_processes_delete_event)
         # This model is shared across the main and the destination detail
         destination_types.destination_types = ModelDestinationTypes(
             self.ui.store_destination_types)
@@ -128,6 +131,7 @@ class UIMain(object):
     def on_win_main_delete_event(self, widget, event):
         """Save the settings and close the application"""
         debug.debug.destroy()
+        processes.processes.destroy()
         settings.positions.save_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)
         settings.positions.save()
@@ -393,6 +397,18 @@ class UIMain(object):
         self.ui.action_debug.set_active(False)
         return True
 
+    def on_action_processes_toggled(self, action):
+        """Show and hide the processes window"""
+        if self.ui.action_processes.get_active():
+            processes.processes.show()
+        else:
+            processes.processes.hide()
+
+    def on_window_processes_delete_event(self, widget, event):
+        """Catch the delete_event in the processes window to hide the window"""
+        self.ui.action_processes.set_active(False)
+        return True
+
     def on_tvw_connections_key_press_event(self, widget, event):
         """Expand and collapse nodes with keyboard arrows"""
         if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
@@ -427,9 +443,10 @@ class UIMain(object):
                 # Execute command
                 try:
                     command = command.format(**destinations_map)
-                    # Execute external process
-                    subprocess.Popen(args=command,
-                                     shell=True)
+                    processes.processes.add_process(host,
+                                                    destination,
+                                                    service,
+                                                    command)
                 except KeyError as error:
                     # An error occurred processing the command
                     error_msg1 = _('Connection open failed')
@@ -445,7 +462,7 @@ class UIMain(object):
                         is_response_id=None)
                     debug.add_error(error_msg2)
                     debug.add_error('Host: "%s"' % host.name)
-                    debug.add_error('Destination name: "%s"' % 
+                    debug.add_error('Destination name: "%s"' %
                                     destination.name)
                     debug.add_error('Destination value: "%s"' %
                                     destination.value)

@@ -98,6 +98,9 @@ class UIMain(object):
         self.model.model.set_sort_column_id(
             self.ui.column_name.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
+        # Automatically select the first host if any
+        if self.model.count() > 0:
+            self.ui.tvw_connections.set_cursor(0)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.win_main, SECTION_WINDOW_NAME)

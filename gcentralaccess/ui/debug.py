@@ -66,10 +66,6 @@ class UIDebug(object):
             widget.connect_accelerator()
             # Set labels
             widget.set_label(text(widget.get_label()))
-        # Initialize labels
-        for widget in self.ui.get_objects_by_type(Gtk.Label):
-            widget.set_label(text(widget.get_label()))
-            widget.set_tooltip_text(widget.get_label().replace('_', ''))
         # Initialize tooltips
         for widget in self.ui.get_objects_by_type(Gtk.ToolButton):
             action = widget.get_related_action()

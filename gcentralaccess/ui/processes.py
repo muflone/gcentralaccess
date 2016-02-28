@@ -26,7 +26,8 @@ from gi.repository import GLib
 
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.functions import get_ui_file, text, _
+from gcentralaccess.functions import (
+    get_ui_file, get_treeview_selected_row, text, _)
 
 import gcentralaccess.ui.debug as debug
 
@@ -126,7 +127,7 @@ class UIProcesses(object):
 
     def on_action_process_activate(self, action):
         """Execute an action for the selected process"""
-        selected_row = self.ui.tvw_processes.get_selection().get_selected()[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_processes)
         if selected_row:
             iter_parent = self.model.model.iter_parent(selected_row)
             selected_path = self.model.model[selected_row].path
@@ -171,7 +172,7 @@ class UIProcesses(object):
 
     def on_tvw_processes_row_activated(self, widget, treepath, column):
         """Expand or collapse the selected row"""
-        selected_row = self.ui.tvw_processes.get_selection().get_selected()[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_processes)
         if selected_row:
             iter_parent = self.ui.store_processes.iter_parent(selected_row)
             selected_path = self.model.model[selected_row].path

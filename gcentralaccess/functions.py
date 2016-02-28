@@ -108,6 +108,12 @@ def recursive_glob(starting_path, pattern):
             result.append(os.path.join(root, filename))
     return result
 
+
+def get_treeview_selected_row(widget):
+    """Return the selected row in a GtkTreeView"""
+    return widget.get_selection().get_selected()[1]
+
+
 # This special alias is used to track localization requests to catch
 # by xgettext. The text() calls aren't tracked by xgettext
 _ = text
@@ -121,5 +127,6 @@ __all__ = [
     'get_ui_file',
     'check_invalid_input',
     'set_error_message_on_infobar',
-    'recursive_glob'
+    'recursive_glob',
+    'get_treeview_selected_row'
 ]

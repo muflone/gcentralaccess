@@ -27,7 +27,8 @@ from gi.repository import Gdk
 from gcentralaccess.constants import (
     APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
-from gcentralaccess.functions import get_ui_file, text, _
+from gcentralaccess.functions import (
+    get_ui_file, get_treeview_selected_row, text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -153,7 +154,7 @@ class UIMain(object):
 
     def on_action_services_activate(self, action):
         """Edit services"""
-        selected_row = self.get_selected_host_row()
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row:
             iter_parent = self.ui.store_hosts.iter_parent(selected_row)
             selected_path = self.model.model[selected_row].path
@@ -303,7 +304,7 @@ class UIMain(object):
 
     def on_action_edit_activate(self, action):
         """Define a new host"""
-        selected_row = self.get_selected_host_row()
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row:
             if self.is_selected_row_host():
                 # First level (host)
@@ -357,7 +358,7 @@ class UIMain(object):
 
     def on_tvw_connections_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
-        selected_row = self.get_selected_host_row()
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row and self.is_selected_row_host():
             # Start host edit
             self.ui.action_edit.activate()
@@ -367,7 +368,7 @@ class UIMain(object):
 
     def on_action_delete_activate(self, action):
         """Remove the selected host"""
-        selected_row = self.get_selected_host_row()
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.win_main,
@@ -380,7 +381,7 @@ class UIMain(object):
 
     def on_tvw_connections_cursor_changed(self, widget):
         """Set actions sensitiveness for host and connection"""
-        if self.get_selected_host_row():
+        if get_treeview_selected_row(self.ui.tvw_connections):
             self.ui.actions_connection.set_sensitive(
                 not self.is_selected_row_host())
             self.ui.actions_host.set_sensitive(self.is_selected_row_host())
@@ -412,7 +413,7 @@ class UIMain(object):
     def on_tvw_connections_key_press_event(self, widget, event):
         """Expand and collapse nodes with keyboard arrows"""
         if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
-            selected_row = self.get_selected_host_row()
+            selected_row = get_treeview_selected_row(self.ui.tvw_connections)
             if (selected_row and self.is_selected_row_host()):
                 tree_path = self.model.get_path(selected_row)
                 expanded = self.ui.tvw_connections.row_expanded(tree_path)
@@ -425,7 +426,7 @@ class UIMain(object):
 
     def on_action_connect_activate(self, action):
         """Establish the connection for the destination"""
-        selected_row = self.get_selected_host_row()
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row and not self.is_selected_row_host():
             host = self.hosts[self.model.get_key(
                 self.ui.store_hosts.iter_parent(selected_row))]
@@ -471,11 +472,7 @@ class UIMain(object):
             else:
                 debug.add_warning('service %s not found' % service_name)
 
-    def get_selected_host_row(self):
-        """Return the currently selected row on the connections view"""
-        return self.ui.tvw_connections.get_selection().get_selected()[1]
-
     def is_selected_row_host(self):
         """Return if the currently selected row is an host"""
         return self.ui.store_hosts.iter_parent(
-            self.get_selected_host_row()) is None
+            get_treeview_selected_row(self.ui.tvw_connections)) is None

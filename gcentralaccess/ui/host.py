@@ -23,7 +23,8 @@ from gi.repository import Gtk
 import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
+    check_invalid_input, get_ui_file, get_treeview_selected_row,
+    set_error_message_on_infobar, text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
@@ -122,8 +123,7 @@ class UIHost(object):
 
     def on_action_destinations_edit_activate(self, action):
         """Edit the selected destination"""
-        selection = self.ui.tvw_destinations.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_destinations)
         if selected_row:
             name = self.destinations.get_key(selected_row)
             value = self.destinations.get_value(selected_row)
@@ -148,8 +148,7 @@ class UIHost(object):
 
     def on_action_destinations_remove_activate(self, action):
         """Remove the selected destination"""
-        selection = self.ui.tvw_destinations.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_destinations)
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.dialog_host,
@@ -234,8 +233,7 @@ class UIHost(object):
 
     def on_action_associations_remove_activate(self, action):
         """Remove the selected destination"""
-        selection = self.ui.tvw_associations.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_associations)
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.dialog_host,

@@ -21,7 +21,8 @@
 from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.functions import get_ui_file, text, _
+from gcentralaccess.functions import (
+    get_ui_file, get_treeview_selected_row, text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
@@ -100,8 +101,7 @@ class UIServices(object):
 
     def on_action_edit_activate(self, action):
         """Edit the selected service"""
-        selection = self.ui.tvw_services.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_services)
         if selected_row:
             name = self.model.get_key(selected_row)
             description = self.model.get_description(selected_row)
@@ -129,8 +129,7 @@ class UIServices(object):
 
     def on_action_remove_activate(self, action):
         """Remove the selected service"""
-        selection = self.ui.tvw_services.get_selection().get_selected()
-        selected_row = selection[1]
+        selected_row = get_treeview_selected_row(self.ui.tvw_services)
         if selected_row and show_message_dialog(
                 class_=UIMessageDialogNoYes,
                 parent=self.ui.dialog_services,

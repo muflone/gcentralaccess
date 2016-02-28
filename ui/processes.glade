@@ -155,6 +155,8 @@
               <object class="GtkTreeView" id="tvw_processes">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
                 <property name="model">store_processes</property>
                 <signal name="button-release-event" handler="on_tvw_processes_button_release_event" swapped="no"/>
                 <signal name="key-press-event" handler="on_tvw_processes_key_press_event" swapped="no"/>

@@ -31,6 +31,37 @@
       <accelerator key="F3"/>
     </child>
   </object>
+  <object class="GtkMenu" id="menu_popup">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_pause">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_pause</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_resume">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_resume</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_kill">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_kill</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkTreeStore" id="store_processes">
     <columns>
       <!-- column-name Index -->
@@ -125,6 +156,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">store_processes</property>
+                <signal name="button-release-event" handler="on_tvw_processes_button_release_event" swapped="no"/>
+                <signal name="key-press-event" handler="on_tvw_processes_key_press_event" swapped="no"/>
                 <signal name="row-activated" handler="on_tvw_processes_row_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="tvw_selection_processes"/>

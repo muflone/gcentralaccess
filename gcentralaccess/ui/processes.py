@@ -23,6 +23,7 @@ import subprocess
 
 from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gdk
 
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -186,3 +187,34 @@ class UIProcesses(object):
                     self.ui.tvw_processes.collapse_row(tree_path)
                 else:
                     self.ui.tvw_processes.expand_row(tree_path, True)
+
+    def on_tvw_processes_key_press_event(self, widget, event):
+        """Expand and collapse nodes with keyboard arrows"""
+        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
+            selected_row = get_treeview_selected_row(self.ui.tvw_processes)
+            iter_parent = self.ui.store_processes.iter_parent(selected_row)
+            if selected_row and iter_parent is None:
+                tree_path = self.model.get_path(selected_row)
+                expanded = self.ui.tvw_processes.row_expanded(tree_path)
+                if event.keyval == Gdk.KEY_Left and expanded:
+                    # Collapse the selected node
+                    self.ui.tvw_processes.collapse_row(tree_path)
+                elif event.keyval == Gdk.KEY_Right and not expanded:
+                    # Expand the selected node
+                    self.ui.tvw_processes.expand_row(tree_path, False)
+        elif event.keyval == Gdk.KEY_Menu:
+            # Show popup menu on Menu key press
+            event = Gdk.EventButton()
+            event.type = Gdk.EventType.BUTTON_RELEASE
+            event.button = Gdk.BUTTON_SECONDARY
+            self.ui.tvw_processes.event(event)
+
+    def on_tvw_processes_button_release_event(self, widget, event):
+        """Show popup menu on right click"""
+        if event.button == Gdk.BUTTON_SECONDARY:
+            self.ui.menu_popup.popup(None,
+                                     None,
+                                     None,
+                                     0,
+                                     0,
+                                     Gtk.get_current_event_time())

@@ -136,6 +136,9 @@ class UIMain(object):
         icon_size = preferences.ICON_SIZE
         self.ui.cell_name.props.height = preferences.get(icon_size)
         self.ui.cell_group_name.props.height = preferences.get(icon_size)
+        # Set groups visibility
+        self.ui.scroll_groups.set_visible(
+            preferences.get(preferences.GROUPS_SHOW))
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 

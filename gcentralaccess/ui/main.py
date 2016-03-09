@@ -37,6 +37,8 @@ import gcentralaccess.models.services as model_services
 from gcentralaccess.models.service_info import ServiceInfo
 from gcentralaccess.models.host_info import HostInfo
 from gcentralaccess.models.hosts import ModelHosts
+from gcentralaccess.models.group_info import GroupInfo
+from gcentralaccess.models.groups import ModelGroups
 from gcentralaccess.models.destination_info import DestinationInfo
 import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.destination_types import ModelDestinationTypes
@@ -83,6 +85,7 @@ class UIMain(object):
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts)
+        self.groups = ModelGroups(self.ui.store_groups)
         # Prepare the debug dialog
         debug.debug = debug.UIDebug(self.ui.win_main,
                                     self.on_window_debug_delete_event)
@@ -92,13 +95,18 @@ class UIMain(object):
         # This model is shared across the main and the destination detail
         destination_types.destination_types = ModelDestinationTypes(
             self.ui.store_destination_types)
+        # Load the groups and hosts list
         self.hosts = {}
-        self.reload_hosts()
+        self.reload_groups()
         # Sort the data in the models
+        self.groups.model.set_sort_column_id(
+            self.ui.column_group.get_sort_column_id(),
+            Gtk.SortType.ASCENDING)
         self.model.model.set_sort_column_id(
             self.ui.column_name.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         # Automatically select the first host if any
+        self.ui.tvw_groups.set_cursor(0)
         if self.model.count() > 0:
             self.ui.tvw_connections.set_cursor(0)
         # Restore the saved size and position
@@ -124,7 +132,10 @@ class UIMain(object):
         # Initialize column headers
         for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
             widget.set_title(text(widget.get_title()))
-        self.ui.cell_name.props.height = preferences.get(preferences.ICON_SIZE)
+        # Set list items row height
+        icon_size = preferences.ICON_SIZE
+        self.ui.cell_name.props.height = preferences.get(icon_size)
+        self.ui.cell_group_name.props.height = preferences.get(icon_size)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
 
@@ -206,9 +217,13 @@ class UIMain(object):
         """Load hosts from the settings files"""
         self.model.clear()
         self.hosts.clear()
-        for filename in os.listdir(DIR_HOSTS):
+        hosts_path = self.get_current_group_path()
+        for filename in os.listdir(hosts_path):
+            # Skip folders, used for groups
+            if os.path.isdir(os.path.join(hosts_path, filename)):
+                continue
             settings_host = settings.Settings(
-                os.path.join(DIR_HOSTS, filename))
+                os.path.join(hosts_path, filename))
             name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
             description = settings_host.get(SECTION_HOST,
                                             SECTION_HOST_DESCRIPTION)
@@ -252,8 +267,9 @@ class UIMain(object):
                     debug.add_warning('service %s not found' % service_name)
         # Update settings file if requested
         if update_settings:
+            hosts_path = self.get_current_group_path()
             settings_host = settings.Settings(
-                os.path.join(DIR_HOSTS, '%s.conf' % host.name))
+                os.path.join(hosts_path, '%s.conf' % host.name))
             # Add host information
             settings_host.set(SECTION_HOST, SECTION_HOST_NAME, host.name)
             settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
@@ -274,11 +290,27 @@ class UIMain(object):
 
     def remove_host(self, name):
         """Remove a host by its name"""
-        filename = os.path.join(DIR_HOSTS, '%s.conf' % name)
+        hosts_path = self.get_current_group_path()
+        filename = os.path.join(hosts_path, '%s.conf' % name)
         if os.path.isfile(filename):
             os.unlink(filename)
         self.hosts.pop(name)
         self.model.remove(self.model.get_iter(name))
+
+    def reload_groups(self):
+        """Load groups from hosts folder"""
+        self.groups.clear()
+        for filename in os.listdir(DIR_HOSTS):
+            if os.path.isdir(os.path.join(DIR_HOSTS, filename)):
+                # For each folder add a new group
+                self.groups.add_data(GroupInfo(filename, filename))
+            else:
+                # If there's some file in the main hosts directory add
+                # a default group for ungrouped hosts
+                self.groups.add_data(GroupInfo('', _('Default group')))
+        # Add default group if not any
+        if self.groups.count() == 0:
+            self.groups.add_data(GroupInfo('', _('Default group')))
 
     def on_action_new_activate(self, action):
         """Define a new host"""
@@ -479,3 +511,14 @@ class UIMain(object):
         """Return if the currently selected row is an host"""
         return self.ui.store_hosts.iter_parent(
             get_treeview_selected_row(self.ui.tvw_connections)) is None
+
+    def get_current_group_path(self):
+        """Return the path of the currently selected group"""
+        selected_row = get_treeview_selected_row(self.ui.tvw_groups)
+        group_name = self.groups.get_key(selected_row) if selected_row else ''
+        return os.path.join(DIR_HOSTS, group_name) if group_name else DIR_HOSTS
+
+    def on_tvw_groups_cursor_changed(self, widget):
+        """Set actions sensitiveness for host and connection"""
+        if get_treeview_selected_row(self.ui.tvw_groups):
+            self.reload_hosts()

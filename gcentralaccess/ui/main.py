@@ -221,6 +221,10 @@ class UIMain(object):
         self.model.clear()
         self.hosts.clear()
         hosts_path = self.get_current_group_path()
+        # Fix bug where the groups model isn't yet emptied, resulting in
+        # being still used after a clear, then an invalid path
+        if not os.path.isdir(hosts_path):
+            return
         for filename in os.listdir(hosts_path):
             # Skip folders, used for groups
             if os.path.isdir(os.path.join(hosts_path, filename)):

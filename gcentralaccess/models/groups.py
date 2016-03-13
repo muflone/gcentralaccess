@@ -22,6 +22,8 @@ from gcentralaccess.models.abstract import ModelAbstract
 
 
 class ModelGroups(ModelAbstract):
+    COL_DESCRIPTION = 1
+
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
         super(self.__class__, self).add_data(item)
@@ -31,3 +33,7 @@ class ModelGroups(ModelAbstract):
                 item.description))
             self.rows[item.name] = new_row
             return new_row
+
+    def get_description(self, treeiter):
+        """Get the description from a TreeIter"""
+        return self.model[treeiter][self.COL_DESCRIPTION]

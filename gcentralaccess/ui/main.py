@@ -28,7 +28,7 @@ from gcentralaccess.constants import (
     APP_NAME,
     FILE_SETTINGS, FILE_WINDOWS_POSITION, FILE_SERVICES, DIR_HOSTS)
 from gcentralaccess.functions import (
-    get_ui_file, get_treeview_selected_row, text, _)
+    get_ui_file, get_treeview_selected_row, show_popup_menu, text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -540,21 +540,11 @@ class UIMain(object):
         dialog_groups.destroy()
 
     def on_tvw_groups_button_release_event(self, widget, event):
-        """Show popup menu on right click"""
+        """Show groups popup menu on right click"""
         if event.button == Gdk.BUTTON_SECONDARY:
-            self.ui.menu_groups.popup(None,
-                                      None,
-                                      None,
-                                      0,
-                                      0,
-                                      Gtk.get_current_event_time())
+            show_popup_menu(self.ui.menu_groups, event.button)
 
     def on_tvw_connections_button_release_event(self, widget, event):
-        """Show popup menu on right click"""
+        """Show connections popup menu on right click"""
         if event.button == Gdk.BUTTON_SECONDARY:
-            self.ui.menu_connections.popup(None,
-                                           None,
-                                           None,
-                                           0,
-                                           0,
-                                           Gtk.get_current_event_time())
+            show_popup_menu(self.ui.menu_connections, event.button)

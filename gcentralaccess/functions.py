@@ -24,6 +24,7 @@ import fnmatch
 from gettext import gettext, dgettext
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gcentralaccess.constants import DIR_UI
 
@@ -114,6 +115,16 @@ def get_treeview_selected_row(widget):
     return widget.get_selection().get_selected()[1]
 
 
+def show_popup_menu(menu, button=Gdk.BUTTON_SECONDARY):
+    """Show a GtkMenu popup"""
+    return menu.popup(parent_menu_shell=None,
+                      parent_menu_item=None,
+                      func=None,
+                      data=None,
+                      button=button,
+                      activate_time=Gtk.get_current_event_time())
+
+
 # This special alias is used to track localization requests to catch
 # by xgettext. The text() calls aren't tracked by xgettext
 _ = text
@@ -128,5 +139,6 @@ __all__ = [
     'check_invalid_input',
     'set_error_message_on_infobar',
     'recursive_glob',
-    'get_treeview_selected_row'
+    'get_treeview_selected_row',
+    'show_popup_menu'
 ]

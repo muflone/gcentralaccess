@@ -28,7 +28,7 @@ from gi.repository import Gdk
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    get_ui_file, get_treeview_selected_row, text, _)
+    get_ui_file, get_treeview_selected_row, show_popup_menu, text, _)
 
 import gcentralaccess.ui.debug as debug
 
@@ -210,11 +210,6 @@ class UIProcesses(object):
             self.ui.tvw_processes.event(event)
 
     def on_tvw_processes_button_release_event(self, widget, event):
-        """Show popup menu on right click"""
+        """Show processes popup menu on right click"""
         if event.button == Gdk.BUTTON_SECONDARY:
-            self.ui.menu_popup.popup(None,
-                                     None,
-                                     None,
-                                     0,
-                                     0,
-                                     Gtk.get_current_event_time())
+            show_popup_menu(self.ui.menu_popup, event.button)

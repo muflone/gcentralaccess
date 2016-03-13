@@ -548,3 +548,13 @@ class UIMain(object):
                                       0,
                                       0,
                                       Gtk.get_current_event_time())
+
+    def on_tvw_connections_button_release_event(self, widget, event):
+        """Show popup menu on right click"""
+        if event.button == Gdk.BUTTON_SECONDARY:
+            self.ui.menu_connections.popup(None,
+                                           None,
+                                           None,
+                                           0,
+                                           0,
+                                           Gtk.get_current_event_time())

@@ -109,6 +109,47 @@
       <accelerator key="Delete" modifiers="GDK_CONTROL_MASK"/>
     </child>
   </object>
+  <object class="GtkMenu" id="menu_connections">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_connection_new">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_new</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_connection_edit">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_edit</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_connection_connect">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_connect</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_connection_delete">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_delete</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="store_destination_types">
     <columns>
       <!-- column-name Key -->
@@ -398,6 +439,7 @@
                     <property name="has_focus">True</property>
                     <property name="is_focus">True</property>
                     <property name="model">store_hosts</property>
+                    <signal name="button-release-event" handler="on_tvw_connections_button_release_event" swapped="no"/>
                     <signal name="cursor-changed" handler="on_tvw_connections_cursor_changed" swapped="no"/>
                     <signal name="key-press-event" handler="on_tvw_connections_key_press_event" swapped="no"/>
                     <signal name="row-activated" handler="on_tvw_connections_row_activated" swapped="no"/>

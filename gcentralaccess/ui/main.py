@@ -538,3 +538,13 @@ class UIMain(object):
         dialog_groups.ui.tvw_groups.set_model(self.groups.model)
         dialog_groups.show()
         dialog_groups.destroy()
+
+    def on_tvw_groups_button_release_event(self, widget, event):
+        """Show popup menu on right click"""
+        if event.button == Gdk.BUTTON_SECONDARY:
+            self.ui.menu_groups.popup(None,
+                                      None,
+                                      None,
+                                      0,
+                                      0,
+                                      Gtk.get_current_event_time())

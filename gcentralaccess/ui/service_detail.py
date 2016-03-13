@@ -30,8 +30,6 @@ import gcentralaccess.preferences as preferences
 
 from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
 
-SECTION_WINDOW_NAME = 'services'
-
 
 class UIServiceDetail(object):
     def __init__(self, parent, services):

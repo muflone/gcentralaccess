@@ -47,6 +47,7 @@ import gcentralaccess.ui.debug as debug
 import gcentralaccess.ui.processes as processes
 from gcentralaccess.ui.about import UIAbout
 from gcentralaccess.ui.services import UIServices
+from gcentralaccess.ui.groups import UIGroups
 from gcentralaccess.ui.host import UIHost
 from gcentralaccess.ui.message_dialog import (
     show_message_dialog, UIMessageDialogNoYes, UIMessageDialogClose)
@@ -529,3 +530,11 @@ class UIMain(object):
         """Set actions sensitiveness for host and connection"""
         if get_treeview_selected_row(self.ui.tvw_groups):
             self.reload_hosts()
+
+    def on_action_groups_activate(self, widget):
+        """Edit groups"""
+        dialog_groups = UIGroups(parent=self.ui.win_main)
+        dialog_groups.model = self.groups
+        dialog_groups.ui.tvw_groups.set_model(self.groups.model)
+        dialog_groups.show()
+        dialog_groups.destroy()

@@ -36,7 +36,8 @@ store_message('_Type:', '_%s' % text(message='Type:', gtk30=True))
 store_message('_Icon:', '_%s:' % text(message='Icon', gtk30=True))
 for message in ('_OK', '_Cancel', '_Close', '_Open', '_Save', '_Connect',
                 '_Delete', 'Select a File', 'Services',
-                'Name', 'Type', 'Value', '_Name:', '_Value:'):
+                'Name', 'Type', 'Value', '_Name:', '_Value:',
+                'If you delete an item, it will be permanently lost.'):
     text(message=message, gtk30=True)
 # With domain context
 for message in ('_Add', '_Remove', '_Edit', '_New', '_Quit', '_About'):

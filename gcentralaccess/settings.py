@@ -36,7 +36,7 @@ services = None
 
 
 class Settings(object):
-    def __init__(self, filename):
+    def __init__(self, filename, case_sensitive):
         """Initialize settings and command line options"""
         parser = optparse.OptionParser(usage='usage: %prog [options]')
         parser.set_defaults(verbose_level=VERBOSE_LEVEL_NORMAL)
@@ -49,6 +49,9 @@ class Settings(object):
         (self.options, self.arguments) = parser.parse_args()
         # Parse settings from the configuration file
         self.config = ConfigParser.RawConfigParser()
+        # Set case sensitiveness if requested
+        if case_sensitive:
+            self.config.optionxform = str
         # Determine which filename to use for settings
         self.filename = filename
         self.logText('Loading settings from %s' % self.filename,

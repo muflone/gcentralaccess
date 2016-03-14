@@ -68,9 +68,9 @@ class UIMain(object):
     def __init__(self, application):
         self.application = application
         # Load settings
-        settings.settings = settings.Settings(FILE_SETTINGS)
-        settings.positions = settings.Settings(FILE_WINDOWS_POSITION)
-        settings.services = settings.Settings(FILE_SERVICES)
+        settings.settings = settings.Settings(FILE_SETTINGS, False)
+        settings.positions = settings.Settings(FILE_WINDOWS_POSITION, False)
+        settings.services = settings.Settings(FILE_SERVICES, False)
         preferences.preferences = preferences.Preferences()
         # Load services
         for key in settings.services.get_sections():
@@ -231,7 +231,8 @@ class UIMain(object):
             if os.path.isdir(os.path.join(hosts_path, filename)):
                 continue
             settings_host = settings.Settings(
-                os.path.join(hosts_path, filename))
+                filename=os.path.join(hosts_path, filename),
+                case_sensitive=True)
             name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
             description = settings_host.get(SECTION_HOST,
                                             SECTION_HOST_DESCRIPTION)
@@ -277,7 +278,8 @@ class UIMain(object):
         if update_settings:
             hosts_path = self.get_current_group_path()
             settings_host = settings.Settings(
-                os.path.join(hosts_path, '%s.conf' % host.name))
+                filename=os.path.join(hosts_path, '%s.conf' % host.name),
+                case_sensitive=True)
             # Add host information
             settings_host.set(SECTION_HOST, SECTION_HOST_NAME, host.name)
             settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,

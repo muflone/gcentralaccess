@@ -310,17 +310,12 @@ class UIMain(object):
     def reload_groups(self):
         """Load groups from hosts folder"""
         self.model_groups.clear()
+        # Always add a default group
+        self.model_groups.add_data(GroupInfo('', _('Default group')))
         for filename in os.listdir(DIR_HOSTS):
             if os.path.isdir(os.path.join(DIR_HOSTS, filename)):
                 # For each folder add a new group
                 self.model_groups.add_data(GroupInfo(filename, filename))
-            else:
-                # If there's some file in the main hosts directory add
-                # a default group for ungrouped hosts
-                self.model_groups.add_data(GroupInfo('', _('Default group')))
-        # Add default group if not any
-        if self.model_groups.count() == 0:
-            self.model_groups.add_data(GroupInfo('', _('Default group')))
 
     def on_action_new_activate(self, action):
         """Define a new host"""

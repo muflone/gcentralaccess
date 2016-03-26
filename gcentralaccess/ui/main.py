@@ -85,7 +85,7 @@ class UIMain(object):
                 icon=settings.services.get(
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
-        self.model = ModelHosts(self.ui.store_hosts)
+        self.model_hosts = ModelHosts(self.ui.store_hosts)
         self.model_groups = ModelGroups(self.ui.store_groups)
         # Prepare the debug dialog
         debug.debug = debug.UIDebug(self.ui.win_main,
@@ -103,12 +103,12 @@ class UIMain(object):
         self.model_groups.model.set_sort_column_id(
             self.ui.column_group.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
-        self.model.model.set_sort_column_id(
+        self.model_hosts.model.set_sort_column_id(
             self.ui.column_name.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         # Automatically select the first host if any
         self.ui.tvw_groups.set_cursor(0)
-        if self.model.count() > 0:
+        if self.model_hosts.count() > 0:
             self.ui.tvw_connections.set_cursor(0)
         # Restore the saved size and position
         settings.positions.restore_window_position(
@@ -175,12 +175,12 @@ class UIMain(object):
         selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row:
             iter_parent = self.ui.store_hosts.iter_parent(selected_row)
-            selected_path = self.model.model[selected_row].path
+            selected_path = self.model_hosts.model[selected_row].path
             # Get the path of the host
             if iter_parent is None:
-                tree_path = self.model.model[selected_row].path
+                tree_path = self.model_hosts.model[selected_row].path
             else:
-                tree_path = self.model.model[iter_parent].path
+                tree_path = self.model_hosts.model[iter_parent].path
             expanded = self.ui.tvw_connections.row_expanded(tree_path)
         dialog_services = UIServices(parent=self.ui.win_main)
         # Load services list
@@ -219,7 +219,7 @@ class UIMain(object):
 
     def reload_hosts(self):
         """Load hosts from the settings files"""
-        self.model.clear()
+        self.model_hosts.clear()
         self.hosts.clear()
         hosts_path = self.get_current_group_path()
         # Fix bug where the groups model isn't yet emptied, resulting in
@@ -260,7 +260,7 @@ class UIMain(object):
         """Add a new host along as with its destinations"""
         # Add the host to the data and to the model
         self.hosts[host.name] = host
-        treeiter = self.model.add_data(host)
+        treeiter = self.model_hosts.add_data(host)
         # Add the destinations to the data
         for destination_name in destinations:
             destination = destinations[destination_name]
@@ -269,9 +269,9 @@ class UIMain(object):
             for service_name in destination.associations:
                 if service_name in model_services.services:
                     service = model_services.services[service_name]
-                    self.model.add_association(treeiter=treeiter,
-                                               destination=destination,
-                                               service=service)
+                    self.model_hosts.add_association(treeiter=treeiter,
+                                                     destination=destination,
+                                                     service=service)
                 else:
                     debug.add_warning('service %s not found' % service_name)
         # Update settings file if requested
@@ -305,7 +305,7 @@ class UIMain(object):
         if os.path.isfile(filename):
             os.unlink(filename)
         self.hosts.pop(name)
-        self.model.remove(self.model.get_iter(name))
+        self.model_hosts.remove(self.model_hosts.get_iter(name))
 
     def reload_groups(self):
         """Load groups from hosts folder"""
@@ -324,7 +324,7 @@ class UIMain(object):
 
     def on_action_new_activate(self, action):
         """Define a new host"""
-        dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
+        dialog = UIHost(parent=self.ui.win_main, hosts=self.model_hosts)
         response = dialog.show(default_name='',
                                default_description='',
                                title=_('Add a new host'),
@@ -342,7 +342,7 @@ class UIMain(object):
                           update_settings=True)
             # Automatically select the newly added host
             self.ui.tvw_connections.set_cursor(
-                path=self.model.get_path_by_name(dialog.name),
+                path=self.model_hosts.get_path_by_name(dialog.name),
                 column=None,
                 start_editing=False)
         dialog.destroy()
@@ -353,12 +353,12 @@ class UIMain(object):
         if selected_row:
             if self.is_selected_row_host():
                 # First level (host)
-                name = self.model.get_key(selected_row)
-                description = self.model.get_description(selected_row)
-                selected_iter = self.model.get_iter(name)
+                name = self.model_hosts.get_key(selected_row)
+                description = self.model_hosts.get_description(selected_row)
+                selected_iter = self.model_hosts.get_iter(name)
                 expanded = self.ui.tvw_connections.row_expanded(
-                    self.model.get_path(selected_iter))
-                dialog = UIHost(parent=self.ui.win_main, hosts=self.model)
+                    self.model_hosts.get_path(selected_iter))
+                dialog = UIHost(parent=self.ui.win_main, hosts=self.model_hosts)
                 # Restore the destinations for the selected host
                 destinations = self.hosts[name].destinations
                 for destination_name in destinations:
@@ -392,7 +392,7 @@ class UIMain(object):
                                   destinations=destinations,
                                   update_settings=True)
                     # Get the path of the host
-                    tree_path = self.model.get_path_by_name(dialog.name)
+                    tree_path = self.model_hosts.get_path_by_name(dialog.name)
                     # Automatically select again the previously selected host
                     self.ui.tvw_connections.set_cursor(path=tree_path,
                                                        column=None,
@@ -422,7 +422,7 @@ class UIMain(object):
                 msg1=_("Remove host"),
                 msg2=_("Remove the selected host?"),
                 is_response_id=Gtk.ResponseType.YES):
-            self.remove_host(self.model.get_key(selected_row))
+            self.remove_host(self.model_hosts.get_key(selected_row))
 
     def on_tvw_connections_cursor_changed(self, widget):
         """Set actions sensitiveness for host and connection"""
@@ -460,7 +460,7 @@ class UIMain(object):
         if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
             selected_row = get_treeview_selected_row(self.ui.tvw_connections)
             if (selected_row and self.is_selected_row_host()):
-                tree_path = self.model.get_path(selected_row)
+                tree_path = self.model_hosts.get_path(selected_row)
                 expanded = self.ui.tvw_connections.row_expanded(tree_path)
                 if event.keyval == Gdk.KEY_Left and expanded:
                     # Collapse the selected node
@@ -473,11 +473,11 @@ class UIMain(object):
         """Establish the connection for the destination"""
         selected_row = get_treeview_selected_row(self.ui.tvw_connections)
         if selected_row and not self.is_selected_row_host():
-            host = self.hosts[self.model.get_key(
+            host = self.hosts[self.model_hosts.get_key(
                 self.ui.store_hosts.iter_parent(selected_row))]
-            destination_name = self.model.get_key(selected_row)
+            destination_name = self.model_hosts.get_key(selected_row)
             destination = host.destinations[destination_name]
-            service_name = self.model.get_service(selected_row)
+            service_name = self.model_hosts.get_service(selected_row)
             if service_name in destination.associations:
                 service = model_services.services[service_name]
                 command = service.command

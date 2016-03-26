@@ -387,6 +387,7 @@
           <object class="GtkPaned" id="paned_group_connections">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="position">150</property>
             <child>
               <object class="GtkScrolledWindow" id="scroll_groups">
                 <property name="visible">True</property>
@@ -499,7 +500,7 @@
                 </child>
               </object>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>

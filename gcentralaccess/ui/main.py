@@ -86,7 +86,7 @@ class UIMain(object):
                     key, SECTION_SERVICE_ICON))
         self.loadUI()
         self.model = ModelHosts(self.ui.store_hosts)
-        self.groups = ModelGroups(self.ui.store_groups)
+        self.model_groups = ModelGroups(self.ui.store_groups)
         # Prepare the debug dialog
         debug.debug = debug.UIDebug(self.ui.win_main,
                                     self.on_window_debug_delete_event)
@@ -100,7 +100,7 @@ class UIMain(object):
         self.hosts = {}
         self.reload_groups()
         # Sort the data in the models
-        self.groups.model.set_sort_column_id(
+        self.model_groups.model.set_sort_column_id(
             self.ui.column_group.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         self.model.model.set_sort_column_id(
@@ -309,18 +309,18 @@ class UIMain(object):
 
     def reload_groups(self):
         """Load groups from hosts folder"""
-        self.groups.clear()
+        self.model_groups.clear()
         for filename in os.listdir(DIR_HOSTS):
             if os.path.isdir(os.path.join(DIR_HOSTS, filename)):
                 # For each folder add a new group
-                self.groups.add_data(GroupInfo(filename, filename))
+                self.model_groups.add_data(GroupInfo(filename, filename))
             else:
                 # If there's some file in the main hosts directory add
                 # a default group for ungrouped hosts
-                self.groups.add_data(GroupInfo('', _('Default group')))
+                self.model_groups.add_data(GroupInfo('', _('Default group')))
         # Add default group if not any
-        if self.groups.count() == 0:
-            self.groups.add_data(GroupInfo('', _('Default group')))
+        if self.model_groups.count() == 0:
+            self.model_groups.add_data(GroupInfo('', _('Default group')))
 
     def on_action_new_activate(self, action):
         """Define a new host"""
@@ -525,7 +525,8 @@ class UIMain(object):
     def get_current_group_path(self):
         """Return the path of the currently selected group"""
         selected_row = get_treeview_selected_row(self.ui.tvw_groups)
-        group_name = self.groups.get_key(selected_row) if selected_row else ''
+        group_name = self.model_groups.get_key(selected_row) if selected_row \
+            else ''
         return os.path.join(DIR_HOSTS, group_name) if group_name else DIR_HOSTS
 
     def on_tvw_groups_cursor_changed(self, widget):
@@ -536,8 +537,8 @@ class UIMain(object):
     def on_action_groups_activate(self, widget):
         """Edit groups"""
         dialog_groups = UIGroups(parent=self.ui.win_main)
-        dialog_groups.model = self.groups
-        dialog_groups.ui.tvw_groups.set_model(self.groups.model)
+        dialog_groups.model = self.model_groups
+        dialog_groups.ui.tvw_groups.set_model(self.model_groups.model)
         dialog_groups.show()
         dialog_groups.destroy()
 

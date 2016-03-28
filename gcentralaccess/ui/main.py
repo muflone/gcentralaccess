@@ -353,7 +353,8 @@ class UIMain(object):
                 selected_iter = self.model_hosts.get_iter(name)
                 expanded = self.ui.tvw_connections.row_expanded(
                     self.model_hosts.get_path(selected_iter))
-                dialog = UIHost(parent=self.ui.win_main, hosts=self.model_hosts)
+                dialog = UIHost(parent=self.ui.win_main,
+                                hosts=self.model_hosts)
                 # Restore the destinations for the selected host
                 destinations = self.hosts[name].destinations
                 for destination_name in destinations:

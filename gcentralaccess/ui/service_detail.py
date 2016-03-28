@@ -29,6 +29,7 @@ from gcentralaccess.functions import (
 import gcentralaccess.preferences as preferences
 
 from gcentralaccess.ui.file_chooser import UIFileChooserOpenFile
+from gcentralaccess.ui.command_arguments import UICommandArguments
 
 
 class UIServiceDetail(object):
@@ -56,7 +57,7 @@ class UIServiceDetail(object):
         self.selected_iter = None
         self.name = ''
         self.description = ''
-        self.command = ''
+        self.command = '[]'
         self.terminal = False
         self.icon = ''
         # Connect signals from the glade file to the module functions
@@ -203,3 +204,9 @@ class UIServiceDetail(object):
         if filename is not None:
             self.ui.txt_icon.set_text(filename)
         dialog.destroy()
+
+    def on_action_configure_activate(self, action):
+        """Configure the arguments list"""
+        dialog = UICommandArguments(self.ui.dialog_edit_service)
+        dialog.show(default_command=self.ui.txt_command.get_text())
+        self.ui.txt_command.set_text(dialog.arguments)

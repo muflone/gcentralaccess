@@ -20,6 +20,7 @@
 
 import os.path
 import subprocess
+import json
 
 from gi.repository import Gtk
 from gi.repository import GLib
@@ -87,8 +88,8 @@ class UIProcesses(object):
 
     def add_process(self, host, destination, service, command):
         """Add a new process"""
-        process = subprocess.Popen(args=command,
-                                   shell=True)
+        process = subprocess.Popen(args=json.loads(command),
+                                   shell=False)
         treeiter = self.model.add_data(ProcessInfo(host,
                                                    destination,
                                                    service,

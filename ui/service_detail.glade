@@ -22,6 +22,13 @@
         <signal name="activate" handler="on_action_browse_icon_activate" swapped="no"/>
       </object>
     </child>
+    <child>
+      <object class="GtkAction" id="action_configure">
+        <property name="label" translatable="yes">Configure</property>
+        <property name="icon_name">system-run</property>
+        <signal name="activate" handler="on_action_configure_activate" swapped="no"/>
+      </object>
+    </child>
   </object>
   <object class="GtkDialog" id="dialog_edit_service">
     <property name="can_focus">False</property>
@@ -173,7 +180,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">2</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -187,7 +194,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">2</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -210,12 +217,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="editable">False</property>
                 <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
-                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -231,7 +238,7 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
-                <property name="width">2</property>
+                <property name="width">3</property>
               </packing>
             </child>
             <child>
@@ -260,6 +267,23 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">4</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btn_configure">
+                <property name="label" translatable="yes">button</property>
+                <property name="use_action_appearance">True</property>
+                <property name="related_action">action_configure</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="hexpand">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">2</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -269,7 +293,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="hexpand">False</property>
                 <child>
                   <object class="GtkImage" id="image_icon">
                     <property name="visible">True</property>
@@ -280,7 +303,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
+                <property name="left_attach">3</property>
                 <property name="top_attach">4</property>
               </packing>
             </child>

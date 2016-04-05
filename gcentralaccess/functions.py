@@ -21,6 +21,7 @@
 import os
 import os.path
 import fnmatch
+import json
 from gettext import gettext, dgettext
 
 from gi.repository import Gtk
@@ -125,6 +126,17 @@ def show_popup_menu(menu, button=Gdk.BUTTON_SECONDARY):
                       activate_time=Gtk.get_current_event_time())
 
 
+def get_list_from_string_list(s_list):
+    """Return a list from a string list"""
+    try:
+        items = json.loads(s_list)
+    except:
+        # If the arguments cannot be parsed from json then treat
+        # them as a single argument list
+        items = [s_list]
+    return items
+
+
 # This special alias is used to track localization requests to catch
 # by xgettext. The text() calls aren't tracked by xgettext
 _ = text
@@ -140,5 +152,6 @@ __all__ = [
     'set_error_message_on_infobar',
     'recursive_glob',
     'get_treeview_selected_row',
-    'show_popup_menu'
+    'show_popup_menu',
+    'get_list_from_string_list'
 ]

@@ -24,7 +24,8 @@ from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    get_ui_file, get_treeview_selected_row, text, _)
+    get_ui_file, get_treeview_selected_row, get_list_from_string_list,
+    text, _)
 import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
@@ -66,12 +67,7 @@ class UICommandArguments(object):
 
     def show(self, default_command):
         """Show the command arguments dialog"""
-        try:
-            arguments = json.loads(default_command)
-        except:
-            # If the arguments cannot be parsed from json then treat
-            # them as a single argument list
-            arguments = [default_command]
+        arguments = get_list_from_string_list(default_command)
         for argument in arguments:
             self.model_arguments.append((argument, ))
         self.ui.dialog_arguments.run()

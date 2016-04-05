@@ -29,7 +29,8 @@ from gi.repository import Gdk
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
-    get_ui_file, get_treeview_selected_row, show_popup_menu, text, _)
+    get_ui_file, get_list_from_string_list, get_treeview_selected_row,
+    show_popup_menu, text, _)
 
 import gcentralaccess.ui.debug as debug
 
@@ -88,7 +89,7 @@ class UIProcesses(object):
 
     def add_process(self, host, destination, service, command):
         """Add a new process"""
-        process = subprocess.Popen(args=json.loads(command),
+        process = subprocess.Popen(args=get_list_from_string_list(command),
                                    shell=False)
         treeiter = self.model.add_data(ProcessInfo(host,
                                                    destination,

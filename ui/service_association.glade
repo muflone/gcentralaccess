@@ -106,16 +106,16 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid" id="grid_association">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
-            <property name="row_homogeneous">True</property>
             <child>
               <object class="GtkLabel" id="lbl_destination">
                 <property name="visible">True</property>
@@ -137,6 +137,7 @@
                 <property name="hexpand">True</property>
                 <property name="model">store_destinations</property>
                 <property name="id_column">0</property>
+                <signal name="changed" handler="on_cbo_destinations_changed" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText" id="cell_destination"/>
                   <attributes>
@@ -170,6 +171,7 @@
                 <property name="hexpand">True</property>
                 <property name="model">store_services</property>
                 <property name="id_column">0</property>
+                <signal name="changed" handler="on_cbo_services_changed" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="cell_service_icon"/>
                   <attributes>
@@ -188,11 +190,75 @@
                 <property name="top_attach">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="lbl_service_arguments">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Service _Arguments:</property>
+                <property name="use_underline">True</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scroll_service_arguments">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport" id="viewport_service_arguments">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkGrid" id="grid_service_arguments">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="border_width">6</property>
+                        <property name="row_spacing">3</property>
+                        <property name="column_spacing">8</property>
+                        <child>
+                          <object class="GtkLabel" id="label_service_arguments_address">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">Address:</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry_service_arguments_address">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="editable">False</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>

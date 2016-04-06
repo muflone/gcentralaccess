@@ -23,8 +23,10 @@ import os.path
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
+import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
-from gcentralaccess.functions import get_ui_file, text
+from gcentralaccess.functions import (
+    get_ui_file, text, get_list_from_string_list, get_string_fields)
 
 import gcentralaccess.models.services as model_services
 from gcentralaccess.models.services import ModelServices
@@ -38,6 +40,9 @@ class UIServiceAssociation(object):
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('service_association.glade'))
         self.ui.dialog_association.set_transient_for(parent)
+        # Restore the saved size and position
+        settings.positions.restore_window_position(
+            self.ui.dialog_association, SECTION_WINDOW_NAME)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators
@@ -61,6 +66,7 @@ class UIServiceAssociation(object):
         self.services.load(model_services.services)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
+        self.service_arguments_widgets = []
 
     def show(self, default_destination, default_service):
         """Show the Service association dialog"""
@@ -84,5 +90,58 @@ class UIServiceAssociation(object):
 
     def destroy(self):
         """Destroy the Service association dialog"""
+        settings.positions.save_window_position(
+            self.ui.dialog_association, SECTION_WINDOW_NAME)
         self.ui.dialog_association.destroy()
         self.ui.dialog_association = None
+
+    def on_cbo_services_changed(self, widget):
+        """Update the service arguments widgets"""
+        treeiter = self.ui.cbo_services.get_active_iter()
+        # Remove the previously added arguments widgets
+        for argument in self.service_arguments_widgets:
+            argument.destroy()
+        # Collect the needed arguments
+        command = get_list_from_string_list(
+            self.services.get_command(treeiter))
+        row_number = 0
+        processed_arguments = []
+        # The argument address, already has a default widget
+        processed_arguments.append('address')
+        for option in command:
+            arguments = get_string_fields(option)
+            
+            # Add a pair of widgets for each argument
+            for argument in arguments:
+                # Skip existing arguments
+                if argument in processed_arguments:
+                    continue
+                row_number += 1
+                processed_arguments.append(argument)
+                
+                # Add a new descriptive label for the argument
+                new_label = Gtk.Label('%s:' % argument.title())
+                new_label.set_xalign(1.0)
+                new_label.set_visible(True)
+                self.ui.grid_service_arguments.attach(child=new_label,
+                                                      left=0,
+                                                      top=row_number,
+                                                      width=1,
+                                                      height=1)
+                self.service_arguments_widgets.append(new_label)
+                # Add a new entry for the argument value
+                new_entry = Gtk.Entry()
+                new_entry.set_visible(True)
+                new_entry.set_hexpand(True)
+                self.ui.grid_service_arguments.attach(child=new_entry,
+                                                      left=1,
+                                                      top=row_number,
+                                                      width=1,
+                                                      height=1)
+                self.service_arguments_widgets.append(new_entry)
+
+    def on_cbo_destinations_changed(self, widget):
+        """Update the address entry for the selected destination"""
+        treeiter = self.ui.cbo_destinations.get_active_iter()
+        self.ui.entry_service_arguments_address.set_text(
+            self.destinations.get_value(treeiter))

@@ -18,6 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import json
+
 from gcentralaccess.models.abstract import ModelAbstract
 
 
@@ -26,8 +28,9 @@ class ModelAssociations(ModelAbstract):
     COL_SERVICE_NAME = 2
     COL_SERVICE_DESCRIPTION = 3
     COL_SERVICE_ICON = 4
+    COL_SERVICE_ARGUMENTS = 5
 
-    def add_data(self, index, name, service):
+    def add_data(self, index, name, service, arguments):
         """Add a new row to the model if it doesn't exists"""
         super(self.__class__, self).add_data(service)
         if index not in self.rows:
@@ -36,11 +39,12 @@ class ModelAssociations(ModelAbstract):
                 name,
                 service.name,
                 service.description,
-                None))
+                None,
+                json.dumps(arguments)))
             self.rows[index] = new_row
             return new_row
 
-    def set_data(self, treeiter, index, name, service):
+    def set_data(self, treeiter, index, name, service, arguments):
         """Update an existing TreeIter"""
         super(self.__class__, self).set_data(treeiter, service)
         self.model.set_value(treeiter, self.COL_KEY, index)
@@ -49,6 +53,8 @@ class ModelAssociations(ModelAbstract):
         self.model.set_value(treeiter, self.COL_SERVICE_DESCRIPTION,
                              service.description)
         self.model.set_value(treeiter, self.COL_SERVICE_ICON, service.icon)
+        self.model.set_value(treeiter, self.COL_SERVICE_ARGUMENTS,
+                             json.dumps(arguments))
 
     def get_destination_name(self, treeiter):
         """Get the destination from a TreeIter"""
@@ -58,6 +64,10 @@ class ModelAssociations(ModelAbstract):
         """Get the service name from a TreeIter"""
         return self.model[treeiter][self.COL_SERVICE_NAME]
 
+    def get_arguments(self, treeiter):
+        """Get the service arguments from a TreeIter"""
+        return json.loads(self.model[treeiter][self.COL_SERVICE_ARGUMENTS])
+
     def dump(self):
         """Extract the model data to a dict object"""
         super(self.__class__, self).dump()
@@ -65,5 +75,6 @@ class ModelAssociations(ModelAbstract):
         for key in self.rows.iterkeys():
             result[key] = (
                 self.get_destination_name(self.rows[key]),
-                self.get_service_name(self.rows[key]))
+                self.get_service_name(self.rows[key]),
+                self.get_arguments(self.rows[key]))
         return result

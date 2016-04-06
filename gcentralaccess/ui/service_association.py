@@ -66,7 +66,7 @@ class UIServiceAssociation(object):
         self.services.load(model_services.services)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
-        self.service_arguments_widgets = []
+        self.service_arguments_widgets = {}
 
     def show(self, default_destination, default_service):
         """Show the Service association dialog"""
@@ -86,6 +86,11 @@ class UIServiceAssociation(object):
         self.ui.dialog_association.hide()
         self.destination = self.ui.cbo_destinations.get_active_id()
         self.service = self.ui.cbo_services.get_active_id()
+        # Prepares argument values
+        self.arguments = {}
+        for argument in self.service_arguments_widgets:
+            (new_label, new_entry) = self.service_arguments_widgets[argument]
+            self.arguments[argument] = new_entry.get_text()
         return response
 
     def destroy(self):
@@ -100,7 +105,10 @@ class UIServiceAssociation(object):
         treeiter = self.ui.cbo_services.get_active_iter()
         # Remove the previously added arguments widgets
         for argument in self.service_arguments_widgets:
-            argument.destroy()
+            (new_label, new_entry) = self.service_arguments_widgets[argument]
+            new_label.destroy()
+            new_entry.destroy()
+        self.service_arguments_widgets = {}
         # Collect the needed arguments
         command = get_list_from_string_list(
             self.services.get_command(treeiter))
@@ -110,7 +118,6 @@ class UIServiceAssociation(object):
         processed_arguments.append('address')
         for option in command:
             arguments = get_string_fields(option)
-            
             # Add a pair of widgets for each argument
             for argument in arguments:
                 # Skip existing arguments
@@ -118,7 +125,6 @@ class UIServiceAssociation(object):
                     continue
                 row_number += 1
                 processed_arguments.append(argument)
-                
                 # Add a new descriptive label for the argument
                 new_label = Gtk.Label('%s:' % argument.title())
                 new_label.set_xalign(1.0)
@@ -128,7 +134,6 @@ class UIServiceAssociation(object):
                                                       top=row_number,
                                                       width=1,
                                                       height=1)
-                self.service_arguments_widgets.append(new_label)
                 # Add a new entry for the argument value
                 new_entry = Gtk.Entry()
                 new_entry.set_visible(True)
@@ -138,7 +143,9 @@ class UIServiceAssociation(object):
                                                       top=row_number,
                                                       width=1,
                                                       height=1)
-                self.service_arguments_widgets.append(new_entry)
+                # Save a tuple of widgets, to remove later
+                self.service_arguments_widgets[argument] = (
+                    new_label, new_entry)
 
     def on_cbo_destinations_changed(self, widget):
         """Update the address entry for the selected destination"""

@@ -228,7 +228,8 @@ class UIHost(object):
         if dialog.show(None, None) == Gtk.ResponseType.OK:
             self.associations.add_data(self.associations.count() + 1,
                                        dialog.destination,
-                                       model_services.services[dialog.service])
+                                       model_services.services[dialog.service],
+                                       dialog.arguments)
         dialog.destroy()
 
     def on_action_associations_remove_activate(self, action):

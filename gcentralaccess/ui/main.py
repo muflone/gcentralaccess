@@ -20,6 +20,7 @@
 
 import os
 import os.path
+import json
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -251,9 +252,12 @@ class UIMain(object):
                         type_local=destination_types.get_description(treeiter))
                     # Load associations
                     values = settings_host.get_list(SECTION_ASSOCIATIONS,
-                                                    option)
-                    if values:
-                        destinations[option].associations.extend(values)
+                                                    option,
+                                                    ';')
+                    for associations in values:
+                        association, arguments = associations.split(':', 1)
+                        destinations[option].associations.append(
+                            (association, json.loads(arguments)))
             self.add_host(host, destinations, False)
 
     def add_host(self, host, destinations, update_settings):
@@ -266,7 +270,7 @@ class UIMain(object):
             destination = destinations[destination_name]
             host.add_destination(item=destination)
             # Add service associations to the model
-            for service_name in destination.associations:
+            for service_name, service_arguments in destination.associations:
                 if service_name in model_services.services:
                     service = model_services.services[service_name]
                     self.model_hosts.add_association(treeiter=treeiter,
@@ -294,7 +298,11 @@ class UIMain(object):
                 # Add associations to the settings
                 settings_host.set(section=SECTION_ASSOCIATIONS,
                                   option=destination.name,
-                                  value=','.join(destination.associations))
+                                  value=';'.join(
+                                    ['%s:%s' % (service_name,
+                                                json.dumps(service_arguments))
+                                        for service_name, service_arguments
+                                        in destination.associations]))
             # Save the settings to the file
             settings_host.save()
 
@@ -328,9 +336,11 @@ class UIMain(object):
             destinations = dialog.destinations.dump()
             associations = dialog.associations.dump()
             for values in associations:
-                destination_name, service_name = associations[values]
+                (destination_name, service_name, service_arguments) = \
+                    associations[values]
                 destination = destinations[destination_name]
-                destination.associations.append(service_name)
+                destination.associations.append(
+                    (service_name, service_arguments))
             self.add_host(HostInfo(name=dialog.name,
                                    description=dialog.description),
                           destinations=destinations,
@@ -360,12 +370,13 @@ class UIMain(object):
                 for destination_name in destinations:
                     destination = destinations[destination_name]
                     dialog.destinations.add_data(destination)
-                    for service_name in destination.associations:
+                    for (service_name, arguments) in destination.associations:
                         if service_name in model_services.services:
                             dialog.associations.add_data(
                                 index=dialog.associations.count(),
                                 name=destination_name,
-                                service=model_services.services[service_name])
+                                service=model_services.services[service_name],
+                                arguments=arguments)
                         else:
                             debug.add_warning('service %s not found' %
                                               service_name)
@@ -379,9 +390,11 @@ class UIMain(object):
                     destinations = dialog.destinations.dump()
                     associations = dialog.associations.dump()
                     for values in associations:
-                        destination_name, service_name = associations[values]
+                        (destination_name, service_name, service_arguments) = \
+                            associations[values]
                         destination = destinations[destination_name]
-                        destination.associations.append(service_name)
+                        destination.associations.append(
+                            (service_name, service_arguments))
                     self.remove_host(name)
                     self.add_host(HostInfo(name=dialog.name,
                                            description=dialog.description),

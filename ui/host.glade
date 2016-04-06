@@ -99,6 +99,8 @@
       <column type="gchararray"/>
       <!-- column-name Service_Icon -->
       <column type="GdkPixbuf"/>
+      <!-- column-name Service_Arguments -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="store_destinations">
@@ -465,9 +467,9 @@
                     <property name="related_action">action_tab_page1</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
-                    <property name="focus_on_click">False</property>
                   </object>
                   <packing>
                     <property name="tab_fill">False</property>
@@ -531,6 +533,18 @@
                                   <object class="GtkCellRendererText" id="cell_associations_service"/>
                                   <attributes>
                                     <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="column_associations_arguments">
+                                <property name="resizable">True</property>
+                                <property name="title" translatable="yes">Arguments</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cell_associations_arguments"/>
+                                  <attributes>
+                                    <attribute name="text">5</attribute>
                                   </attributes>
                                 </child>
                               </object>
@@ -640,9 +654,9 @@
                     <property name="related_action">action_tab_page2</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
                     <property name="hexpand">True</property>
-                    <property name="focus_on_click">False</property>
                   </object>
                   <packing>
                     <property name="position">1</property>

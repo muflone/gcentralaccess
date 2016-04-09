@@ -463,6 +463,7 @@ class UIMain(object):
     def on_tvw_connections_key_press_event(self, widget, event):
         """Expand and collapse nodes with keyboard arrows"""
         if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
+            # Collapse or expand the selected row using <Left> and <Right>
             selected_row = get_treeview_selected_row(self.ui.tvw_connections)
             if (selected_row and self.is_selected_row_host()):
                 tree_path = self.model_hosts.get_path(selected_row)
@@ -473,6 +474,7 @@ class UIMain(object):
                 elif event.keyval == Gdk.KEY_Right and not expanded:
                     # Expand the selected node
                     self.ui.tvw_connections.expand_row(tree_path, False)
+                return True
 
     def on_action_connect_activate(self, action):
         """Establish the connection for the destination"""

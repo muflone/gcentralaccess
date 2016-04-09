@@ -278,9 +278,11 @@ class UIMain(object):
             for service_name, service_arguments in destination.associations:
                 if service_name in model_services.services:
                     service = model_services.services[service_name]
+                    arguments = json.dumps(service_arguments)
                     self.model_hosts.add_association(treeiter=treeiter,
                                                      destination=destination,
-                                                     service=service)
+                                                     service=service,
+                                                     arguments=arguments)
                 else:
                     debug.add_warning('service %s not found' % service_name)
         # Update settings file if requested
@@ -491,8 +493,11 @@ class UIMain(object):
                 self.ui.store_hosts.iter_parent(selected_row))]
             destination_name = self.model_hosts.get_key(selected_row)
             destination = host.destinations[destination_name]
+            associations = [service_name for service_name, arguments
+                            in destination.associations]
             service_name = self.model_hosts.get_service(selected_row)
-            if service_name in destination.associations:
+            service_arguments = self.model_hosts.get_arguments(selected_row)
+            if service_name in associations:
                 service = model_services.services[service_name]
                 command = service.command
                 # Prepares the map for destination arguments
@@ -500,6 +505,8 @@ class UIMain(object):
                 destinations_map['address'] = destination.value
                 for types in destination_types.destination_types.rows:
                     destinations_map[types] = destination.value
+                for key in service_arguments:
+                    destinations_map[key] = service_arguments[key]
                 # Execute command
                 try:
                     command = command.format(**destinations_map)

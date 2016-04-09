@@ -18,6 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import json
+
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.host_info import HostInfo
 
@@ -26,6 +28,7 @@ class ModelHosts(ModelAbstract):
     COL_DESCRIPTION = 1
     COL_SERVICE = 2
     COL_ICON = 3
+    COL_SERVICE_ARGUMENTS = 4
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -34,7 +37,8 @@ class ModelHosts(ModelAbstract):
             new_row = self.model.append(None, (item.name,
                                                item.description,
                                                '',
-                                               None))
+                                               None,
+                                               ''))
             self.rows[item.name] = new_row
             return new_row
 
@@ -56,10 +60,15 @@ class ModelHosts(ModelAbstract):
         """Get the service from a TreeIter"""
         return self.model[treeiter][self.COL_SERVICE]
 
-    def add_association(self, treeiter, destination, service):
+    def get_arguments(self, treeiter):
+        """Get the service arguments from a TreeIter"""
+        return json.loads(self.model[treeiter][self.COL_SERVICE_ARGUMENTS])
+
+    def add_association(self, treeiter, destination, service, arguments):
         """Add a new row to the model if it doesn't exists"""
         new_row = self.model.append(treeiter, (destination.name,
                                                destination.value,
                                                service.name,
-                                               service.pixbuf))
+                                               service.pixbuf,
+                                               arguments))
         return new_row

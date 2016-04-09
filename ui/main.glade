@@ -230,6 +230,8 @@
       <column type="gchararray"/>
       <!-- column-name Icon -->
       <column type="GdkPixbuf"/>
+      <!-- column-name Arguments -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="win_main">
@@ -492,6 +494,12 @@
                           <object class="GtkCellRendererText" id="cell_services"/>
                           <attributes>
                             <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cell_arguments"/>
+                          <attributes>
+                            <attribute name="text">4</attribute>
                           </attributes>
                         </child>
                       </object>

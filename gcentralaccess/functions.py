@@ -136,7 +136,10 @@ def get_string_fields(s_text):
 def get_list_from_string_list(s_list):
     """Return a list from a string list"""
     try:
-        items = json.loads(s_list)
+        if s_list:
+            items = json.loads(s_list)
+        else:
+            items = []
     except:
         # If the arguments cannot be parsed from json then treat
         # them as a single argument list

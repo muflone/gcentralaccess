@@ -251,13 +251,18 @@ class UIMain(object):
                         type=type,
                         type_local=destination_types.get_description(treeiter))
                     # Load associations
-                    values = settings_host.get_list(SECTION_ASSOCIATIONS,
-                                                    option,
-                                                    ';')
-                    for associations in values:
-                        association, arguments = associations.split(':', 1)
+                    associations = settings_host.get_list(SECTION_ASSOCIATIONS,
+                                                          option,
+                                                          ';')
+                    for association in associations:
+                        if ':' in association:
+                            service, arguments = association.split(':', 1)
+                        else:
+                            # No association arguments, set empty arguments
+                            service = association
+                            arguments = '{}'
                         destinations[option].associations.append(
-                            (association, json.loads(arguments)))
+                            (service, json.loads(arguments)))
             self.add_host(host, destinations, False)
 
     def add_host(self, host, destinations, update_settings):

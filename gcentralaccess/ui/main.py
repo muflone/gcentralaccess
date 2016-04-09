@@ -475,6 +475,23 @@ class UIMain(object):
                     # Expand the selected node
                     self.ui.tvw_connections.expand_row(tree_path, False)
                 return True
+        elif event.keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down) and \
+                event.state & Gdk.ModifierType.CONTROL_MASK:
+            # Change group using <Control>+<Page Up> and <Control>+<Page Down>
+            selected_row = get_treeview_selected_row(self.ui.tvw_groups)
+            if event.keyval == Gdk.KEY_Page_Down:
+                # Next group
+                new_iter = self.model_groups.model.iter_next(selected_row)
+            elif event.keyval == Gdk.KEY_Page_Up:
+                # Previous row
+                new_iter = self.model_groups.model.iter_previous(selected_row)
+            if new_iter:
+                # Select the newly selected row in the groups list
+                new_path = self.model_groups.get_path(new_iter)
+                self.ui.tvw_groups.set_cursor(new_path)
+                # Automatically select the first host for the group
+                self.ui.tvw_connections.set_cursor(0)
+            return True
 
     def on_action_connect_activate(self, action):
         """Establish the connection for the destination"""

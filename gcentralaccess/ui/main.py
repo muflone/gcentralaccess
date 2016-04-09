@@ -41,8 +41,6 @@ from gcentralaccess.models.hosts import ModelHosts
 from gcentralaccess.models.group_info import GroupInfo
 from gcentralaccess.models.groups import ModelGroups
 from gcentralaccess.models.destination_info import DestinationInfo
-import gcentralaccess.models.destination_types as destination_types
-from gcentralaccess.models.destination_types import ModelDestinationTypes
 
 import gcentralaccess.ui.debug as debug
 import gcentralaccess.ui.processes as processes
@@ -94,9 +92,6 @@ class UIMain(object):
         # Prepare the processes dialog
         processes.processes = processes.UIProcesses(
             self.ui.win_main, self.on_window_processes_delete_event)
-        # This model is shared across the main and the destination detail
-        destination_types.destination_types = ModelDestinationTypes(
-            self.ui.store_destination_types)
         # Load the groups and hosts list
         self.hosts = {}
         self.reload_groups()
@@ -242,14 +237,9 @@ class UIMain(object):
             # Load host destinations
             if SECTION_DESTINATIONS in settings_host.get_sections():
                 for option in settings_host.get_options(SECTION_DESTINATIONS):
-                    values = settings_host.get(SECTION_DESTINATIONS, option)
-                    type, value = values.split(':', 1)
-                    treeiter = destination_types.get_iter(type)
-                    destinations[option] = DestinationInfo(
-                        name=option,
-                        value=value,
-                        type=type,
-                        type_local=destination_types.get_description(treeiter))
+                    value = settings_host.get(SECTION_DESTINATIONS, option)
+                    destinations[option] = DestinationInfo(name=option,
+                                                           value=value)
                     # Load associations
                     associations = settings_host.get_list(SECTION_ASSOCIATIONS,
                                                           option,
@@ -300,8 +290,7 @@ class UIMain(object):
                 destination = host.destinations[key]
                 settings_host.set(SECTION_DESTINATIONS,
                                   destination.name,
-                                  '%s:%s' % (destination.type,
-                                             destination.value))
+                                  destination.value)
                 # Add associations to the settings
                 settings_host.set(section=SECTION_ASSOCIATIONS,
                                   option=destination.name,
@@ -500,16 +489,14 @@ class UIMain(object):
             if service_name in associations:
                 service = model_services.services[service_name]
                 command = service.command
-                # Prepares the map for destination arguments
-                destinations_map = {}
-                destinations_map['address'] = destination.value
-                for types in destination_types.destination_types.rows:
-                    destinations_map[types] = destination.value
+                # Prepares the arguments
+                arguments_map = {}
+                arguments_map['address'] = destination.value
                 for key in service_arguments:
-                    destinations_map[key] = service_arguments[key]
+                    arguments_map[key] = service_arguments[key]
                 # Execute command
                 try:
-                    command = command.format(**destinations_map)
+                    command = command.format(**arguments_map)
                     processes.processes.add_process(host,
                                                     destination,
                                                     service,

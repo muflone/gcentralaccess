@@ -29,66 +29,6 @@ msgstr "Descrizione"
 msgid "_Services"
 msgstr "_Servizi"
 
-#: ui/main.glade:77
-msgid "IPv4 Address"
-msgstr "Indirizzo IPv4"
-
-#: ui/main.glade:82
-msgid "IPv6 Address"
-msgstr "Indirizzo IPv6"
-
-#: ui/main.glade:87
-msgid "MAC Address"
-msgstr "Indirizzo MAC"
-
-#: ui/main.glade:92
-msgid "HTTP URL"
-msgstr "URL HTTP"
-
-#: ui/main.glade:97
-msgid "HTTPS URL"
-msgstr "URL HTTPS"
-
-#: ui/main.glade:102
-msgid "Generic URL"
-msgstr "URL Generico"
-
-#: ui/main.glade:103
-msgid "protocol://url"
-msgstr "protocollo://url"
-
-#: ui/main.glade:107
-msgid "Directory path"
-msgstr "Percorso di directory"
-
-#: ui/main.glade:108
-msgid "/path/to/directory"
-msgstr "/percorso/della/directory"
-
-#: ui/main.glade:112
-msgid "File path"
-msgstr "Percorso di file"
-
-#: ui/main.glade:113
-msgid "/path/to/file"
-msgstr "/percorso/del/file"
-
-#: ui/main.glade:117
-msgid "Samba or Windows share"
-msgstr "Condivisione Samba o Windows"
-
-#: ui/main.glade:118
-msgid "smb://server/share"
-msgstr "smb://server/condivisione"
-
-#: ui/main.glade:122
-msgid "Custom destination"
-msgstr "Destinazione personalizzata"
-
-#: ui/main.glade:123
-msgid "custom destination"
-msgstr "destinazione personalizzata"
-
 #: ui/host.glade:58
 msgid "Configure host"
 msgstr "Configura sistema"

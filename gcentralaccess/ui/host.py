@@ -20,7 +20,6 @@
 
 from gi.repository import Gtk
 
-import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, get_treeview_selected_row,
@@ -109,15 +108,10 @@ class UIHost(object):
         dialog = UIDestination(self.ui.dialog_host, self.destinations)
         if dialog.show(default_name='',
                        default_value='',
-                       default_type='ipv4',
                        title=_('Add new destination'),
                        treeiter=None) == Gtk.ResponseType.OK:
-            treeiter = destination_types.get_iter(dialog.type)
-            type_local = destination_types.get_description(treeiter)
             self.destinations.add_data(DestinationInfo(name=dialog.name,
-                                                       value=dialog.value,
-                                                       type=dialog.type,
-                                                       type_local=type_local))
+                                                       value=dialog.value))
         # Get the new destinations list, clear and store the list again
         dialog.destroy()
 
@@ -127,23 +121,17 @@ class UIHost(object):
         if selected_row:
             name = self.destinations.get_key(selected_row)
             value = self.destinations.get_value(selected_row)
-            destination_type = self.destinations.get_type(selected_row)
             selected_iter = self.destinations.get_iter(name)
             dialog = UIDestination(self.ui.dialog_host, self.destinations)
             if dialog.show(default_name=name,
                            default_value=value,
-                           default_type=destination_type,
                            title=_('Edit destination'),
                            treeiter=selected_iter
                            ) == Gtk.ResponseType.OK:
                 # Update values
-                treeiter = destination_types.get_iter(dialog.type)
-                type_local = destination_types.get_description(treeiter)
                 self.destinations.set_data(
                     selected_iter, DestinationInfo(name=dialog.name,
-                                                   value=dialog.value,
-                                                   type=dialog.type,
-                                                   type_local=type_local))
+                                                   value=dialog.value))
             dialog.destroy()
 
     def on_action_destinations_remove_activate(self, action):

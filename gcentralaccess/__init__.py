@@ -32,11 +32,10 @@ for module in (gettext, locale):
     module.textdomain(DOMAIN_NAME)
 
 # Import some translated messages from GTK+ domain
-store_message('_Type:', '_%s' % text(message='Type:', gtk30=True))
 store_message('_Icon:', '_%s:' % text(message='Icon', gtk30=True))
 for message in ('_OK', '_Cancel', '_Close', '_Open', '_Save', '_Connect',
                 '_Delete', 'Select a File', 'Services',
-                'Name', 'Type', 'Value', '_Name:', '_Value:',
+                'Name', 'Value', '_Name:', '_Value:',
                 'If you delete an item, it will be permanently lost.'):
     text(message=message, gtk30=True)
 # With domain context

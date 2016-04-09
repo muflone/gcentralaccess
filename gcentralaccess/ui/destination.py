@@ -27,7 +27,6 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
 
-import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.destinations import ModelDestinations
 from gcentralaccess.models.destination_info import DestinationInfo
 
@@ -58,22 +57,16 @@ class UIDestination(object):
             action = widget.get_related_action()
             if action:
                 widget.set_tooltip_text(action.get_label().replace('_', ''))
-        # Load destination types
-        self.ui.cbo_type.set_model(destination_types.get_model())
         self.model = destinations
         self.selected_iter = None
         self.name = ''
         self.value = ''
-        self.type = ''
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
-        self.ui.cbo_type.set_active(0)
 
-    def show(self, default_name, default_value, default_type,
-             title, treeiter):
+    def show(self, default_name, default_value, title, treeiter):
         """Show the destination dialog"""
         self.ui.txt_name.set_text(default_name)
-        self.ui.cbo_type.set_active_id(default_type)
         self.ui.txt_value.set_text(default_value)
         self.ui.txt_name.grab_focus()
         self.ui.dialog_destination.set_title(title)
@@ -81,7 +74,6 @@ class UIDestination(object):
         response = self.ui.dialog_destination.run()
         self.ui.dialog_destination.hide()
         self.name = self.ui.txt_name.get_text().strip()
-        self.type = self.ui.cbo_type.get_active_id()
         self.value = self.ui.txt_value.get_text().strip()
         return response
 
@@ -104,7 +96,6 @@ class UIDestination(object):
                 error_msg=error_msg)
         name = self.ui.txt_name.get_text().strip()
         value = self.ui.txt_value.get_text().strip()
-        type = self.ui.cbo_type.get_active_id()
         if len(name) == 0:
             # Show error for missing destination name
             show_error_message_on_infobar(
@@ -136,11 +127,3 @@ class UIDestination(object):
     def on_txt_name_changed(self, widget):
         """Check the destination name field"""
         check_invalid_input(widget, False, False, False)
-
-    def on_cbo_type_changed(self, widget):
-        """Update the placeholders for the selected destination type"""
-        # Set the placeholder text, only for GTK+ 3.2.0 and higher
-        if not Gtk.check_version(3, 2, 0):
-            treeiter = self.ui.cbo_type.get_active_iter()
-            self.ui.txt_value.set_placeholder_text(
-                destination_types.get_placeholder(treeiter))

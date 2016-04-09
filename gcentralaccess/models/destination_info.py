@@ -20,9 +20,7 @@
 
 
 class DestinationInfo(object):
-    def __init__(self, name, value, type, type_local):
+    def __init__(self, name, value):
         self.name = name
         self.value = value
-        self.type = type
-        self.type_local = type_local
         self.associations = []

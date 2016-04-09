@@ -24,10 +24,6 @@
       <column type="gchararray"/>
       <!-- column-name Value -->
       <column type="gchararray"/>
-      <!-- column-name Type -->
-      <column type="gchararray"/>
-      <!-- column-name Type_Localized -->
-      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="store_services">

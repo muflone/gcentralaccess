@@ -18,15 +18,12 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import gcentralaccess.models.destination_types as destination_types
 from gcentralaccess.models.abstract import ModelAbstract
 from gcentralaccess.models.destination_info import DestinationInfo
 
 
 class ModelDestinations(ModelAbstract):
     COL_VALUE = 1
-    COL_TYPE = 2
-    COL_TYPE_LOCAL = 3
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -34,9 +31,7 @@ class ModelDestinations(ModelAbstract):
         if item.name not in self.rows:
             new_row = self.model.append((
                 item.name,
-                item.value,
-                item.type,
-                item.type_local))
+                item.value))
             self.rows[item.name] = new_row
             return new_row
 
@@ -45,27 +40,17 @@ class ModelDestinations(ModelAbstract):
         super(self.__class__, self).set_data(treeiter, item)
         self.model.set_value(treeiter, self.COL_KEY, item.name)
         self.model.set_value(treeiter, self.COL_VALUE, item.value)
-        self.model.set_value(treeiter, self.COL_TYPE, item.type)
-        self.model.set_value(treeiter, self.COL_TYPE_LOCAL, item.type_local)
 
     def get_value(self, treeiter):
         """Get the value from a TreeIter"""
         return self.model[treeiter][self.COL_VALUE]
-
-    def get_type(self, treeiter):
-        """Get the type from a TreeIter"""
-        return self.model[treeiter][self.COL_TYPE]
 
     def dump(self):
         """Extract the model data to a dict object"""
         super(self.__class__, self).dump()
         result = {}
         for key in self.rows.iterkeys():
-            type = self.get_type(self.rows[key])
-            treeiter = destination_types.get_iter(type)
             result[key] = DestinationInfo(
                 name=self.get_key(self.rows[key]),
-                value=self.get_value(self.rows[key]),
-                type=type,
-                type_local=destination_types.get_description(treeiter))
+                value=self.get_value(self.rows[key]))
         return result

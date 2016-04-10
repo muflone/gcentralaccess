@@ -226,6 +226,8 @@ class UIMain(object):
             # Skip folders, used for groups
             if os.path.isdir(os.path.join(hosts_path, filename)):
                 continue
+            debug.add_info('Loading host %s' % os.path.join(hosts_path,
+                                                            filename))
             settings_host = settings.Settings(
                 filename=os.path.join(hosts_path, filename),
                 case_sensitive=True)

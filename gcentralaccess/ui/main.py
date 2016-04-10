@@ -246,15 +246,16 @@ class UIMain(object):
                     associations = settings_host.get_list(SECTION_ASSOCIATIONS,
                                                           option,
                                                           ';')
-                    for association in associations:
-                        if ':' in association:
-                            service, arguments = association.split(':', 1)
-                        else:
-                            # No association arguments, set empty arguments
-                            service = association
-                            arguments = '{}'
-                        destinations[option].associations.append(
-                            (service, json.loads(arguments)))
+                    if associations:
+                        for association in associations:
+                            if ':' in association:
+                                service, arguments = association.split(':', 1)
+                            else:
+                                # No association arguments, set empty arguments
+                                service = association
+                                arguments = '{}'
+                            destinations[option].associations.append(
+                                (service, json.loads(arguments)))
             self.add_host(host, destinations, False)
 
     def add_host(self, host, destinations, update_settings):

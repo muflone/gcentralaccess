@@ -542,6 +542,8 @@ class UIMain(object):
         """Set actions sensitiveness for host and connection"""
         if get_treeview_selected_row(self.ui.tvw_groups):
             self.reload_hosts()
+            # Automatically select the first host for the group
+            self.ui.tvw_connections.set_cursor(0)
 
     def on_action_groups_activate(self, widget):
         """Edit groups"""
@@ -569,8 +571,6 @@ class UIMain(object):
             # Select the newly selected row in the groups list
             new_path = self.model_groups.get_path(new_iter)
             self.ui.tvw_groups.set_cursor(new_path)
-            # Automatically select the first host for the group
-            self.ui.tvw_connections.set_cursor(0)
 
     def on_action_group_next_activate(self, action):
         """Move to the next group"""
@@ -580,8 +580,6 @@ class UIMain(object):
             # Select the newly selected row in the groups list
             new_path = self.model_groups.get_path(new_iter)
             self.ui.tvw_groups.set_cursor(new_path)
-            # Automatically select the first host for the group
-            self.ui.tvw_connections.set_cursor(0)
 
     def on_action_host_collapse_activate(self, action):
         """Collapse the selected host and hide the associations"""

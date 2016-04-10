@@ -44,28 +44,6 @@
       </object>
       <accelerator key="F2" modifiers="GDK_SHIFT_MASK"/>
     </child>
-    <child>
-      <object class="GtkAction" id="action_groups">
-        <property name="label" translatable="yes">_Groups</property>
-        <property name="icon_name">folder</property>
-        <signal name="activate" handler="on_action_groups_activate" swapped="no"/>
-      </object>
-      <accelerator key="g" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
-    </child>
-  </object>
-  <object class="GtkMenu" id="menu_groups">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="accel_group">accelerators</property>
-    <child>
-      <object class="GtkMenuItem" id="menuitem_groups">
-        <property name="use_action_appearance">True</property>
-        <property name="related_action">action_groups</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
   </object>
   <object class="GtkActionGroup" id="actions_connection">
     <property name="sensitive">False</property>
@@ -87,6 +65,45 @@
         <signal name="activate" handler="on_action_new_activate" swapped="no"/>
       </object>
       <accelerator key="Insert"/>
+    </child>
+  </object>
+  <object class="GtkActionGroup" id="actions_groups">
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkAction" id="action_group_previous">
+        <property name="label" translatable="yes">Previous group</property>
+        <signal name="activate" handler="on_action_group_previous_activate" swapped="no"/>
+      </object>
+      <accelerator key="Page_Up" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_group_next">
+        <property name="label" translatable="yes">Next group</property>
+        <signal name="activate" handler="on_action_group_next_activate" swapped="no"/>
+      </object>
+      <accelerator key="Page_Down" modifiers="GDK_CONTROL_MASK"/>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_groups">
+        <property name="label" translatable="yes">_Groups</property>
+        <property name="icon_name">folder</property>
+        <signal name="activate" handler="on_action_groups_activate" swapped="no"/>
+      </object>
+      <accelerator key="g" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+    </child>
+  </object>
+  <object class="GtkMenu" id="menu_groups">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="accel_group">accelerators</property>
+    <child>
+      <object class="GtkMenuItem" id="menuitem_groups">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_groups</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
     </child>
   </object>
   <object class="GtkActionGroup" id="actions_host">

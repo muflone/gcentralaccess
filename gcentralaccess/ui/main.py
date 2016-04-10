@@ -469,14 +469,10 @@ class UIMain(object):
             # Collapse or expand the selected row using <Left> and <Right>
             selected_row = get_treeview_selected_row(self.ui.tvw_connections)
             if (selected_row and self.is_selected_row_host()):
-                tree_path = self.model_hosts.get_path(selected_row)
-                expanded = self.ui.tvw_connections.row_expanded(tree_path)
-                if event.keyval == Gdk.KEY_Left and expanded:
-                    # Collapse the selected node
-                    self.ui.tvw_connections.collapse_row(tree_path)
-                elif event.keyval == Gdk.KEY_Right and not expanded:
-                    # Expand the selected node
-                    self.ui.tvw_connections.expand_row(tree_path, False)
+                if event.keyval == Gdk.KEY_Left:
+                    self.ui.action_host_collapse.activate()
+                elif event.keyval == Gdk.KEY_Right:
+                    self.ui.action_host_expand.activate()
                 return True
 
     def on_action_connect_activate(self, action):
@@ -586,3 +582,19 @@ class UIMain(object):
             self.ui.tvw_groups.set_cursor(new_path)
             # Automatically select the first host for the group
             self.ui.tvw_connections.set_cursor(0)
+
+    def on_action_host_collapse_activate(self, action):
+        """Collapse the selected host and hide the associations"""
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
+        if (selected_row and self.is_selected_row_host()):
+            tree_path = self.model_hosts.get_path(selected_row)
+            if self.ui.tvw_connections.row_expanded(tree_path):
+                self.ui.tvw_connections.collapse_row(tree_path)
+
+    def on_action_host_expand_activate(self, action):
+        """Expand the selected host and show the associations"""
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
+        if (selected_row and self.is_selected_row_host()):
+            tree_path = self.model_hosts.get_path(selected_row)
+            if not self.ui.tvw_connections.row_expanded(tree_path):
+                self.ui.tvw_connections.expand_row(tree_path, False)

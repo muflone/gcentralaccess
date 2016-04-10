@@ -66,6 +66,18 @@
       </object>
       <accelerator key="Insert"/>
     </child>
+    <child>
+      <object class="GtkAction" id="action_host_collapse">
+        <property name="label">Collapse</property>
+        <signal name="activate" handler="on_action_host_collapse_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAction" id="action_host_expand">
+        <property name="label">Expand</property>
+        <signal name="activate" handler="on_action_host_expand_activate" swapped="no"/>
+      </object>
+    </child>
   </object>
   <object class="GtkActionGroup" id="actions_groups">
     <property name="accel_group">accelerators</property>

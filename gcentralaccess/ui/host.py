@@ -24,7 +24,6 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, get_treeview_selected_row,
     set_error_message_on_infobar, text, _)
-import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
 import gcentralaccess.models.services as model_services

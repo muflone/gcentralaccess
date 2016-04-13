@@ -21,12 +21,8 @@
 import time
 
 from gi.repository import Gtk
-from gi.repository import GdkPixbuf
-
-import gcentralaccess.preferences as preferences
 
 from gcentralaccess.models.abstract import ModelAbstract
-from gcentralaccess.models.process_info import ProcessInfo
 
 processes = {}
 

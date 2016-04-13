@@ -18,17 +18,12 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import os.path
-
 from gi.repository import Gtk
 
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
-
-from gcentralaccess.models.destinations import ModelDestinations
-from gcentralaccess.models.destination_info import DestinationInfo
 
 SECTION_WINDOW_NAME = 'destination'
 

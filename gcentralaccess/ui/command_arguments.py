@@ -26,7 +26,6 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     get_ui_file, get_treeview_selected_row, get_list_from_string_list,
     text, _)
-import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
 from gcentralaccess.ui.command_argument import UICommandArgument

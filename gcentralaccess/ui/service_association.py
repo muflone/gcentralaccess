@@ -18,10 +18,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import os.path
-
 from gi.repository import Gtk
-from gi.repository import GdkPixbuf
 
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader

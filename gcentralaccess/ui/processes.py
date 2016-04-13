@@ -20,7 +20,6 @@
 
 import os.path
 import subprocess
-import json
 
 from gi.repository import Gtk
 from gi.repository import GLib

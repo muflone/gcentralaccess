@@ -19,7 +19,6 @@
 ##
 
 from gi.repository import Gtk
-from gi.repository import GLib
 from gi.repository.GdkPixbuf import Pixbuf
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader

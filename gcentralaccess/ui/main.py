@@ -332,8 +332,8 @@ class UIMain(object):
                                title=_('Add a new host'),
                                treeiter=None)
         if response == Gtk.ResponseType.OK:
-            destinations = dialog.destinations.dump()
-            associations = dialog.associations.dump()
+            destinations = dialog.model_destinations.dump()
+            associations = dialog.model_associations.dump()
             for values in associations:
                 (destination_name, service_name, service_arguments) = \
                     associations[values]
@@ -368,10 +368,10 @@ class UIMain(object):
                 destinations = self.hosts[name].destinations
                 for destination_name in destinations:
                     destination = destinations[destination_name]
-                    dialog.destinations.add_data(destination)
+                    dialog.model_destinations.add_data(destination)
                     for (service_name, arguments) in destination.associations:
                         if service_name in model_services.services:
-                            dialog.associations.add_data(
+                            dialog.model_associations.add_data(
                                 index=dialog.associations.count(),
                                 name=destination_name,
                                 service=model_services.services[service_name],
@@ -386,8 +386,8 @@ class UIMain(object):
                                        treeiter=selected_iter)
                 if response == Gtk.ResponseType.OK:
                     # Remove older host and add the newer
-                    destinations = dialog.destinations.dump()
-                    associations = dialog.associations.dump()
+                    destinations = dialog.model_destinations.dump()
+                    associations = dialog.model_associations.dump()
                     for values in associations:
                         (destination_name, service_name, service_arguments) = \
                             associations[values]
@@ -487,7 +487,7 @@ class UIMain(object):
                             in destination.associations]
             service_name = self.model_hosts.get_service(selected_row)
             service_arguments = self.model_hosts.get_arguments(selected_row)
-            if service_name in associations:
+            if service_name in model_services.services:
                 service = model_services.services[service_name]
                 command = service.command
                 # Prepares the arguments

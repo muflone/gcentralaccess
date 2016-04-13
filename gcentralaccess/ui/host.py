@@ -69,11 +69,11 @@ class UIHost(object):
         for widget in self.ui.get_objects_by_type(Gtk.TreeViewColumn):
             widget.set_title(text(widget.get_title()))
         # Load the destinations
-        self.destinations = ModelDestinations(self.ui.store_destinations)
-        self.associations = ModelAssociations(self.ui.store_associations)
+        self.model_destinations = ModelDestinations(self.ui.store_destinations)
+        self.model_associations = ModelAssociations(self.ui.store_associations)
         self.selected_iter = None
         # Sort the data in the models
-        self.destinations.model.set_sort_column_id(
+        self.model_destinations.model.set_sort_column_id(
             self.ui.column_destinations_name.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         # Connect signals from the glade file to the module functions
@@ -86,7 +86,7 @@ class UIHost(object):
         self.ui.txt_name.grab_focus()
         self.ui.dialog_host.set_title(title)
         self.selected_iter = treeiter
-        self.associations.model.set_sort_column_id(
+        self.model_associations.model.set_sort_column_id(
             self.ui.column_associations_destination.get_sort_column_id(),
             Gtk.SortType.ASCENDING)
         # Show the dialog
@@ -105,13 +105,13 @@ class UIHost(object):
 
     def on_action_destinations_add_activate(self, action):
         """Add a new destination"""
-        dialog = UIDestination(self.ui.dialog_host, self.destinations)
+        dialog = UIDestination(self.ui.dialog_host, self.model_destinations)
         if dialog.show(default_name='',
                        default_value='',
                        title=_('Add new destination'),
                        treeiter=None) == Gtk.ResponseType.OK:
-            self.destinations.add_data(DestinationInfo(name=dialog.name,
-                                                       value=dialog.value))
+            self.model_destinations.add_data(
+                DestinationInfo(name=dialog.name, value=dialog.value))
         # Get the new destinations list, clear and store the list again
         dialog.destroy()
 
@@ -119,17 +119,18 @@ class UIHost(object):
         """Edit the selected destination"""
         selected_row = get_treeview_selected_row(self.ui.tvw_destinations)
         if selected_row:
-            name = self.destinations.get_key(selected_row)
-            value = self.destinations.get_value(selected_row)
-            selected_iter = self.destinations.get_iter(name)
-            dialog = UIDestination(self.ui.dialog_host, self.destinations)
+            name = self.model_destinations.get_key(selected_row)
+            value = self.model_destinations.get_value(selected_row)
+            selected_iter = self.model_destinations.get_iter(name)
+            dialog = UIDestination(self.ui.dialog_host,
+                                   self.model_destinations)
             if dialog.show(default_name=name,
                            default_value=value,
                            title=_('Edit destination'),
                            treeiter=selected_iter
                            ) == Gtk.ResponseType.OK:
                 # Update values
-                self.destinations.set_data(
+                self.model_destinations.set_data(
                     selected_iter, DestinationInfo(name=dialog.name,
                                                    value=dialog.value))
             dialog.destroy()
@@ -145,7 +146,7 @@ class UIHost(object):
                 msg1=_("Remove destination"),
                 msg2=_("Remove the selected destination?"),
                 is_response_id=Gtk.ResponseType.YES):
-            self.destinations.remove(selected_row)
+            self.model_destinations.remove(selected_row)
 
     def on_tvw_destinations_row_activated(self, widget, treepath, column):
         """Edit the selected row on activation"""
@@ -212,12 +213,13 @@ class UIHost(object):
     def on_action_associations_add_activate(self, action):
         """Add a new service association"""
         dialog = UIServiceAssociation(self.ui.dialog_host,
-                                      self.destinations)
+                                      self.model_destinations)
         if dialog.show(None, None) == Gtk.ResponseType.OK:
-            self.associations.add_data(self.associations.count() + 1,
-                                       dialog.destination,
-                                       model_services.services[dialog.service],
-                                       dialog.arguments)
+            self.model_associations.add_data(
+                self.model_associations.count() + 1,
+                dialog.destination,
+                model_services.services[dialog.service],
+                dialog.arguments)
         dialog.destroy()
 
     def on_action_associations_remove_activate(self, action):
@@ -231,4 +233,4 @@ class UIHost(object):
                 msg1=_("Remove association"),
                 msg2=_("Remove the selected association?"),
                 is_response_id=Gtk.ResponseType.YES):
-            self.associations.remove(selected_row)
+            self.model_associations.remove(selected_row)

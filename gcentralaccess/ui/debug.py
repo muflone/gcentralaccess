@@ -47,7 +47,6 @@ class UIDebug(object):
         self.on_window_debug_delete_event = delete_event_cb
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('debug.glade'))
-        self.ui.window_debug.set_transient_for(parent)
         # Initialize preferences
         self.actions_preferences = {
             DEBUG_ENABLED: self.ui.action_enable,

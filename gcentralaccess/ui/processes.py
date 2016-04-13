@@ -49,7 +49,6 @@ class UIProcesses(object):
         self.poller_id = None
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('processes.glade'))
-        self.ui.window_processes.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.window_processes, SECTION_WINDOW_NAME)

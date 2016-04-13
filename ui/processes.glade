@@ -87,6 +87,7 @@
     <property name="title" translatable="yes">Processes</property>
     <property name="default_width">400</property>
     <property name="default_height">200</property>
+    <property name="type_hint">utility</property>
     <accel-groups>
       <group name="accelerators"/>
     </accel-groups>

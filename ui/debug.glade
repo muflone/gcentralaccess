@@ -73,7 +73,6 @@
   <object class="GtkTextBuffer" id="buffer_debug"/>
   <object class="GtkWindow" id="window_debug">
     <property name="can_focus">False</property>
-    <property name="window_position">center-on-parent</property>
     <property name="default_width">400</property>
     <property name="default_height">250</property>
     <property name="type_hint">menu</property>

@@ -218,6 +218,7 @@ class UIHost(object):
             self.model_associations.add_data(
                 self.model_associations.count() + 1,
                 dialog.destination,
+                dialog.description,
                 model_services.services[dialog.service],
                 dialog.arguments)
         dialog.destroy()

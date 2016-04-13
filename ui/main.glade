@@ -199,6 +199,8 @@
       <column type="GdkPixbuf"/>
       <!-- column-name Arguments -->
       <column type="gchararray"/>
+      <!-- column-name Association -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="win_main">
@@ -455,6 +457,12 @@
                           <object class="GtkCellRendererPixbuf" id="cell_icon"/>
                           <attributes>
                             <attribute name="pixbuf">3</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererText" id="cell_association"/>
+                          <attributes>
+                            <attribute name="text">5</attribute>
                           </attributes>
                         </child>
                         <child>

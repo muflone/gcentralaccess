@@ -24,18 +24,20 @@ from gcentralaccess.models.abstract import ModelAbstract
 
 
 class ModelAssociations(ModelAbstract):
-    COL_DESTINATION = 1
-    COL_SERVICE_NAME = 2
-    COL_SERVICE_DESCRIPTION = 3
-    COL_SERVICE_ICON = 4
-    COL_SERVICE_ARGUMENTS = 5
+    COL_DESCRIPTION = 1
+    COL_DESTINATION = 2
+    COL_SERVICE_NAME = 3
+    COL_SERVICE_DESCRIPTION = 4
+    COL_SERVICE_ICON = 5
+    COL_SERVICE_ARGUMENTS = 6
 
-    def add_data(self, index, name, service, arguments):
+    def add_data(self, index, name, description, service, arguments):
         """Add a new row to the model if it doesn't exists"""
         super(self.__class__, self).add_data(service)
         if index not in self.rows:
             new_row = self.model.append((
                 index,
+                description,
                 name,
                 service.name,
                 service.description,
@@ -44,10 +46,11 @@ class ModelAssociations(ModelAbstract):
             self.rows[index] = new_row
             return new_row
 
-    def set_data(self, treeiter, index, name, service, arguments):
+    def set_data(self, treeiter, index, name, description, service, arguments):
         """Update an existing TreeIter"""
         super(self.__class__, self).set_data(treeiter, service)
         self.model.set_value(treeiter, self.COL_KEY, index)
+        self.model.set_value(treeiter, self.COL_DESCRIPTION, description)
         self.model.set_value(treeiter, self.COL_DESTINATION, name)
         self.model.set_value(treeiter, self.COL_SERVICE_NAME, service.name)
         self.model.set_value(treeiter, self.COL_SERVICE_DESCRIPTION,
@@ -60,13 +63,17 @@ class ModelAssociations(ModelAbstract):
         """Get the destination from a TreeIter"""
         return self.model[treeiter][self.COL_DESTINATION]
 
+    def get_description(self, treeiter):
+        """Get the description from a TreeIter"""
+        return self.model[treeiter][self.COL_DESCRIPTION]
+
     def get_service_name(self, treeiter):
         """Get the service name from a TreeIter"""
         return self.model[treeiter][self.COL_SERVICE_NAME]
 
     def get_arguments(self, treeiter):
         """Get the service arguments from a TreeIter"""
-        return json.loads(self.model[treeiter][self.COL_SERVICE_ARGUMENTS])
+        return self.model[treeiter][self.COL_SERVICE_ARGUMENTS]
 
     def dump(self):
         """Extract the model data to a dict object"""
@@ -75,6 +82,7 @@ class ModelAssociations(ModelAbstract):
         for key in self.rows.iterkeys():
             result[key] = (
                 self.get_destination_name(self.rows[key]),
+                self.get_description(self.rows[key]),
                 self.get_service_name(self.rows[key]),
                 self.get_arguments(self.rows[key]))
         return result

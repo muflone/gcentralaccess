@@ -86,6 +86,7 @@ class UIServiceAssociation(object):
         self.ui.dialog_association.hide()
         self.destination = self.ui.cbo_destinations.get_active_id()
         self.service = self.ui.cbo_services.get_active_id()
+        self.description = self.ui.entry_description.get_text()
         # Prepares argument values
         self.arguments = {}
         for argument in self.service_arguments_widgets:

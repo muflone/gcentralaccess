@@ -29,6 +29,7 @@ class ModelHosts(ModelAbstract):
     COL_SERVICE = 2
     COL_ICON = 3
     COL_SERVICE_ARGUMENTS = 4
+    COL_ASSOCIATION = 5
 
     def add_data(self, item):
         """Add a new row to the model if it doesn't exists"""
@@ -38,6 +39,7 @@ class ModelHosts(ModelAbstract):
                                                item.description,
                                                '',
                                                None,
+                                               '',
                                                ''))
             self.rows[item.name] = new_row
             return new_row
@@ -62,13 +64,19 @@ class ModelHosts(ModelAbstract):
 
     def get_arguments(self, treeiter):
         """Get the service arguments from a TreeIter"""
-        return json.loads(self.model[treeiter][self.COL_SERVICE_ARGUMENTS])
+        return self.model[treeiter][self.COL_SERVICE_ARGUMENTS]
 
-    def add_association(self, treeiter, destination, service, arguments):
+    def get_association(self, treeiter):
+        """Get the association from a TreeIter"""
+        return self.model[treeiter][self.COL_ASSOCIATION]
+
+    def add_association(self, treeiter, description, destination, service,
+                        arguments):
         """Add a new row to the model if it doesn't exists"""
         new_row = self.model.append(treeiter, (destination.name,
                                                destination.value,
                                                service.name,
                                                service.pixbuf,
-                                               arguments))
+                                               arguments,
+                                               description))
         return new_row

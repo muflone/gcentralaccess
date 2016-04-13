@@ -19,7 +19,9 @@
 ##
 
 
-class DestinationInfo(object):
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
+class AssociationInfo(object):
+    def __init__(self, description, destination_name, service_name, arguments):
+        self.description = description
+        self.destination_name = destination_name
+        self.service_name = service_name
+        self.service_arguments = arguments

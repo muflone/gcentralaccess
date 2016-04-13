@@ -59,8 +59,13 @@ SECTION_SERVICE_ICON = 'icon'
 SECTION_HOST = 'host'
 SECTION_HOST_NAME = 'name'
 SECTION_HOST_DESCRIPTION = 'description'
+SECTION_HOST_ASSOCIATIONS = 'associations'
 SECTION_DESTINATIONS = 'destinations'
-SECTION_ASSOCIATIONS = 'associations'
+SECTION_ASSOCIATION = 'association'
+SECTION_ASSOCIATION_DESCRIPTION = 'description'
+SECTION_ASSOCIATION_DESTINATION = 'destination'
+SECTION_ASSOCIATION_SERVICE = 'service'
+SECTION_ASSOCIATION_ARGUMENTS = 'arguments'
 
 
 class UIMain(object):
@@ -242,20 +247,26 @@ class UIMain(object):
                     value = settings_host.get(SECTION_DESTINATIONS, option)
                     destinations[option] = DestinationInfo(name=option,
                                                            value=value)
-                    # Load associations
-                    associations = settings_host.get_list(SECTION_ASSOCIATIONS,
-                                                          option,
-                                                          ';')
-                    if associations:
-                        for association in associations:
-                            if ':' in association:
-                                service, arguments = association.split(':', 1)
-                            else:
-                                # No association arguments, set empty arguments
-                                service = association
-                                arguments = '{}'
-                            destinations[option].associations.append(
-                                (service, json.loads(arguments)))
+            # Load associations
+            association_index = 1
+            associations_count = settings_host.get_int(
+                section=SECTION_HOST, option=SECTION_HOST_ASSOCIATIONS)
+            while association_index <= associations_count:
+                section = '%s %d' % (SECTION_ASSOCIATION, association_index)
+                host.add_association(
+                    description=settings_host.get(
+                        section=section,
+                        option=SECTION_ASSOCIATION_DESCRIPTION),
+                    destination_name=settings_host.get(
+                        section=section,
+                        option=SECTION_ASSOCIATION_DESTINATION),
+                    service_name=settings_host.get(
+                        section=section,
+                        option=SECTION_ASSOCIATION_SERVICE),
+                    arguments=json.loads(settings_host.get(
+                        section=section,
+                        option=SECTION_ASSOCIATION_ARGUMENTS)))
+                association_index += 1
             self.add_host(host, destinations, False)
 
     def add_host(self, host, destinations, update_settings):
@@ -267,17 +278,21 @@ class UIMain(object):
         for destination_name in destinations:
             destination = destinations[destination_name]
             host.add_destination(item=destination)
-            # Add service associations to the model
-            for service_name, service_arguments in destination.associations:
-                if service_name in model_services.services:
-                    service = model_services.services[service_name]
-                    arguments = json.dumps(service_arguments)
-                    self.model_hosts.add_association(treeiter=treeiter,
-                                                     destination=destination,
-                                                     service=service,
-                                                     arguments=arguments)
-                else:
-                    debug.add_warning('service %s not found' % service_name)
+        # Add service associations to the model
+        for association in host.associations:
+            description = association.description
+            service_name = association.service_name
+            service_arguments = json.dumps(association.service_arguments)
+            destination = destinations[association.destination_name]
+            if service_name in model_services.services:
+                service = model_services.services[service_name]
+                self.model_hosts.add_association(treeiter=treeiter,
+                                                 description=description,
+                                                 destination=destination,
+                                                 service=service,
+                                                 arguments=service_arguments)
+            else:
+                debug.add_warning('service %s not found' % service_name)
         # Update settings file if requested
         if update_settings:
             hosts_path = self.get_current_group_path()
@@ -291,17 +306,30 @@ class UIMain(object):
             # Add destinations
             for key in host.destinations:
                 destination = host.destinations[key]
-                settings_host.set(SECTION_DESTINATIONS,
-                                  destination.name,
-                                  destination.value)
-                # Add associations to the settings
-                settings_host.set(section=SECTION_ASSOCIATIONS,
+                settings_host.set(section=SECTION_DESTINATIONS,
                                   option=destination.name,
-                                  value=';'.join(
-                                    ['%s:%s' % (service_name,
-                                                json.dumps(service_arguments))
-                                        for service_name, service_arguments
-                                        in destination.associations]))
+                                  value=destination.value)
+            association_index = 0
+            for association in host.associations:
+                arguments = json.dumps(association.service_arguments)
+                # Add associations to the settings
+                association_index += 1
+                section = '%s %d' % (SECTION_ASSOCIATION, association_index)
+                settings_host.set(section=section,
+                                  option=SECTION_ASSOCIATION_DESCRIPTION,
+                                  value=association.description)
+                settings_host.set(section=section,
+                                  option=SECTION_ASSOCIATION_DESTINATION,
+                                  value=association.destination_name)
+                settings_host.set(section=section,
+                                  option=SECTION_ASSOCIATION_SERVICE,
+                                  value=association.service_name)
+                settings_host.set(section=section,
+                                  option=SECTION_ASSOCIATION_ARGUMENTS,
+                                  value=arguments)
+            settings_host.set_int(section=SECTION_HOST,
+                                  option=SECTION_HOST_ASSOCIATIONS,
+                                  value=association_index)
             # Save the settings to the file
             settings_host.save()
 
@@ -334,14 +362,18 @@ class UIMain(object):
         if response == Gtk.ResponseType.OK:
             destinations = dialog.model_destinations.dump()
             associations = dialog.model_associations.dump()
+            host = HostInfo(dialog.name, dialog.description)
+            # Set the associations
             for values in associations:
-                (destination_name, service_name, service_arguments) = \
-                    associations[values]
+                (destination_name, description, service_name,
+                    service_arguments) = associations[values]
                 destination = destinations[destination_name]
-                destination.associations.append(
-                    (service_name, service_arguments))
-            self.add_host(HostInfo(name=dialog.name,
-                                   description=dialog.description),
+                arguments = json.loads(service_arguments)
+                host.add_association(description=description,
+                                     destination_name=destination_name,
+                                     service_name=service_name,
+                                     arguments=arguments)
+            self.add_host(host=host,
                           destinations=destinations,
                           update_settings=True)
             # Automatically select the newly added host
@@ -369,16 +401,19 @@ class UIMain(object):
                 for destination_name in destinations:
                     destination = destinations[destination_name]
                     dialog.model_destinations.add_data(destination)
-                    for (service_name, arguments) in destination.associations:
-                        if service_name in model_services.services:
-                            dialog.model_associations.add_data(
-                                index=dialog.associations.count(),
-                                name=destination_name,
-                                service=model_services.services[service_name],
-                                arguments=arguments)
-                        else:
-                            debug.add_warning('service %s not found' %
-                                              service_name)
+                # Restore the associations for the selected host
+                for association in self.hosts[name].associations:
+                    service_name = association.service_name
+                    if service_name in model_services.services:
+                        dialog.model_associations.add_data(
+                            index=dialog.model_associations.count(),
+                            name=destination_name,
+                            description=association.description,
+                            service=model_services.services[service_name],
+                            arguments=association.service_arguments)
+                    else:
+                        debug.add_warning('service %s not found' %
+                                          service_name)
                 # Show the edit host dialog
                 response = dialog.show(default_name=name,
                                        default_description=description,
@@ -388,15 +423,19 @@ class UIMain(object):
                     # Remove older host and add the newer
                     destinations = dialog.model_destinations.dump()
                     associations = dialog.model_associations.dump()
+                    host = HostInfo(dialog.name, dialog.description)
+                    # Set the associations
                     for values in associations:
-                        (destination_name, service_name, service_arguments) = \
-                            associations[values]
+                        (destination_name, description, service_name,
+                            service_arguments) = associations[values]
                         destination = destinations[destination_name]
-                        destination.associations.append(
-                            (service_name, service_arguments))
+                        arguments = json.loads(service_arguments)
+                        host.add_association(description=description,
+                                             destination_name=destination_name,
+                                             service_name=service_name,
+                                             arguments=arguments)
                     self.remove_host(name)
-                    self.add_host(HostInfo(name=dialog.name,
-                                           description=dialog.description),
+                    self.add_host(host=host,
                                   destinations=destinations,
                                   update_settings=True)
                     # Get the path of the host
@@ -483,18 +522,22 @@ class UIMain(object):
                 self.ui.store_hosts.iter_parent(selected_row))]
             destination_name = self.model_hosts.get_key(selected_row)
             destination = host.destinations[destination_name]
-            associations = [service_name for service_name, arguments
-                            in destination.associations]
+            description = self.model_hosts.get_association(selected_row)
             service_name = self.model_hosts.get_service(selected_row)
             service_arguments = self.model_hosts.get_arguments(selected_row)
+            arguments = json.loads(service_arguments)
+            association = host.find_association(description=description,
+                                                destination=destination.name,
+                                                service=service_name,
+                                                arguments=arguments)
             if service_name in model_services.services:
                 service = model_services.services[service_name]
                 command = service.command
                 # Prepares the arguments
                 arguments_map = {}
                 arguments_map['address'] = destination.value
-                for key in service_arguments:
-                    arguments_map[key] = service_arguments[key]
+                for key in association.service_arguments:
+                    arguments_map[key] = association.service_arguments[key]
                 # Execute command
                 try:
                     command = command.format(**arguments_map)

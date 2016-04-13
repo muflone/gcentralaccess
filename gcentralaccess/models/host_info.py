@@ -18,12 +18,15 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+from gcentralaccess.models.association_info import AssociationInfo
+
 
 class HostInfo(object):
     def __init__(self, name, description):
         self.name = name
         self.description = description
         self.destinations = {}
+        self.associations = []
 
     def add_destination(self, item):
         """Add a new DestinationInfo object to destinations"""
@@ -33,3 +36,22 @@ class HostInfo(object):
         """Remove any destinations"""
         while self.destinations:
             self.destinations.popitem()
+
+    def add_association(self, description, destination_name, service_name,
+                        arguments):
+        """Add a new AssociationInfo object to the host"""
+        self.associations.append(AssociationInfo(description,
+                                                    destination_name,
+                                                    service_name,
+                                                    arguments))
+
+    def find_association(self, description, destination, service, arguments):
+        """Find the AssociationInfo with the corresponding arguments"""
+        for association in self.associations:
+            if (association.description == description and
+                    association.destination_name == destination and
+                    association.service_name == service and
+                    association.service_arguments == arguments):
+                return association
+        else:
+            return None

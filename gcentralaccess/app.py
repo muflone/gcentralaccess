@@ -18,9 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
-import subprocess
-
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Gio
 
 from gcentralaccess.constants import APP_ID, DIR_SETTINGS
@@ -62,7 +61,7 @@ class Application(Gtk.Application):
 
     def on_app_settings_folder_activate(self, action, data):
         """Open the settings folder from the app menu"""
-        subprocess.call(args=['xdg-open', DIR_SETTINGS])
+        Gtk.show_uri(None, 'file://%s' % DIR_SETTINGS, Gdk.CURRENT_TIME)
 
     def on_app_about_activate(self, action, data):
         """Show the about dialog from the app menu"""

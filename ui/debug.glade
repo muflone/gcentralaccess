@@ -77,6 +77,9 @@
     <property name="default_width">400</property>
     <property name="default_height">250</property>
     <property name="type_hint">menu</property>
+    <accel-groups>
+      <group name="accelerators"/>
+    </accel-groups>
     <signal name="delete-event" handler="on_window_debug_delete_event" swapped="no"/>
     <child>
       <object class="GtkBox" id="box_debug">

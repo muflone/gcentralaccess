@@ -18,10 +18,12 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import subprocess
+
 from gi.repository import Gtk
 from gi.repository import Gio
 
-from gcentralaccess.constants import APP_ID
+from gcentralaccess.constants import APP_ID, DIR_SETTINGS
 from gcentralaccess.functions import get_ui_file
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 
@@ -39,6 +41,10 @@ class Application(Gtk.Application):
         """Configure the application during the startup"""
         self.ui = UIMain(self)
         # Add the about action to the app menu
+        action = Gio.SimpleAction(name="settings_folder")
+        action.connect("activate", self.on_app_settings_folder_activate)
+        self.add_action(action)
+        # Add the about action to the app menu
         action = Gio.SimpleAction(name="about")
         action.connect("activate", self.on_app_about_activate)
         self.add_action(action)
@@ -53,6 +59,10 @@ class Application(Gtk.Application):
     def activate(self, application):
         """Execute the application"""
         self.ui.run()
+
+    def on_app_settings_folder_activate(self, action, data):
+        """Open the settings folder from the app menu"""
+        subprocess.call(args=['xdg-open', DIR_SETTINGS])
 
     def on_app_about_activate(self, action, data):
         """Show the about dialog from the app menu"""

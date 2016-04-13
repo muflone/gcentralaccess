@@ -52,20 +52,24 @@ from gcentralaccess.ui.message_dialog import (
     show_message_dialog, UIMessageDialogNoYes, UIMessageDialogClose)
 
 SECTION_WINDOW_NAME = 'main'
-SECTION_SERVICE_DESCRIPTION = 'description'
-SECTION_SERVICE_COMMAND = 'command'
-SECTION_SERVICE_TERMINAL = 'terminal'
-SECTION_SERVICE_ICON = 'icon'
+# Options for services
+OPTION_SERVICE_DESCRIPTION = 'description'
+OPTION_SERVICE_COMMAND = 'command'
+OPTION_SERVICE_TERMINAL = 'terminal'
+OPTION_SERVICE_ICON = 'icon'
+# Section and options for host
 SECTION_HOST = 'host'
-SECTION_HOST_NAME = 'name'
-SECTION_HOST_DESCRIPTION = 'description'
-SECTION_HOST_ASSOCIATIONS = 'associations'
+OPTION_HOST_NAME = 'name'
+OPTION_HOST_DESCRIPTION = 'description'
+OPTION_HOST_ASSOCIATIONS = 'associations'
+# Section for destinations
 SECTION_DESTINATIONS = 'destinations'
+# Section and options for associations
 SECTION_ASSOCIATION = 'association'
-SECTION_ASSOCIATION_DESCRIPTION = 'description'
-SECTION_ASSOCIATION_DESTINATION = 'destination'
-SECTION_ASSOCIATION_SERVICE = 'service'
-SECTION_ASSOCIATION_ARGUMENTS = 'arguments'
+OPTION_ASSOCIATION_DESCRIPTION = 'description'
+OPTION_ASSOCIATION_DESTINATION = 'destination'
+OPTION_ASSOCIATION_SERVICE = 'service'
+OPTION_ASSOCIATION_ARGUMENTS = 'arguments'
 
 
 class UIMain(object):
@@ -81,13 +85,13 @@ class UIMain(object):
             model_services.services[key] = ServiceInfo(
                 name=key,
                 description=settings.services.get(
-                    key, SECTION_SERVICE_DESCRIPTION),
+                    key, OPTION_SERVICE_DESCRIPTION),
                 command=settings.services.get(
-                    key, SECTION_SERVICE_COMMAND),
+                    key, OPTION_SERVICE_COMMAND),
                 terminal=settings.services.get_boolean(
-                    key, SECTION_SERVICE_TERMINAL),
+                    key, OPTION_SERVICE_TERMINAL),
                 icon=settings.services.get(
-                    key, SECTION_SERVICE_ICON))
+                    key, OPTION_SERVICE_ICON))
         self.loadUI()
         self.model_hosts = ModelHosts(self.ui.store_hosts)
         self.model_groups = ModelGroups(self.ui.store_groups)
@@ -194,19 +198,19 @@ class UIMain(object):
         for key in model_services.services.iterkeys():
             settings.services.set(
                 section=key,
-                option=SECTION_SERVICE_DESCRIPTION,
+                option=OPTION_SERVICE_DESCRIPTION,
                 value=model_services.services[key].description)
             settings.services.set(
                 section=key,
-                option=SECTION_SERVICE_COMMAND,
+                option=OPTION_SERVICE_COMMAND,
                 value=model_services.services[key].command)
             settings.services.set_boolean(
                 section=key,
-                option=SECTION_SERVICE_TERMINAL,
+                option=OPTION_SERVICE_TERMINAL,
                 value=model_services.services[key].terminal)
             settings.services.set(
                 section=key,
-                option=SECTION_SERVICE_ICON,
+                option=OPTION_SERVICE_ICON,
                 value=model_services.services[key].icon)
         self.reload_hosts()
         if selected_row:
@@ -236,9 +240,9 @@ class UIMain(object):
             settings_host = settings.Settings(
                 filename=os.path.join(hosts_path, filename),
                 case_sensitive=True)
-            name = settings_host.get(SECTION_HOST, SECTION_HOST_NAME)
+            name = settings_host.get(SECTION_HOST, OPTION_HOST_NAME)
             description = settings_host.get(SECTION_HOST,
-                                            SECTION_HOST_DESCRIPTION)
+                                            OPTION_HOST_DESCRIPTION)
             host = HostInfo(name=name, description=description)
             destinations = {}
             # Load host destinations
@@ -250,22 +254,22 @@ class UIMain(object):
             # Load associations
             association_index = 1
             associations_count = settings_host.get_int(
-                section=SECTION_HOST, option=SECTION_HOST_ASSOCIATIONS)
+                section=SECTION_HOST, option=OPTION_HOST_ASSOCIATIONS)
             while association_index <= associations_count:
                 section = '%s %d' % (SECTION_ASSOCIATION, association_index)
                 host.add_association(
                     description=settings_host.get(
                         section=section,
-                        option=SECTION_ASSOCIATION_DESCRIPTION),
+                        option=OPTION_ASSOCIATION_DESCRIPTION),
                     destination_name=settings_host.get(
                         section=section,
-                        option=SECTION_ASSOCIATION_DESTINATION),
+                        option=OPTION_ASSOCIATION_DESTINATION),
                     service_name=settings_host.get(
                         section=section,
-                        option=SECTION_ASSOCIATION_SERVICE),
+                        option=OPTION_ASSOCIATION_SERVICE),
                     arguments=json.loads(settings_host.get(
                         section=section,
-                        option=SECTION_ASSOCIATION_ARGUMENTS)))
+                        option=OPTION_ASSOCIATION_ARGUMENTS)))
                 association_index += 1
             self.add_host(host, destinations, False)
 
@@ -300,8 +304,8 @@ class UIMain(object):
                 filename=os.path.join(hosts_path, '%s.conf' % host.name),
                 case_sensitive=True)
             # Add host information
-            settings_host.set(SECTION_HOST, SECTION_HOST_NAME, host.name)
-            settings_host.set(SECTION_HOST, SECTION_HOST_DESCRIPTION,
+            settings_host.set(SECTION_HOST, OPTION_HOST_NAME, host.name)
+            settings_host.set(SECTION_HOST, OPTION_HOST_DESCRIPTION,
                               host.description)
             # Add destinations
             for key in host.destinations:
@@ -316,19 +320,19 @@ class UIMain(object):
                 association_index += 1
                 section = '%s %d' % (SECTION_ASSOCIATION, association_index)
                 settings_host.set(section=section,
-                                  option=SECTION_ASSOCIATION_DESCRIPTION,
+                                  option=OPTION_ASSOCIATION_DESCRIPTION,
                                   value=association.description)
                 settings_host.set(section=section,
-                                  option=SECTION_ASSOCIATION_DESTINATION,
+                                  option=OPTION_ASSOCIATION_DESTINATION,
                                   value=association.destination_name)
                 settings_host.set(section=section,
-                                  option=SECTION_ASSOCIATION_SERVICE,
+                                  option=OPTION_ASSOCIATION_SERVICE,
                                   value=association.service_name)
                 settings_host.set(section=section,
-                                  option=SECTION_ASSOCIATION_ARGUMENTS,
+                                  option=OPTION_ASSOCIATION_ARGUMENTS,
                                   value=arguments)
             settings_host.set_int(section=SECTION_HOST,
-                                  option=SECTION_HOST_ASSOCIATIONS,
+                                  option=OPTION_HOST_ASSOCIATIONS,
                                   value=association_index)
             # Save the settings to the file
             settings_host.save()

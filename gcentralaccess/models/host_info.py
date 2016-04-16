@@ -41,9 +41,9 @@ class HostInfo(object):
                         arguments):
         """Add a new AssociationInfo object to the host"""
         self.associations.append(AssociationInfo(description,
-                                                    destination_name,
-                                                    service_name,
-                                                    arguments))
+                                                 destination_name,
+                                                 service_name,
+                                                 arguments))
 
     def find_association(self, description, destination, service, arguments):
         """Find the AssociationInfo with the corresponding arguments"""

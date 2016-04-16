@@ -454,7 +454,7 @@ class UIMain(object):
                     if service_name in model_services.services:
                         dialog.model_associations.add_data(
                             index=dialog.model_associations.count(),
-                            name=destination_name,
+                            name=association.destination_name,
                             description=association.description,
                             service=model_services.services[service_name],
                             arguments=association.service_arguments)

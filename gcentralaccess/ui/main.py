@@ -145,8 +145,51 @@ class UIMain(object):
         # Set groups visibility
         self.ui.scroll_groups.set_visible(
             preferences.get(preferences.GROUPS_SHOW))
+        # Add a Gtk.Headerbar, only for GTK+ 3.10.0 and higher
+        if (not Gtk.check_version(3, 10, 0) and
+                not preferences.get(preferences.HEADERBARS_DISABLE)):
+            self.load_ui_headerbar()
+            # Remove the redundant toolbar and flatten the Gtk.ScrolledWindows
+            self.ui.toolbar_main.destroy()
+            self.ui.scroll_groups.set_shadow_type(Gtk.ShadowType.NONE)
+            self.ui.scroll_connections.set_shadow_type(Gtk.ShadowType.NONE)
         # Connect signals from the glade file to the module functions
         self.ui.connect_signals(self)
+
+    def load_ui_headerbar(self):
+        """Add a Gtk.HeaderBar to the window with buttons"""
+        def create_button_from_action(action):
+            """Create a new Gtk.Button from a Gtk.Action"""
+            new_button = Gtk.Button()
+            new_button.set_use_action_appearance(False)
+            new_button.set_related_action(action)
+            # Use icon from the action
+            icon_name = action.get_icon_name()
+            if preferences.get(preferences.HEADERBARS_SYMBOLIC_ICONS):
+                icon_name += '-symbolic'
+            # Get desired icon size
+            icon_size = (Gtk.IconSize.BUTTON
+                         if preferences.get(preferences.HEADERBARS_SMALL_ICONS)
+                         else Gtk.IconSize.LARGE_TOOLBAR)
+            new_button.set_image(Gtk.Image.new_from_icon_name(icon_name,
+                                                              icon_size))
+            # Set the tooltip from the action label
+            new_button.set_tooltip_text(action.get_label().replace('_', ''))
+            return new_button
+        # Add the Gtk.HeaderBar
+        header_bar = Gtk.HeaderBar()
+        header_bar.props.title = self.ui.win_main.get_title()
+        header_bar.set_show_close_button(True)
+        self.ui.win_main.set_titlebar(header_bar)
+        # Add buttons to the left side
+        for action in (self.ui.action_new, self.ui.action_edit,
+                       self.ui.action_connect, self.ui.action_delete):
+            header_bar.pack_start(create_button_from_action(action))
+        # Add buttons to the right side (in reverse order)
+        for action in reversed((self.ui.action_services, self.ui.action_groups,
+                                self.ui.action_debug, self.ui.action_processes,
+                                self.ui.action_about)):
+            header_bar.pack_end(create_button_from_action(action))
 
     def run(self):
         """Show the UI"""

@@ -160,7 +160,10 @@ class UIMain(object):
         """Add a Gtk.HeaderBar to the window with buttons"""
         def create_button_from_action(action):
             """Create a new Gtk.Button from a Gtk.Action"""
-            new_button = Gtk.Button()
+            if isinstance(action, Gtk.ToggleAction):
+                new_button = Gtk.ToggleButton()
+            else:
+                new_button = Gtk.Button()
             new_button.set_use_action_appearance(False)
             new_button.set_related_action(action)
             # Use icon from the action

@@ -183,7 +183,8 @@ class UIMain(object):
         self.ui.win_main.set_titlebar(header_bar)
         # Add buttons to the left side
         for action in (self.ui.action_new, self.ui.action_edit,
-                       self.ui.action_connect, self.ui.action_delete):
+                       self.ui.action_copy, self.ui.action_connect,
+                       self.ui.action_delete):
             header_bar.pack_start(create_button_from_action(action))
         # Add buttons to the right side (in reverse order)
         for action in reversed((self.ui.action_services, self.ui.action_groups,
@@ -517,6 +518,72 @@ class UIMain(object):
                 msg2=_("Remove the selected host?"),
                 is_response_id=Gtk.ResponseType.YES):
             self.remove_host(self.model_hosts.get_key(selected_row))
+
+    def on_action_copy_activate(self, action):
+        """Copy the selected host to another"""
+        selected_row = get_treeview_selected_row(self.ui.tvw_connections)
+        if selected_row:
+            if self.is_selected_row_host():
+                # First level (host)
+                name = self.model_hosts.get_key(selected_row)
+                description = self.model_hosts.get_description(selected_row)
+                selected_iter = self.model_hosts.get_iter(name)
+                expanded = self.ui.tvw_connections.row_expanded(
+                    self.model_hosts.get_path(selected_iter))
+                dialog = UIHost(parent=self.ui.win_main,
+                                hosts=self.model_hosts)
+                # Restore the destinations for the selected host
+                destinations = self.hosts[name].destinations
+                for destination_name in destinations:
+                    destination = destinations[destination_name]
+                    dialog.model_destinations.add_data(destination)
+                # Restore the associations for the selected host
+                for association in self.hosts[name].associations:
+                    service_name = association.service_name
+                    if service_name in model_services.services:
+                        dialog.model_associations.add_data(
+                            index=dialog.model_associations.count(),
+                            name=association.destination_name,
+                            description=association.description,
+                            service=model_services.services[service_name],
+                            arguments=association.service_arguments)
+                    else:
+                        debug.add_warning('service %s not found' %
+                                          service_name)
+                # Show the edit host dialog
+                response = dialog.show(default_name=_('Copy of %s') % name,
+                                       default_description='',
+                                       title=_('Copy host'),
+                                       treeiter=None)
+                if response == Gtk.ResponseType.OK:
+                    destinations = dialog.model_destinations.dump()
+                    associations = dialog.model_associations.dump()
+                    host = HostInfo(dialog.name, dialog.description)
+                    # Set the associations
+                    for values in associations:
+                        (destination_name, description, service_name,
+                            service_arguments) = associations[values]
+                        destination = destinations[destination_name]
+                        arguments = json.loads(service_arguments)
+                        host.add_association(description=description,
+                                             destination_name=destination_name,
+                                             service_name=service_name,
+                                             arguments=arguments)
+                    self.add_host(host=host,
+                                  destinations=destinations,
+                                  update_settings=True)
+                    # Get the path of the host
+                    tree_path = self.model_hosts.get_path_by_name(dialog.name)
+                    # Automatically select again the previously selected host
+                    self.ui.tvw_connections.set_cursor(path=tree_path,
+                                                       column=None,
+                                                       start_editing=False)
+                    # Automatically expand the row if it was expanded before
+                    if expanded:
+                        self.ui.tvw_connections.expand_row(tree_path, False)
+                        # Collapse the duplicated row
+                        self.ui.tvw_connections.collapse_row(
+                            self.model_hosts.get_path(selected_iter))
 
     def on_tvw_connections_cursor_changed(self, widget):
         """Set actions sensitiveness for host and connection"""

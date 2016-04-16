@@ -34,7 +34,7 @@ for module in (gettext, locale):
 # Import some translated messages from GTK+ domain
 store_message('_Icon:', '_%s:' % text(message='Icon', gtk30=True))
 for message in ('_OK', '_Cancel', '_Close', '_Open', '_Save', '_Connect',
-                '_Delete', 'Select a File', 'Services',
+                '_Copy', '_Delete', 'Select a File', 'Services',
                 'Name', 'Value', '_Name:', '_Value:',
                 'If you delete an item, it will be permanently lost.'):
     text(message=message, gtk30=True)

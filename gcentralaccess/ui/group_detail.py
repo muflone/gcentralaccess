@@ -20,6 +20,7 @@
 
 from gi.repository import Gtk
 
+import gcentralaccess.preferences as preferences
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, set_error_message_on_infobar, text, _)
@@ -30,7 +31,8 @@ class UIGroupDetail(object):
         """Prepare the group detail dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('group_detail.glade'))
-        self.ui.dialog_edit_group.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_edit_group.set_transient_for(parent)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators

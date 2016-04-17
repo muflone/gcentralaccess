@@ -28,6 +28,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import DIR_HOSTS
 from gcentralaccess.functions import (
     get_ui_file, get_treeview_selected_row, text, _)
+import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
 from gcentralaccess.models.groups import ModelGroups
@@ -46,7 +47,8 @@ class UIGroups(object):
         """Prepare the groups dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('groups.glade'))
-        self.ui.dialog_groups.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_groups.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.dialog_groups, SECTION_WINDOW_NAME)

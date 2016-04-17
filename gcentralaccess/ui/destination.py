@@ -20,6 +20,7 @@
 
 from gi.repository import Gtk
 
+import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
@@ -33,7 +34,8 @@ class UIDestination(object):
         """Prepare the destination dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('destination.glade'))
-        self.ui.dialog_destination.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_destination.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.dialog_destination, SECTION_WINDOW_NAME)

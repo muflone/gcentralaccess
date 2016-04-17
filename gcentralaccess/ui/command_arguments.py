@@ -26,6 +26,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     get_ui_file, get_treeview_selected_row, get_list_from_string_list,
     text, _)
+import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
 from gcentralaccess.ui.command_argument import UICommandArgument
@@ -40,7 +41,8 @@ class UICommandArguments(object):
         """Prepare the command arguments dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('command_arguments.glade'))
-        self.ui.dialog_arguments.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_arguments.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.dialog_arguments, SECTION_WINDOW_NAME)

@@ -24,6 +24,7 @@ from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.functions import (
     check_invalid_input, get_ui_file, get_treeview_selected_row,
     set_error_message_on_infobar, text, _)
+import gcentralaccess.preferences as preferences
 import gcentralaccess.settings as settings
 
 import gcentralaccess.models.services as model_services
@@ -45,7 +46,8 @@ class UIHost(object):
         self.hosts = hosts
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('host.glade'))
-        self.ui.dialog_host.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_host.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.dialog_host, SECTION_WINDOW_NAME)

@@ -21,6 +21,7 @@
 from gi.repository import Gtk
 from gi.repository.GdkPixbuf import Pixbuf
 
+import gcentralaccess.preferences as preferences
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
 from gcentralaccess.constants import (
     APP_NAME, APP_VERSION, APP_DESCRIPTION, APP_URL, APP_COPYRIGHT,
@@ -70,7 +71,8 @@ class UIAbout(object):
                     resource_type, (resource_url,))
         icon_logo = Pixbuf.new_from_file(FILE_ICON)
         self.ui.dialog_about.set_logo(icon_logo)
-        self.ui.dialog_about.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_about.set_transient_for(parent)
 
     def show(self):
         """Show the About dialog"""

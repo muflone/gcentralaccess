@@ -37,7 +37,8 @@ class UIServiceDetail(object):
         """Prepare the services detail dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('service_detail.glade'))
-        self.ui.dialog_edit_service.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_edit_service.set_transient_for(parent)
         # Initialize actions
         for widget in self.ui.get_objects_by_type(Gtk.Action):
             # Connect the actions accelerators

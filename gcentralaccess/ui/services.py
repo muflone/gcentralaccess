@@ -41,7 +41,8 @@ class UIServices(object):
         """Prepare the services dialog"""
         # Load the user interface
         self.ui = GtkBuilderLoader(get_ui_file('services.glade'))
-        self.ui.dialog_services.set_transient_for(parent)
+        if not preferences.get(preferences.DETACHED_WINDOWS):
+            self.ui.dialog_services.set_transient_for(parent)
         # Restore the saved size and position
         settings.positions.restore_window_position(
             self.ui.dialog_services, SECTION_WINDOW_NAME)

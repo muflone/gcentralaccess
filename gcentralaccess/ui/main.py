@@ -149,8 +149,11 @@ class UIMain(object):
         if (not Gtk.check_version(3, 10, 0) and
                 not preferences.get(preferences.HEADERBARS_DISABLE)):
             self.load_ui_headerbar()
-            # Remove the redundant toolbar and flatten the Gtk.ScrolledWindows
-            self.ui.toolbar_main.destroy()
+            if preferences.get(preferences.HEADERBARS_REMOVE_TOOLBAR):
+                # This is only for development, it should always be True
+                # Remove the redundant toolbar
+                self.ui.toolbar_main.destroy()
+            # Flatten the Gtk.ScrolledWindows
             self.ui.scroll_groups.set_shadow_type(Gtk.ShadowType.NONE)
             self.ui.scroll_connections.set_shadow_type(Gtk.ShadowType.NONE)
         # Connect signals from the glade file to the module functions

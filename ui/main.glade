@@ -169,6 +169,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="menuitem_connection_copy">
+        <property name="use_action_appearance">True</property>
+        <property name="related_action">action_copy</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="menuitem_connection_connect">
         <property name="use_action_appearance">True</property>
         <property name="related_action">action_connect</property>

@@ -18,6 +18,8 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 
+import json
+
 from gi.repository import Gtk
 
 from gcentralaccess.gtkbuilder_loader import GtkBuilderLoader
@@ -215,7 +217,7 @@ class UIHost(object):
         """Add a new service association"""
         dialog = UIServiceAssociation(self.ui.dialog_host,
                                       self.model_destinations)
-        if dialog.show(None, None) == Gtk.ResponseType.OK:
+        if dialog.show('', None, None) == Gtk.ResponseType.OK:
             self.model_associations.add_data(
                 self.model_associations.count() + 1,
                 dialog.destination,
@@ -236,3 +238,30 @@ class UIHost(object):
                 msg2=_("Remove the selected association?"),
                 is_response_id=Gtk.ResponseType.YES):
             self.model_associations.remove(selected_row)
+
+    def on_action_associations_edit_activate(self, action):
+        """Edit the selected service association"""
+        selected_row = get_treeview_selected_row(self.ui.tvw_associations)
+        if selected_row:
+            dialog = UIServiceAssociation(self.ui.dialog_host,
+                                          self.model_destinations)
+            model = self.model_associations
+            selected_key = model.get_key(selected_row)
+            selected_iter = model.get_iter(selected_key)
+            if dialog.show(
+                    model.get_description(selected_row),
+                    model.get_destination_name(selected_row),
+                    model.get_service_name(selected_row),
+                    json.loads(model.get_arguments(selected_row))
+                    ) == Gtk.ResponseType.OK:
+                model.set_data(
+                    treeiter=selected_iter,
+                    description=dialog.description,
+                    destination_name=dialog.destination,
+                    service=model_services.services[dialog.service],
+                    arguments=dialog.arguments)
+            dialog.destroy()
+
+    def on_tvw_associations_row_activated(self, widget, treepath, column):
+        """Edit the selected row on activation"""
+        self.ui.action_associations_edit.activate()

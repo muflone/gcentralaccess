@@ -46,16 +46,15 @@ class ModelAssociations(ModelAbstract):
             self.rows[index] = new_row
             return new_row
 
-    def set_data(self, treeiter, index, name, description, service, arguments):
+    def set_data(self, treeiter, description, destination_name, service,
+                 arguments):
         """Update an existing TreeIter"""
-        super(self.__class__, self).set_data(treeiter, service)
-        self.model.set_value(treeiter, self.COL_KEY, index)
         self.model.set_value(treeiter, self.COL_DESCRIPTION, description)
-        self.model.set_value(treeiter, self.COL_DESTINATION, name)
+        self.model.set_value(treeiter, self.COL_DESTINATION, destination_name)
         self.model.set_value(treeiter, self.COL_SERVICE_NAME, service.name)
         self.model.set_value(treeiter, self.COL_SERVICE_DESCRIPTION,
                              service.description)
-        self.model.set_value(treeiter, self.COL_SERVICE_ICON, service.icon)
+        self.model.set_value(treeiter, self.COL_SERVICE_ICON, None)
         self.model.set_value(treeiter, self.COL_SERVICE_ARGUMENTS,
                              json.dumps(arguments))
 

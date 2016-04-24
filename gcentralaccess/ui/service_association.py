@@ -67,12 +67,14 @@ class UIServiceAssociation(object):
         self.ui.connect_signals(self)
         self.service_arguments_widgets = {}
 
-    def show(self, default_destination, default_service):
+    def show(self, default_description, default_destination, default_service,
+             default_arguments):
         """Show the Service association dialog"""
+        # Set default description
+        self.ui.entry_description.set_text(default_description)
         # Set default destination
         if default_destination:
             self.ui.cbo_destinations.set_active_id(default_destination)
-            self.ui.cbo_destinations.set_sensitive(False)
         elif self.destinations.count() > 0:
             self.ui.cbo_destinations.set_active(0)
         # Set default service
@@ -80,6 +82,11 @@ class UIServiceAssociation(object):
             self.ui.cbo_services.set_active_id(default_service)
         elif self.services.count() > 0:
             self.ui.cbo_services.set_active(0)
+        # Set default arguments
+        for argument in self.service_arguments_widgets:
+            (new_label, new_entry) = self.service_arguments_widgets[argument]
+            if argument in default_arguments:
+                new_entry.set_text(default_arguments[argument])
         # Show the dialog
         response = self.ui.dialog_association.run()
         self.ui.dialog_association.hide()

@@ -17,6 +17,7 @@
       <object class="GtkAction" id="action_associations_edit">
         <property name="label" translatable="yes">_Edit</property>
         <property name="icon_name">document-properties</property>
+        <signal name="activate" handler="on_action_associations_edit_activate" swapped="no"/>
       </object>
       <accelerator key="Return" modifiers="GDK_MOD1_MASK"/>
     </child>
@@ -479,6 +480,7 @@
                             <property name="can_focus">True</property>
                             <property name="model">store_associations</property>
                             <property name="search_column">0</property>
+                            <signal name="row-activated" handler="on_tvw_associations_row_activated" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview_associations"/>
                             </child>
